@@ -7,7 +7,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.MenuRes;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -66,6 +68,9 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     private FragmentManager mFragmentManager;
     private int mFragmentContainer;
     private BottomBarItemBase[] mItems;
+
+    private BottomBarFragment mLastTab;
+    private boolean mAttached;
 
     public BottomBar(Context context) {
         super(context);
@@ -289,6 +294,54 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         return true;
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        if (validFragment()){
+            String currentTab = getCurrentTabTag();
+
+            // Go through all tabs and make sure their fragments match
+            // the correct state.
+            FragmentTransaction ft = null;
+            for (int i=0; i< mItems.length; i++) {
+                BottomBarFragment tab = (BottomBarFragment) mItems[i];
+                tab.fragment = mFragmentManager.findFragmentByTag(tab.getTag());
+                if (tab.fragment != null && !tab.fragment.isDetached()) {
+                    if (tab.getTag().equals(currentTab)) {
+                        // The fragment for this tab is already there and
+                        // active, and it is what we really want to have
+                        // as the current tab.  Nothing to do.
+                        mLastTab = tab;
+                    } else {
+                        // This fragment was restored in the active state,
+                        // but is not the current tab.  Deactivate it.
+                        if (ft == null) {
+                            ft = mFragmentManager.beginTransaction();
+                        }
+                        ft.detach(tab.fragment);
+                    }
+                }
+            }
+            // We are now ready to go.  Make sure we are switched to the
+            // correct tab.
+            mAttached = true;
+            ft = doTabChanged(mCurrentTabPosition, ft);
+            if (ft != null) {
+                ft.commit();
+                mFragmentManager.executePendingTransactions();
+            }
+        }else {
+            mAttached = true;
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mAttached = false;
+    }
+
     private void updateItems(BottomBarItemBase[] bottomBarItems) {
         int index = 0;
         int biggestWidth = 0;
@@ -459,15 +512,59 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         return position;
     }
 
-    private void updateCurrentFragment() {
-        if (mFragmentManager != null
+    private boolean validFragment(){
+        return mFragmentManager != null
                 && mFragmentContainer != 0
                 && mItems != null
-                && mItems instanceof BottomBarFragment[]) {
-            mFragmentManager.beginTransaction()
-                    .replace(mFragmentContainer, ((BottomBarFragment) mItems[mCurrentTabPosition]).getFragment())
-                    .commit();
+                && mItems instanceof BottomBarFragment[];
+    }
+
+    public String getCurrentTabTag() {
+        if (mCurrentTabPosition >= 0 && mCurrentTabPosition < mItems.length) {
+            return ((BottomBarFragment)mItems[mCurrentTabPosition]).getTag();
         }
+        return null;
+    }
+
+    private void updateCurrentFragment() {
+        if (validFragment()) {
+            if (mAttached) {
+                FragmentTransaction ft = doTabChanged(mCurrentTabPosition, null);
+                if (ft != null) {
+                    ft.commit();
+                }
+            }
+        }
+    }
+
+    private FragmentTransaction doTabChanged(int position, FragmentTransaction ft) {
+        BottomBarFragment newTab = (BottomBarFragment) mItems[position];
+
+        if (newTab == null) {
+            throw new IllegalStateException("No tab known for position " + position);
+        }
+        if (mLastTab != newTab) {
+            if (ft == null) {
+                ft = mFragmentManager.beginTransaction();
+            }
+            if (mLastTab != null) {
+                if (mLastTab.fragment != null) {
+                    ft.detach(mLastTab.fragment);
+                }
+            }
+            if (newTab != null) {
+                if (newTab.fragment == null) {
+                    newTab.fragment = Fragment.instantiate(mContext,
+                            newTab.getClss().getName(), newTab.getArgs());
+                    ft.add(mFragmentContainer, newTab.fragment, newTab.getTag());
+                } else {
+                    ft.attach(newTab.fragment);
+                }
+            }
+
+            mLastTab = newTab;
+        }
+        return ft;
     }
 
     private void clearItems() {
