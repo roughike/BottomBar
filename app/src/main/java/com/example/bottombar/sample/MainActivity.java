@@ -16,11 +16,16 @@ public class MainActivity extends AppCompatActivity {
 
         mBottomBar = BottomBar.attach(this, savedInstanceState);
         mBottomBar.setFragmentItems(getSupportFragmentManager(), R.id.fragmentContainer,
-                new BottomBarFragment(SampleFragment.newInstance("Content for recents."), R.drawable.ic_recents, "Recents"),
-                new BottomBarFragment(SampleFragment.newInstance("Content for favorites."), R.drawable.ic_favorites, "Favorites"),
-                new BottomBarFragment(SampleFragment.newInstance("Content for nearby stuff."), R.drawable.ic_nearby, "Nearby"),
-                new BottomBarFragment(SampleFragment.newInstance("Content for friends."), R.drawable.ic_friends, "Friends"),
-                new BottomBarFragment(SampleFragment.newInstance("Content for food."), R.drawable.ic_restaurants, "Food")
+                new BottomBarFragment(SampleFragment. class,
+                        R.drawable.ic_recents, "Recents").setArgs(SampleFragment.args("Content for recents.")),
+                new BottomBarFragment(SampleFragment. class
+                        ,R.drawable.ic_favorites, "Favorites").setArgs(SampleFragment.args("Content for favorites.")),
+                new BottomBarFragment(SampleFragment. class
+                        , R.drawable.ic_nearby, "Nearby").setArgs(SampleFragment.args("Content for stuff.")),
+                new BottomBarFragment(SampleFragment. class
+                        , R.drawable.ic_friends, "Friends").setArgs(SampleFragment.args("Content for friends.")),
+                new BottomBarFragment(SampleFragment. class
+                        , R.drawable.ic_restaurants, "Food").setArgs(SampleFragment.args("Content for food."))
         );
     }
 
