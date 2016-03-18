@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom">
+
+    <FrameLayout
+        android:id="@+id/bb_user_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/bb_bottom_bar_outer_container"
+        android:layout_toEndOf="@+id/bb_bottom_bar_outer_container"/>
+
+    <FrameLayout
+        android:id="@+id/bb_bottom_bar_outer_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <View
+            android:id="@+id/bb_tablet_right_border"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|end"
+            android:background="#EAEAEA"/>
+
+        <LinearLayout
+            android:id="@+id/bb_bottom_bar_item_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="1dp"
+            android:layout_marginEnd="1dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="#FFFFFF"
+            android:orientation="vertical" />
+
+    </FrameLayout>
+
+</RelativeLayout>

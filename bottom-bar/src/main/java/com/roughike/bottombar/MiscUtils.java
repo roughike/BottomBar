@@ -1,13 +1,21 @@
 package com.roughike.bottombar;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.support.annotation.MenuRes;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.PopupMenu;
 
 /*
@@ -35,11 +43,12 @@ class MiscUtils {
 
     /**
      * Converts dps to pixels nicely.
+     *
      * @param context the Context for getting the resources
-     * @param dp dimension in dps
+     * @param dp      dimension in dps
      * @return dimension in pixels
      */
-    protected static int dpToPixel(Context context, float dp){
+    protected static int dpToPixel(Context context, float dp) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return (int) (dp * (metrics.densityDpi / 160f));
@@ -59,8 +68,9 @@ class MiscUtils {
     /**
      * A hacky method for inflating menus from xml resources to an array
      * of BottomBarTabs.
+     *
      * @param activity the activity context for retrieving the MenuInflater.
-     * @param menuRes the xml menu resource to inflate
+     * @param menuRes  the xml menu resource to inflate
      * @return an Array of BottomBarTabs.
      */
     protected static BottomBarTab[] inflateMenuFromResource(Activity activity, @MenuRes int menuRes) {
@@ -81,5 +91,59 @@ class MiscUtils {
         }
 
         return tabs;
+    }
+
+    /**
+     * Animate a background color change. Uses Circular Reveal if supported,
+     * otherwise crossfades the background color in.
+     *
+     * @param clickedView    the view that was clicked for calculating the start position
+     *                       for the Circular Reveal.
+     * @param backgroundView the currently showing background color.
+     * @param bgOverlay      the overlay view for the new background color that will be
+     *                       animated in.
+     * @param newColor       the new color.
+     */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    protected static void animateBGColorChange(View clickedView, final View backgroundView,
+                                               final View bgOverlay, final int newColor) {
+        int centerX = (int) (clickedView.getX() + (clickedView.getMeasuredWidth() / 2));
+        int centerY = clickedView.getMeasuredHeight() / 2;
+        int finalRadius = backgroundView.getWidth();
+
+        backgroundView.clearAnimation();
+        bgOverlay.clearAnimation();
+
+        Animator circularReveal;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            circularReveal = ViewAnimationUtils
+                    .createCircularReveal(bgOverlay, centerX, centerY, 0, finalRadius);
+        } else {
+            bgOverlay.setAlpha(0);
+            circularReveal = ObjectAnimator.ofFloat(bgOverlay, "alpha", 0, 1);
+        }
+
+        circularReveal.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                onCancel();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                onCancel();
+            }
+
+            private void onCancel() {
+                backgroundView.setBackgroundColor(newColor);
+                bgOverlay.setVisibility(View.INVISIBLE);
+                bgOverlay.setAlpha(1);
+            }
+        });
+
+        bgOverlay.setBackgroundColor(newColor);
+        bgOverlay.setVisibility(View.VISIBLE);
+        circularReveal.start();
     }
 }

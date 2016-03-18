@@ -42,6 +42,7 @@ class BottomBarItemBase {
     protected Drawable icon;
     protected int titleResource;
     protected String title;
+    protected int color;
     
     protected Drawable getIcon(Context context) {
         if (this.iconResource != 0) {
