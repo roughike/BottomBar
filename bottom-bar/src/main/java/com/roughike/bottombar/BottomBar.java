@@ -93,11 +93,6 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     private BottomBarFragment mLastTab;
     private boolean mAttached;
 
-    public BottomBar(Context context) {
-        super(context);
-        init(context, null, 0, 0);
-    }
-
     private boolean mDrawBehindNavBar = true;
     private boolean mUseTopOffset = true;
 
