@@ -10,7 +10,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.MenuRes;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -29,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
+import java.util.List;
 
 /*
  * BottomBar library for Android
@@ -664,9 +667,23 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
                 && mFragmentContainer != 0
                 && mItems != null
                 && mItems instanceof BottomBarFragment[]) {
-            mFragmentManager.beginTransaction()
-                    .replace(mFragmentContainer, ((BottomBarFragment) mItems[mCurrentTabPosition]).getFragment())
-                    .commit();
+            Fragment currentFragment = ((BottomBarFragment) mItems[mCurrentTabPosition]).getFragment();
+            if(currentFragment == null) return;
+            List<Fragment> fragments = mFragmentManager.getFragments();
+            FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+            if(fragments!=null){
+                for (Fragment fragment1 : fragments){
+                    if(!fragment1.equals(currentFragment)){
+                        fragmentTransaction.hide(fragment1);
+                    }
+                }
+            }
+            if(currentFragment.isAdded()){
+                fragmentTransaction.show(currentFragment);
+            }else{
+                fragmentTransaction.add(mFragmentContainer,currentFragment);
+            }
+            fragmentTransaction.commit();
         }
     }
 
