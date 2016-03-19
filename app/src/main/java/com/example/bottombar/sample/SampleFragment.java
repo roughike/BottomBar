@@ -32,6 +32,13 @@ public class SampleFragment extends Fragment {
     private static final String ARG_TEXT = "ARG_TEXT";
 
     public SampleFragment() {
+
+    }
+
+    public static Bundle args(String text){
+        Bundle args = new Bundle();
+        args.putString(ARG_TEXT, text);
+        return args;
     }
 
     public static SampleFragment newInstance(String text) {

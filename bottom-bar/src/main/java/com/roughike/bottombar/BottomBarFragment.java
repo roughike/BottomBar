@@ -18,6 +18,7 @@
 package com.roughike.bottombar;
 
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -40,57 +41,78 @@ import android.support.v4.app.Fragment;
  * limitations under the License.
  */
 public class BottomBarFragment extends BottomBarItemBase {
-    private Fragment fragment;
+    private String tag;
+    private Class<?> clss;
+    private Bundle args;
+    Fragment fragment;
 
     /**
      * Creates a new Tab for the BottomBar.
-     * @param fragment a Fragment to be shown when this Tab is selected.
+     * @param clss a Fragment Class to be shown when this Tab is selected.
      * @param iconResource a resource for the Tab icon.
      * @param title title for the Tab.
      */
-    public BottomBarFragment(Fragment fragment, @DrawableRes int iconResource, @NonNull String title) {
-        this.fragment = fragment;
+    public BottomBarFragment(Class<?> clss, @DrawableRes int iconResource, @NonNull String title) {
+        this.clss = clss;
         this.iconResource = iconResource;
         this.title = title;
     }
 
     /**
      * Creates a new Tab for the BottomBar.
-     * @param fragment a Fragment to be shown when this Tab is selected.
+     * @param clss a Fragment Class to be shown when this Tab is selected.
      * @param icon an icon for the Tab.
      * @param title title for the Tab.
      */
-    public BottomBarFragment(Fragment fragment, Drawable icon, @NonNull String title) {
-        this.fragment = fragment;
+    public BottomBarFragment(Class<?> clss, Drawable icon, @NonNull String title) {
+        this.clss = clss;
         this.icon = icon;
         this.title = title;
     }
 
     /**
      * Creates a new Tab for the BottomBar.
-     * @param fragment a Fragment to be shown when this Tab is selected.
+     * @param clss a Fragment Class to be shown when this Tab is selected.
      * @param icon an icon for the Tab.
      * @param titleResource resource for the title.
      */
-    public BottomBarFragment(Fragment fragment, Drawable icon, @StringRes int titleResource) {
-        this.fragment = fragment;
+    public BottomBarFragment(Class<?> clss, Drawable icon, @StringRes int titleResource) {
+        this.clss = clss;
         this.icon = icon;
         this.titleResource = titleResource;
     }
 
     /**
      * Creates a new Tab for the BottomBar.
-     * @param fragment a Fragment to be shown when this Tab is selected.
+     * @param clss a Fragment Class to be shown when this Tab is selected.
      * @param iconResource a resource for the Tab icon.
      * @param titleResource resource for the title.
      */
-    public BottomBarFragment(Fragment fragment, @DrawableRes int iconResource, @StringRes int titleResource) {
-        this.fragment = fragment;
+    public BottomBarFragment(Class<?> clss, @DrawableRes int iconResource, @StringRes int titleResource) {
+        this.clss = clss;
         this.iconResource = iconResource;
         this.titleResource = titleResource;
     }
 
-    protected Fragment getFragment() {
-        return fragment;
+    public BottomBarFragment setTag(String tag){
+        this.tag = tag;
+        return this;
+    }
+
+    public BottomBarFragment setArgs(Bundle args){
+        this.args = args;
+        return this;
+    }
+
+    public String getTag() {
+        return tag == null ? clss.getName() : tag;
+    }
+
+    public Class<?> getClss() {
+        return clss;
+    }
+
+    public Bundle getArgs() {
+        return args;
     }
 }
