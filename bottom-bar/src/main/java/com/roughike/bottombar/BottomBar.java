@@ -88,7 +88,11 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
 
     private int mCurrentBackgroundColor;
     private int mDefaultBackgroundColor;
+
     private boolean mDrawBehindNavBar = true;
+    private boolean mUseTopOffset = true;
+
+    private boolean mUseOnlyStatusBarOffset;
 
     /**
      * Bind the BottomBar to your Activity, and inflate your layout here.
@@ -141,8 +145,13 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
                     .addView(oldLayout, oldLayout.getLayoutParams());
             contentView.addView(bottomBar, 0);
         } else {
-            bottomBar.getUserContainer()
-                    .addView(view, view.getLayoutParams());
+            if (view.getLayoutParams() == null) {
+                bottomBar.getUserContainer()
+                        .addView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            } else {
+                bottomBar.getUserContainer()
+                        .addView(view, view.getLayoutParams());
+            }
         }
 
         return bottomBar;
@@ -291,6 +300,27 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     }
 
     /**
+     * Super ugly hacks
+     * ----------------------------/
+     */
+
+    /**
+     * If you get some unwanted extra padding in the top (such as
+     * when using CoordinatorLayout), this fixes it.
+     */
+    public void noTopOffset() {
+        mUseTopOffset = false;
+    }
+
+    /**
+     * If your ActionBar gets inside the status bar for some reason,
+     * this fixes it.
+     */
+    public void useOnlyStatusBarTopOffset() {
+        mUseOnlyStatusBarOffset = true;
+    }
+
+    /**
      * ------------------------------------------- //
      */
     public BottomBar(Context context) {
@@ -357,6 +387,14 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
 
     protected boolean drawBehindNavBar() {
         return mDrawBehindNavBar;
+    }
+
+    protected boolean useTopOffset() {
+        return mUseTopOffset;
+    }
+
+    protected boolean useOnlyStatusbarOffset() {
+        return mUseOnlyStatusBarOffset;
     }
 
     @Override
@@ -542,7 +580,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     private void handleBackgroundColorChange(int tabPosition, View tab) {
         if (!mIsShiftingMode || mIsTabletMode) return;
 
-        if (mColorMap.containsKey(tabPosition)) {
+        if (mColorMap != null && mColorMap.containsKey(tabPosition)) {
             handleBackgroundColorChange(
                     tab, mColorMap.get(tabPosition));
         } else {
@@ -682,29 +720,29 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
                 navBarHeight = MiscUtils.dpToPixel(activity, 48);
             }
 
-            int statusBarResource = res
-                    .getIdentifier("status_bar_height", "dimen", "android");
-            int statusBarHeight;
+            if (bottomBar.useTopOffset()) {
+                int offset;
+                int statusBarResource = res
+                        .getIdentifier("status_bar_height", "dimen", "android");
 
-            if (statusBarResource > 0) {
-                statusBarHeight = res
-                        .getDimensionPixelSize(statusBarResource);
-            } else {
-                statusBarHeight = MiscUtils.dpToPixel(activity, 25);
+                if (statusBarResource > 0) {
+                    offset = res.getDimensionPixelSize(statusBarResource);
+                } else {
+                    offset = MiscUtils.dpToPixel(activity, 25);
+                }
+
+                if (!bottomBar.useOnlyStatusbarOffset()) {
+                    TypedValue tv = new TypedValue();
+                    if (activity.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+                        offset += TypedValue.complexToDimensionPixelSize(tv.data,
+                                res.getDisplayMetrics());
+                    } else {
+                        offset += MiscUtils.dpToPixel(activity, 56);
+                    }
+                }
+
+                bottomBar.getUserContainer().setPadding(0, offset, 0, 0);
             }
-
-            TypedValue tv = new TypedValue();
-            int actionBarHeight;
-
-            if (activity.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,
-                        res.getDisplayMetrics());
-            } else {
-                actionBarHeight = MiscUtils.dpToPixel(activity, 56);
-            }
-
-            bottomBar.getUserContainer().setPadding(0,
-                    (statusBarHeight + actionBarHeight), 0, 0);
 
             final View outerContainer = bottomBar.getOuterContainer();
             bottomBar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

@@ -1,20 +1,24 @@
 # BottomBar
 <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/demo1.gif" width="278" height="492" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/demo2.gif" width="278" height="492" />
 
+## Have issues? [Common problems and solutions](https://github.com/roughike/BottomBar/blob/master/README.md#common-problems-and-solutions)
+
 ## What?
 
-A custom view component that mimicks the new [Material Design Bottom Navigation pattern](https://www.google.com/design/spec/components/bottom-navigation.html).
+A custom view component that mimics the new [Material Design Bottom Navigation pattern](https://www.google.com/design/spec/components/bottom-navigation.html).
 
 **(currently under active development, expect to see new releases almost daily)**
 
-## minSDK version
+## Does it work on my Grandpa's HTC Dream?
 
-The current minSDK version is API level 14.
+Nope. The current minSDK version is API level 14.
+
+Your uncle's Galaxy S Mini will probably be supported in the future though. 
 
 ## Gimme that Gradle sweetness, pls?
 
 ```groovy
-compile 'com.roughike:bottom-bar:1.0.5'
+compile 'com.roughike:bottom-bar:1.0.8'
 ```
 
 **Maven:**
@@ -22,7 +26,7 @@ compile 'com.roughike:bottom-bar:1.0.5'
 <dependency>
   <groupId>com.roughike</groupId>
   <artifactId>bottom-bar</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.8</version>
   <type>pom</type>
 </dependency>
 ```
@@ -86,26 +90,6 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-#### I wanna control what views get inside of it!
-
-No problem. Just attach it to a View instead of Activity:
-
-```java
-mBottomBar.attach(findViewById(R.id.myView), savedInstanceState);
-```
-
-#### What about Tablets?
-
-It works nicely with tablets straight out of the box. When the library detects that the user has a tablet, the BottomBar will become a "LeftBar", just like [in the Material Design Guidelines](https://material-design.storage.googleapis.com/publish/material_v_4/material_ext_publish/0B3321sZLoP_HSTd3UFY2aEp2ZDg/components_bottomnavigation_usage2.png).
-
-#### Why is it overlapping my Navigation Drawer?
-
-All you need to do is instead of attaching the BottomBar to your Activity, attach it to the view that has your content. For example, if your fragments are in a ViewGroup that has the id ```fragmentContainer```, you would do something like this:
-
-```java
-mBottomBar.attach(findViewById(R.id.fragmentContainer), savedInstanceState);
-```
-
 #### Can it handle my Fragments and replace them automagically when a different tab is selected?
 
 Yep yep yep! Just call ```setFragmentItems()``` instead of ```setItemsFromMenu()```:
@@ -118,31 +102,9 @@ mBottomBar.setFragmentItems(getSupportFragmentManager(), R.id.fragmentContainer,
 );
 ```
 
-#### Separate BottomBars for individual Fragments
-
-Override your Fragment's ```onCreateView()``` like this:
-
-```java
-@Override
-public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.my_fragment_layout, container, false);
-    // initialize your views here
-
-    BottomBar bottomBar = BottomBar.attach(view, savedInstanceState);
-    bottomBar.setItems(
-        new BottomBarTab(R.drawable.ic_recents, "Recents"),
-        new BottomBarTab(R.drawable.ic_favorites, "Favorites"),
-        new BottomBarTab(R.drawable.ic_nearby, "Nearby")
-    );
-
-    // Important! Don't return the view here. Instead, return the bottomBar, as it already contains your view.
-    return bottomBar;
-}
-```
-
 #### I hate Fragments and wanna do everything by myself!
 
-That's alright, you can also handle items by yourself. 
+That's alright, you can also do it the hard way if you're living on the edge.
 
 ```java
 mBottomBar.setItems(
@@ -162,9 +124,48 @@ mBottomBar.setOnItemSelectedListener(new OnTabSelectedListener() {
 
 For a working example, refer to [the sample app](https://github.com/roughike/BottomBar/tree/master/app/src/main).
 
-## What about the (insert thing that looks different than the specs here)?
+## Common problems and solutions
 
-I'll implement the Material Design spec as well as I can. Just give me some time and **all your dreams will come true**.
+#### Can I use it by XML?
+
+No, but you can still put it anywhere in the View hierarchy. Just attach it to any View you want like this:
+
+```java
+mBottomBar.attach(findViewById(R.id.myContent), savedInstanceState);
+```
+
+#### Why does the top of my content have sooooo much empty space?!
+
+Probably because you're doing some next-level advanced Android stuff (such as using CoordinatorLayout and ```fitsSystemWindows="true"```) and the normal paddings for the content are too much. Add this right after calling ```attach()```:
+
+```java
+mBottomBar.noTopOffset();
+```
+
+#### I don't like the awesome transparent Navigation Bar / it behaves poorly / breaks my layout!
+
+You can disable it. I'm squashing bugs as fast as I can, but they are hard to find.
+
+```java
+mBottomBar.noNavBarGoodness();
+```
+
+#### Why is it overlapping my Navigation Drawer?
+
+All you need to do is instead of attaching the BottomBar to your Activity, attach it to the view that has your content. For example, if your fragments are in a ViewGroup that has the id ```fragmentContainer```, you would do something like this:
+
+```java
+mBottomBar.attach(findViewById(R.id.fragmentContainer), savedInstanceState);
+```
+
+#### What about Tablets?
+
+It works nicely with tablets straight out of the box. When the library detects that the user has a tablet, the BottomBar will become a "LeftBar", just like [in the Material Design Guidelines](https://material-design.storage.googleapis.com/publish/material_v_4/material_ext_publish/0B3321sZLoP_HSTd3UFY2aEp2ZDg/components_bottomnavigation_usage2.png).
+
+
+#### What about the (insert thing that looks different than the specs here)?
+
+Just give me some time and **all your dreams will come true**.
 
 ## Apps using BottomBar
 
