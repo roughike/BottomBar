@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -93,8 +94,9 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     private boolean mUseTopOffset = true;
 
     private boolean mUseOnlyStatusBarOffset;
+  private int bottomBarBackgroundColor;
 
-    /**
+  /**
      * Bind the BottomBar to your Activity, and inflate your layout here.
      * <p/>
      * Remember to also call {@link #onRestoreInstanceState(Bundle)} inside
@@ -356,9 +358,20 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         mTenDp = MiscUtils.dpToPixel(mContext, 10);
         mMaxFixedItemWidth = MiscUtils.dpToPixel(mContext, 168);
 
+        readAttrs(context, attrs, defStyleAttr, defStyleRes);
+
         initializeViews();
     }
 
+    private void readAttrs(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+      TypedArray a =
+        context.obtainStyledAttributes(attrs, R.styleable.BottomBar, defStyleAttr, defStyleRes);
+      try {
+        bottomBarBackgroundColor = a.getColor(R.styleable.BottomBar_bb_background_color, Color.WHITE);
+      }finally {
+        a.recycle();
+      }
+    }
 
     private void initializeViews() {
         View rootView = View.inflate(mContext,
@@ -373,6 +386,8 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         mBackgroundOverlay = rootView.findViewById(R.id.bb_bottom_bar_background_overlay);
 
         mShadowView = rootView.findViewById(R.id.bb_bottom_bar_shadow);
+
+        mItemContainer.setBackgroundColor(bottomBarBackgroundColor);
 
         addView(rootView);
     }
