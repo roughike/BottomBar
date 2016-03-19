@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -94,8 +95,9 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     private boolean mDrawBehindNavBar = true;
     private boolean mUseTopOffset = true;
     private boolean mUseOnlyStatusBarOffset;
+  private int mBottomBarBackgroundColor;
 
-    /**
+  /**
      * Bind the BottomBar to your Activity, and inflate your layout here.
      * <p/>
      * Remember to also call {@link #onRestoreInstanceState(Bundle)} inside
@@ -453,9 +455,20 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         mTenDp = MiscUtils.dpToPixel(mContext, 10);
         mMaxFixedItemWidth = MiscUtils.dpToPixel(mContext, 168);
 
+        readAttrs(context, attrs, defStyleAttr, defStyleRes);
+
         initializeViews();
     }
 
+    private void readAttrs(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+      TypedArray a =
+        context.obtainStyledAttributes(attrs, R.styleable.BottomBar, defStyleAttr, defStyleRes);
+      try {
+        mBottomBarBackgroundColor = a.getColor(R.styleable.BottomBar_bb_background_color, Color.WHITE);
+      }finally {
+        a.recycle();
+      }
+    }
 
     private void initializeViews() {
         View rootView = View.inflate(mContext,
@@ -472,10 +485,23 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
 
         mShadowView = rootView.findViewById(R.id.bb_bottom_bar_shadow);
 
+        mItemContainer.setBackgroundColor(mBottomBarBackgroundColor);
+
         addView(rootView);
     }
 
-    protected ViewGroup getUserContainer() {
+  @Override
+  public void setBackgroundColor(int color) {
+    super.setBackgroundColor(color);
+    if (!mIsShiftingMode) {
+      if (mItemContainer != null) {
+        mBottomBarBackgroundColor = color;
+        mItemContainer.setBackgroundColor(color);
+      }
+    }
+  }
+
+  protected ViewGroup getUserContainer() {
         return mUserContentContainer;
     }
 
