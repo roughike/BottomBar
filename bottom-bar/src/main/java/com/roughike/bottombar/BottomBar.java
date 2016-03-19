@@ -632,6 +632,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     }
 
     private void selectTab(View tab, boolean animate) {
+        if(tab == null) return;
         tab.setTag(TAG_BOTTOM_BAR_VIEW_ACTIVE);
         ImageView icon = (ImageView) tab.findViewById(R.id.bb_bottom_bar_icon);
         TextView title = (TextView) tab.findViewById(R.id.bb_bottom_bar_title);
@@ -693,6 +694,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     }
 
     private void unselectTab(View tab, boolean animate) {
+        if(tab == null) return;
         tab.setTag(TAG_BOTTOM_BAR_VIEW_INACTIVE);
 
         ImageView icon = (ImageView) tab.findViewById(R.id.bb_bottom_bar_icon);
