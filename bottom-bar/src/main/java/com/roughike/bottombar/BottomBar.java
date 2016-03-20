@@ -123,17 +123,6 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
             contentView.addView(bottomBar, 0);
         } else {
             CoordinatorLayout coordinatorLayout = (CoordinatorLayout) oldLayout;
-            ViewGroup.LayoutParams layoutParams = bottomBar.getLayoutParams();
-            if (layoutParams instanceof MarginLayoutParams) {
-                ((MarginLayoutParams) layoutParams).bottomMargin = bottomBar.getHeight();
-            }
-            for (int i = 0; i < coordinatorLayout.getChildCount(); i++) {
-                View child = coordinatorLayout.getChildAt(i);
-                if (!(child instanceof BottomBar) && child.getLayoutParams().height == ViewGroup.LayoutParams.MATCH_PARENT) {
-                    // ((MarginLayoutParams)child.getLayoutParams()).bottomMargin = bottomBar.getHeight();
-                    child.setPadding(child.getPaddingLeft(), child.getPaddingTop(), child.getPaddingRight(), child.getPaddingBottom() + bottomBar.getHeight());
-                }
-            }
             coordinatorLayout.addView(bottomBar);
 
         }
