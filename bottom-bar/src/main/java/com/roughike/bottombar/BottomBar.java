@@ -124,7 +124,6 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         } else {
             CoordinatorLayout coordinatorLayout = (CoordinatorLayout) oldLayout;
             coordinatorLayout.addView(bottomBar);
-
         }
 
         return bottomBar;
