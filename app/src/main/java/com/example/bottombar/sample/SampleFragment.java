@@ -47,9 +47,10 @@ public class SampleFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        TextView textView = new TextView(getActivity());
+        View contentView = inflater.inflate(R.layout.layout_fragment, null);
+        TextView textView = (TextView) contentView.findViewById(R.id.tab_text);
         textView.setText(getArguments().getString(ARG_TEXT));
 
-        return textView;
+        return contentView;
     }
 }

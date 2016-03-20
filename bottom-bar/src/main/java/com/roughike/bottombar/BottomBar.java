@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.MenuRes;
+import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -43,6 +45,8 @@ import java.util.HashMap;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+@CoordinatorLayout.DefaultBehavior(BottomNavigationBehavior.class)
 public class BottomBar extends FrameLayout implements View.OnClickListener, View.OnLongClickListener {
     private static final long ANIMATION_DURATION = 150;
     private static final int MAX_FIXED_TAB_COUNT = 3;
@@ -111,11 +115,28 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
 
         ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
         View oldLayout = contentView.getChildAt(0);
-        contentView.removeView(oldLayout);
+        if (!(oldLayout instanceof CoordinatorLayout)) {
+            contentView.removeView(oldLayout);
 
-        bottomBar.getUserContainer()
-                .addView(oldLayout, 0, oldLayout.getLayoutParams());
-        contentView.addView(bottomBar, 0);
+            bottomBar.getUserContainer()
+                    .addView(oldLayout, 0, BottomNavigationBehavior.generateLayoutParams(oldLayout.getLayoutParams()));
+            contentView.addView(bottomBar, 0);
+        } else {
+            CoordinatorLayout coordinatorLayout = (CoordinatorLayout) oldLayout;
+            ViewGroup.LayoutParams layoutParams = bottomBar.getLayoutParams();
+            if (layoutParams instanceof MarginLayoutParams) {
+                ((MarginLayoutParams) layoutParams).bottomMargin = bottomBar.getHeight();
+            }
+            for (int i = 0; i < coordinatorLayout.getChildCount(); i++) {
+                View child = coordinatorLayout.getChildAt(i);
+                if (!(child instanceof BottomBar) && child.getLayoutParams().height == ViewGroup.LayoutParams.MATCH_PARENT) {
+                    // ((MarginLayoutParams)child.getLayoutParams()).bottomMargin = bottomBar.getHeight();
+                    child.setPadding(child.getPaddingLeft(), child.getPaddingTop(), child.getPaddingRight(), child.getPaddingBottom() + bottomBar.getHeight());
+                }
+            }
+            coordinatorLayout.addView(bottomBar);
+
+        }
 
         return bottomBar;
     }
@@ -132,7 +153,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      * @param savedInstanceState a Bundle for restoring the state on configuration change.
      * @return a BottomBar at the bottom of the screen.
      */
-    public static BottomBar attach(View view, Bundle savedInstanceState) {
+    public static BottomBar attach(@NonNull View view, Bundle savedInstanceState) {
         BottomBar bottomBar = new BottomBar(view.getContext());
         bottomBar.onRestoreInstanceState(savedInstanceState);
 
@@ -143,7 +164,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
             contentView.removeView(oldLayout);
 
             bottomBar.getUserContainer()
-                    .addView(oldLayout, oldLayout.getLayoutParams());
+                    .addView(oldLayout, BottomNavigationBehavior.generateLayoutParams(oldLayout.getLayoutParams()));
             contentView.addView(bottomBar, 0);
         } else {
             if (view.getLayoutParams() == null) {

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ BottomBar library for Android
+  ~ Copyright (c) 2016 Iiro Krankka (http://github.com/roughike).
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="long_string">Material is the metaphor  A material metaphor is the unifying theory
+        of a rationalized space and a system of motion. The material is grounded in tactile reality,
+        inspired by the study of paper and ink, yet technologically advanced and open to imagination and magic.
+        Surfaces and edges of the material provide visual cues that are grounded in reality. The use of familiar
+        tactile attributes helps users quickly understand affordances. Yet the flexibility of the material creates
+        new affordances that supercede those in the physical world, without breaking the rules of physics.
+        The fundamentals of light, surface, and movement are key to conveying how objects move, interact,
+        and exist in space and in relation to each other. Realistic lighting shows seams, divides space,
+        and indicates moving parts. Material is the metaphor  A material metaphor is the unifying theory of a
+        rationalized space and a system of motion. The material is grounded in tactile reality, inspired by the
+        study of paper and ink, yet technologically advanced and open to imagination and magic.
+        Surfaces and edges of the material provide visual cues that are grounded in reality.
+        The use of familiar tactile attributes helps users quickly understand affordances.
+        Yet the flexibility of the material creates new affordances that supercede those in the physical world,
+        without breaking the rules of physics.  The fundamentals of light, surface, and movement are key to conveying
+        how objects move, interact, and exist in space and in relation to each other. Realistic lighting shows seams,
+        divides space, and indicates moving parts.
+    Bold, graphic, intentional
+
+The foundational elements of print-based design – typography, grids, space, scale, color, and use of imagery – guide visual treatments. These elements do far more than please the eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge-to-edge imagery, large-scale typography, and intentional white space create a bold and graphic interface that immerse the user in the experience.
+
+An emphasis on user actions makes core functionality immediately apparent and provides waypoints for the user.
+
+    Motion provides meaning
+
+Motion respects and reinforces the user as the prime mover. Primary user actions are inflection points that initiate motion, transforming the whole design.
+
+All action takes place in a single environment. Objects are presented to the user without breaking the continuity of experience even as they transform and reorganize.
+
+Motion is meaningful and appropriate, serving to focus attention and maintain continuity. Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.</string>
+</resources>

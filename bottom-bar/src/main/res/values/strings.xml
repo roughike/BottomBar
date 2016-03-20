@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BottomBar</string>
+    <string name="bottom_bar_behavior">com.roughike.bottombar</string>
 </resources>
