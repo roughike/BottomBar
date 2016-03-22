@@ -28,7 +28,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +58,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     private static final String STATE_CURRENT_SELECTED_TAB = "STATE_CURRENT_SELECTED_TAB";
     private static final String TAG_BOTTOM_BAR_VIEW_INACTIVE = "BOTTOM_BAR_VIEW_INACTIVE";
     private static final String TAG_BOTTOM_BAR_VIEW_ACTIVE = "BOTTOM_BAR_VIEW_ACTIVE";
+    private static final String TAG = "BottomBar";
 
     private Context mContext;
     private boolean mIgnoreTabletLayout;
@@ -1063,9 +1063,12 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         }
 
         if (!bottomBar.drawBehindNavBar()
-                || navBarHeight == 0
-                || (!(softMenuIdentifier > 0 && res.getBoolean(softMenuIdentifier))
-                && ViewConfiguration.get(activity).hasPermanentMenuKey())) {
+            || !((activity.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+            == WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+            || navBarHeight == 0
+            || (!(softMenuIdentifier > 0 && res.getBoolean(softMenuIdentifier))
+            && ViewConfiguration.get(activity).hasPermanentMenuKey())) {
+            Log.w(TAG, "no navigation godness");
             return;
         }
 
@@ -1098,10 +1101,8 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         /**
          * End of delicious copy-paste code
          */
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-                && res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            activity.getWindow().getAttributes().flags |= WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+            && res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 
             if (bottomBar.useTopOffset()) {
                 int offset;
@@ -1143,6 +1144,15 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
                         bottomBar.setTranslationY(defaultOffset);
                         ((CoordinatorLayout.LayoutParams) bottomBar.getLayoutParams())
                                 .setBehavior(new BottomNavigationBehavior(newHeight, defaultOffset));
+                    }
+
+                    final View view = bottomBar.getUserContainer().getChildAt(0);
+                    if (navBarHeightCopy > 0 && ViewCompat.getFitsSystemWindows(view)) {
+
+                        view.setPadding(
+                            view.getPaddingLeft(), view.getPaddingTop(), view.getPaddingRight(),
+                            view.getPaddingBottom() - navBarHeightCopy
+                        );
                     }
 
                     ViewTreeObserver obs = outerContainer.getViewTreeObserver();
