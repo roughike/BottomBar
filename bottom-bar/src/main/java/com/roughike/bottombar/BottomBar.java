@@ -303,6 +303,14 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         updateItems(mItems);
     }
 
+    public int getItemCount() {
+        return mItems.length;
+    }
+
+    public BottomBarItemBase getItem(int index) {
+        return mItems[index];
+    }
+
     /**
      * Set a listener that gets fired when the selected tab changes.
      *
@@ -686,6 +694,10 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
 
     protected boolean useOnlyStatusbarOffset() {
         return mUseOnlyStatusBarOffset;
+    }
+
+    public int getCurrentTabPosition() {
+        return mCurrentTabPosition;
     }
 
     @Override
