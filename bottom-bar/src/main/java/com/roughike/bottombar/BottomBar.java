@@ -90,8 +90,8 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     private int mTenDp;
     private int mMaxFixedItemWidth;
 
-    private OnTabSelectedListener mListener;
-    private OnMenuTabSelectedListener mMenuListener;
+    private Object mListener;
+    private Object mMenuListener;
 
     private int mCurrentTabPosition;
     private boolean mIsShiftingMode;
@@ -109,7 +109,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
 
     private boolean mIsDarkTheme;
     private boolean mIgnoreNightMode;
-    private int mCustomActiveTabColor = -1;
+    private int mCustomActiveTabColor;
 
     private boolean mDrawBehindNavBar = true;
     private boolean mUseTopOffset = true;
@@ -297,12 +297,23 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     }
 
     /**
+     * Deprecated. Use {@link #setItemsFromMenu(int, OnMenuTabClickListener)} instead.
+     */
+    @Deprecated
+    public void setItemsFromMenu(@MenuRes int menuRes, OnMenuTabSelectedListener listener) {
+        clearItems();
+        mItems = MiscUtils.inflateMenuFromResource((Activity) getContext(), menuRes);
+        mMenuListener = listener;
+        updateItems(mItems);
+    }
+
+    /**
      * Set items from an XML menu resource file.
      *
      * @param menuRes  the menu resource to inflate items from.
      * @param listener listener for tab change events.
      */
-    public void setItemsFromMenu(@MenuRes int menuRes, OnMenuTabSelectedListener listener) {
+    public void setItemsFromMenu(@MenuRes int menuRes, OnMenuTabClickListener listener) {
         clearItems();
         mItems = MiscUtils.inflateMenuFromResource((Activity) getContext(), menuRes);
         mMenuListener = listener;
@@ -318,11 +329,19 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     }
 
     /**
+     * Deprecated. Use {@link #setOnTabClickListener(OnTabClickListener)} instead.
+     */
+    @Deprecated
+    public void setOnItemSelectedListener(OnTabSelectedListener listener) {
+        mListener = listener;
+    }
+
+    /**
      * Set a listener that gets fired when the selected tab changes.
      *
      * @param listener a listener for monitoring changes in tab selection.
      */
-    public void setOnItemSelectedListener(OnTabSelectedListener listener) {
+    public void setOnTabClickListener(OnTabClickListener listener) {
         mListener = listener;
     }
 
@@ -687,17 +706,17 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      */
     public void getBarSize(final OnSizeDeterminedListener listener) {
         final int sizeCandidate = mIsTabletMode ?
-                mItemContainer.getWidth() : mItemContainer.getHeight();
+                mOuterContainer.getWidth() : mOuterContainer.getHeight();
 
         if (sizeCandidate == 0) {
-            mItemContainer.getViewTreeObserver().addOnGlobalLayoutListener(
+            mOuterContainer.getViewTreeObserver().addOnGlobalLayoutListener(
                     new ViewTreeObserver.OnGlobalLayoutListener() {
                         @SuppressWarnings("deprecation")
                         @Override
                         public void onGlobalLayout() {
                             listener.onSizeReady(mIsTabletMode ?
-                                    mItemContainer.getWidth() : mItemContainer.getHeight());
-                            ViewTreeObserver obs = mItemContainer.getViewTreeObserver();
+                                    mOuterContainer.getWidth() : mOuterContainer.getHeight());
+                            ViewTreeObserver obs = mOuterContainer.getViewTreeObserver();
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                                 obs.removeOnGlobalLayoutListener(this);
@@ -719,7 +738,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      * @return the BottomBar.
      */
     public View getBar() {
-        return mItemContainer;
+        return mOuterContainer;
     }
 
     /**
@@ -902,24 +921,73 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         if (v.getTag().equals(TAG_BOTTOM_BAR_VIEW_INACTIVE)) {
             unselectTab(findViewWithTag(TAG_BOTTOM_BAR_VIEW_ACTIVE), true);
             selectTab(v, true);
-            updateSelectedTab(findItemPosition(v));
         }
+        updateSelectedTab(findItemPosition(v));
     }
 
     private void updateSelectedTab(int newPosition) {
+        final boolean notifyMenuListener = mMenuListener != null && mItems instanceof BottomBarTab[];
+        final boolean notifyRegularListener = mListener != null;
+
         if (newPosition != mCurrentTabPosition) {
             handleBadgeVisibility(mCurrentTabPosition, newPosition);
             mCurrentTabPosition = newPosition;
 
-            if (mListener != null) {
-                mListener.onItemSelected(mCurrentTabPosition);
+            if (notifyRegularListener) {
+                notifyRegularListener(mListener, false, mCurrentTabPosition);
             }
 
-            if (mMenuListener != null && mItems instanceof BottomBarTab[]) {
-                mMenuListener.onMenuItemSelected(((BottomBarTab) mItems[mCurrentTabPosition]).id);
+            if (notifyMenuListener) {
+                notifyMenuListener(mMenuListener, false, ((BottomBarTab) mItems[mCurrentTabPosition]).id);
             }
 
             updateCurrentFragment();
+        } else {
+            if (notifyRegularListener) {
+                notifyRegularListener(mListener, true, mCurrentTabPosition);
+            }
+
+            if (notifyMenuListener) {
+                notifyMenuListener(mMenuListener, true, ((BottomBarTab) mItems[mCurrentTabPosition]).id);
+            }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void notifyRegularListener(Object listener, boolean isReselection, int position) {
+        if (listener instanceof OnTabClickListener) {
+            OnTabClickListener onTabClickListener = (OnTabClickListener) listener;
+
+            if (!isReselection) {
+                onTabClickListener.onTabSelected(position);
+            } else {
+                onTabClickListener.onTabReSelected(position);
+            }
+        } else if (listener instanceof OnTabSelectedListener) {
+            OnTabSelectedListener onTabSelectedListener = (OnTabSelectedListener) listener;
+
+            if (!isReselection) {
+                onTabSelectedListener.onItemSelected(position);
+            }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void notifyMenuListener(Object listener, boolean isReselection, @IdRes int menuItemId) {
+        if (listener instanceof OnMenuTabClickListener) {
+            OnMenuTabClickListener onMenuTabClickListener = (OnMenuTabClickListener) listener;
+
+            if (!isReselection) {
+                onMenuTabClickListener.onMenuTabSelected(menuItemId);
+            } else {
+                onMenuTabClickListener.onMenuTabReSelected(menuItemId);
+            }
+        } else if (listener instanceof OnMenuTabSelectedListener) {
+            OnMenuTabSelectedListener onMenuTabSelectedListener = (OnMenuTabSelectedListener) listener;
+
+            if (!isReselection) {
+                onMenuTabSelectedListener.onMenuItemSelected(menuItemId);
+            }
         }
     }
 
@@ -1101,7 +1169,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         int tabPosition = findItemPosition(tab);
 
         if (!mIsShiftingMode || mIsTabletMode) {
-            int activeColor = mCustomActiveTabColor != -1 ?
+            int activeColor = mCustomActiveTabColor != 0 ?
                     mCustomActiveTabColor : mPrimaryColor;
             icon.setColorFilter(activeColor);
 
