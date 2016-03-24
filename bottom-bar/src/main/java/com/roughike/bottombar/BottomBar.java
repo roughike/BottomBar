@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.MenuRes;
+import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
@@ -569,11 +570,10 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      *
      * @param tabPosition     zero-based index for the tab.
      * @param backgroundColor a color for this badge, such as "#FF0000".
-     * @param initialCount    text displayed initially for this Badge.
      * @return a {@link BottomBarBadge} object.
      */
-    public BottomBarBadge makeBadgeForTabAt(int tabPosition, String backgroundColor, int initialCount) {
-        return makeBadgeForTabAt(tabPosition, Color.parseColor(backgroundColor), initialCount);
+    public BottomBarBadge makeBadgeForTabAt(int tabPosition, String backgroundColor) {
+        return makeBadgeForTabAt(tabPosition, Color.parseColor(backgroundColor));
     }
 
     /**
@@ -582,10 +582,9 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      *
      * @param tabPosition     zero-based index for the tab.
      * @param backgroundColor a color for this badge, such as 0xFFFF0000.
-     * @param initialCount    text displayed initially for this Badge.
      * @return a {@link BottomBarBadge} object.
      */
-    public BottomBarBadge makeBadgeForTabAt(int tabPosition, int backgroundColor, int initialCount) {
+    public BottomBarBadge makeBadgeForTabAt(int tabPosition, int backgroundColor) {
         if (mItems == null || mItems.length == 0) {
             throw new UnsupportedOperationException("You have no BottomBar Tabs set yet. " +
                     "Please set them first before calling the makeBadgeForTabAt() method.");
@@ -594,10 +593,13 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
                     "index " + tabPosition + ". You have no BottomBar Tabs at that position.");
         }
 
+        // bottombar badge size
+        int size = MiscUtils.dpToPixel(getContext(), 10);
         BottomBarBadge badge = new BottomBarBadge(mContext,
                 mItemContainer.getChildAt(tabPosition), backgroundColor);
         badge.setTag(TAG_BADGE + tabPosition);
-        badge.setCount(initialCount);
+        // badge.setCount(initialCount);
+        badge.setLayoutParams(new ViewGroup.LayoutParams(size, size));
 
         if (mBadgeMap == null) {
             mBadgeMap = new HashMap<>();
@@ -613,14 +615,21 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
             canShow = mBadgeStateMap.get(tabPosition);
         }
 
-        if (canShow && mCurrentTabPosition != tabPosition
-                && initialCount != 0) {
+        if (canShow && mCurrentTabPosition != tabPosition) {
             badge.show();
         } else {
             badge.hide();
         }
 
         return badge;
+    }
+
+    @Nullable
+    public BottomBarBadge getBadgeAt(final int index) {
+        if (null != mBadgeMap && mBadgeMap.containsKey(index)) {
+            return (BottomBarBadge) mOuterContainer.findViewWithTag(mBadgeMap.get(index));
+        }
+        return null;
     }
 
     /**
