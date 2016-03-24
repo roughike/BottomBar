@@ -27,6 +27,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import java.lang.ref.SoftReference;
+
 /*
  * BottomBar library for Android
  * Copyright (c) 2016 Iiro Krankka (http://github.com/roughike).
@@ -131,13 +133,12 @@ public class BottomBarBadge extends View {
         return isVisible;
     }
 
-    private View mTabToAddTo;
+    private SoftReference<View> mTabToAddTo;
 
     protected BottomBarBadge(Context context, final View tabToAddTo, // Rhyming accidentally! That's a Smoove Move!
                              int backgroundColor) {
         super(context);
-
-        mTabToAddTo = tabToAddTo;
+        mTabToAddTo = new SoftReference<>(tabToAddTo);
 
 //        setLayoutParams(new ViewGroup.LayoutParams(
 //                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -145,9 +146,10 @@ public class BottomBarBadge extends View {
 //        MiscUtils.setTextAppearance(this,
 //                R.style.BB_BottomBarBadge_Text);
 
-        int strokeColor = MiscUtils.getColor(getContext(), R.attr.colorAccent);
+        int strokeColor = MiscUtils.getColor(context, R.attr.colorAccent);
+        float strokeSize = MiscUtils.dpToPixelf(context, 1);
 //        int three = MiscUtils.dpToPixel(context, 20);
-        Drawable backgroundCircle = BadgeCircle.make(100, backgroundColor, strokeColor, 2f);
+        Drawable backgroundCircle = BadgeCircle.make(100, backgroundColor, strokeColor, strokeSize);
 //        setPadding(three, three, three, three);
         setBackgroundCompat(backgroundCircle);
 //
@@ -170,10 +172,14 @@ public class BottomBarBadge extends View {
     @Override
     protected void onSizeChanged(final int w, final int h, final int oldw, final int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        adjustPositionAndSize(mTabToAddTo);
+        adjustPositionAndSize(mTabToAddTo.get());
     }
 
     private void adjustPositionAndSize(View tabToAddTo) {
+        if (null == tabToAddTo) {
+            return;
+        }
+
         View image = tabToAddTo.findViewById(R.id.bb_bottom_bar_icon);
 //        Log.v(getClass().getSimpleName(), "tab position: " + tabToAddTo.getX() + "x" + tabToAddTo.getY());
 //        Log.v(getClass().getSimpleName(), "image position: " + image.getX() + "x" + image.getY());

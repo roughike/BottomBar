@@ -58,6 +58,19 @@ class MiscUtils {
     }
 
     /**
+     * Converts dps to pixels nicely to floats.
+     *
+     * @param context the Context for getting the resources
+     * @param dp      dimension in dps
+     * @return dimension in pixels
+     */
+    protected static float dpToPixelf(Context context, float dp) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return (dp * (metrics.densityDpi / 160f));
+    }
+
+    /**
      * Returns screen width.
      *
      * @param context Context to get resources and device specific display metrics
