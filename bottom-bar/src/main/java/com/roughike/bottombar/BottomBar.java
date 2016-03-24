@@ -338,6 +338,14 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     }
 
     /**
+     * Deprecated. Use {@link #setOnTabClickListener(OnTabClickListener)} instead.
+     */
+    @Deprecated
+    public void setOnItemSelectedListener(OnTabSelectedListener listener) {
+        mListener = listener;
+    }
+
+    /**
      * Set a listener that gets fired when the selected tab changes.
      *
      * @param listener a listener for monitoring changes in tab selection.
