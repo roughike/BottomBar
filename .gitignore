@@ -1,15 +1,45 @@
-.gradle
-/local.properties
-.idea
+# Custom
+_site
+
+# Ant
+build.num
+
+# ADT
+.classpath
+.project
+.settings
+local.properties
+bin
+gen
+_layouts
+proguard.cfg
+-
+
+# OSX
 .DS_Store
-/build
-/captures
+
+# Github
+gh-pages
+
+# Gradle
+.gradle
+build
+
+# IDEA
+*.iml
+*.ipr
 *.iws
-screenshot_one.png
-screenshot_two.png
+out
+.idea
+
+# Maven
+target
+release.properties
+pom.xml.*
+
 demo1.gif
 demo2.gif
+demo2-badge.gif
 tablet.png
 screenshot_tablet.png
 scrolling_demo.gif
-color_demo.gif

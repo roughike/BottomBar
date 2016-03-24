@@ -1,5 +1,5 @@
 # BottomBar
-<img src="https://raw.githubusercontent.com/roughike/BottomBar/master/scrolling_demo.gif" width="278" height="492" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/demo2.gif" width="278" height="492" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/screenshot_tablet.png" width="307" height="492" /> 
+<img src="https://raw.githubusercontent.com/roughike/BottomBar/master/scrolling_demo.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/demo2-badge.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/screenshot_tablet.png" width="33%" /> 
 
 **Don't send me pull requests just yet, not until the dust settles.**
 
@@ -22,7 +22,7 @@ Your uncle Bob's Galaxy S Mini will probably be supported in the future though.
 ## Gimme that Gradle sweetness, pls?
 
 ```groovy
-compile 'com.roughike:bottom-bar:1.1.7'
+compile 'com.roughike:bottom-bar:1.2.2'
 ```
 
 **Maven:**
@@ -30,7 +30,7 @@ compile 'com.roughike:bottom-bar:1.1.7'
 <dependency>
   <groupId>com.roughike</groupId>
   <artifactId>bottom-bar</artifactId>
-  <version>1.1.7</version>
+  <version>1.2.2</version>
   <type>pom</type>
 </dependency>
 ```
@@ -92,6 +92,28 @@ public class MainActivity extends AppCompatActivity {
         mBottomBar.onSaveInstanceState(outState);
     }
 }
+```
+
+## Badges
+
+You can easily add badges for showing an unread message count or new items / whatever you like.
+
+```java
+// Make a Badge for the first tab, with red background color and a value of "13".
+BottomBarBadge unreadMessages = mBottomBar.makeBadgeForTabAt(0, "#FF0000", 13);
+
+// Control the badge's visibility
+unreadMessages.show();
+unreadMessages.hide();
+
+// Change the displayed count for this badge.
+unreadMessages.setCount(4);
+
+// Change the show / hide animation duration.
+unreadMessages.setAnimationDuration(200);
+
+// If you want the badge be shown always after unselecting the tab that contains it.
+unreadMessages.setAutoShowAfterUnSelection(true);
 ```
 
 ## Customization

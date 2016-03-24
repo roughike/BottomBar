@@ -2,11 +2,10 @@ package com.roughike.bottombar;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.MenuRes;
@@ -19,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.ViewPropertyAnimator;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -179,15 +177,28 @@ class MiscUtils {
 
     /**
      * A convenience method for setting text appearance.
+     *
      * @param textView a TextView which textAppearance to modify.
-     * @param resId a style resource for the text appearance.
+     * @param resId    a style resource for the text appearance.
      */
     @SuppressWarnings("deprecation")
-    public static void setTextAppearance(TextView textView, int resId) {
+    protected static void setTextAppearance(TextView textView, int resId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             textView.setTextAppearance(resId);
         } else {
             textView.setTextAppearance(textView.getContext(), resId);
         }
+    }
+
+    /**
+     * Determine if the current UI Mode is Night Mode.
+     *
+     * @param context Context to get the configuration.
+     * @return true if the night mode is enabled, otherwise false.
+     */
+    protected static boolean isNightMode(Context context) {
+        int currentNightMode = context.getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK;
+        return currentNightMode == Configuration.UI_MODE_NIGHT_YES;
     }
 }
