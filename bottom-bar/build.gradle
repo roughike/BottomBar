@@ -8,12 +8,12 @@ ext {
     libraryName = 'bottom-bar'
     artifact = 'bottom-bar'
 
-    libraryDescription = 'A custom view component that mimicks the Material Design "Bottom navigation" pattern.'
+    libraryDescription = 'A custom view component that mimics the Material Design "Bottom navigation" pattern.'
 
     siteUrl = 'https://github.com/roughike/BottomBar'
     gitUrl = 'https://github.com/roughike/BottomBar.git'
 
-    libraryVersion = '1.1.6'
+    libraryVersion = '1.2.4'
 
     developerId = 'roughike'
     developerName = 'Iiro Krankka'
@@ -29,7 +29,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 11
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -40,8 +40,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'com.android.support:design:23.2.0'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
 }
 
 apply plugin: 'com.github.dcendents.android-maven'

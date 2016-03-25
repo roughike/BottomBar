@@ -17,8 +17,6 @@
 
 package com.roughike.bottombar;
 
-import android.support.annotation.IdRes;
-
 /*
  * BottomBar library for Android
  * Copyright (c) 2016 Iiro Krankka (http://github.com/roughike).
@@ -35,20 +33,12 @@ import android.support.annotation.IdRes;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * @deprecated Use {@link OnMenuTabClickListener} instead
- */
-@Deprecated
-public interface OnMenuTabSelectedListener {
+public interface OnSizeDeterminedListener {
     /**
-     * The method being called when currently visible {@link BottomBarTab} changes.
-     * This listener won't be fired until the user changes the selected item the
-     * first time. So you won't get this event when you're just initialized the
-     * BottomBar.
+     * Called when the size of the BottomBar is determined and ready.
      *
-     * @param menuItemId the new visible tab's id that
-     * was assigned in the menu xml resource file.
+     * @param size height or width of the BottomBar, depending on if
+     *             the current device is a phone or a tablet.
      */
-    void onMenuItemSelected(@IdRes int menuItemId);
+    void onSizeReady(int size);
 }

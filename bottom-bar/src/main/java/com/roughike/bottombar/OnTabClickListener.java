@@ -17,18 +17,24 @@ package com.roughike.bottombar;
  * limitations under the License.
  */
 
-/**
- * @deprecated Use {@link OnTabClickListener} instead.
- */
-@Deprecated
-public interface OnTabSelectedListener {
+public interface OnTabClickListener {
     /**
      * The method being called when currently visible {@link BottomBarTab} changes.
-     * This listener won't be fired until the user changes the selected item the
-     * first time. So you won't get this event when you're just initialized the
-     * BottomBar.
+     *
+     * This listener is fired for the first time after the items have been set and
+     * also after a configuration change, such as when screen orientation changes
+     * from portrait to landscape.
      *
      * @param position the new visible {@link BottomBarTab}
      */
-    void onItemSelected(int position);
+    void onTabSelected(int position);
+
+    /**
+     * The method being called when currently visible {@link BottomBarTab} is
+     * reselected. Use this method for scrolling to the top of your content,
+     * as recommended by the Material Design spec
+     *
+     * @param position the {@link BottomBarTab} that was reselected.
+     */
+    void onTabReSelected(int position);
 }

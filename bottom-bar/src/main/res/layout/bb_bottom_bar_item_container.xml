@@ -19,24 +19,27 @@
 
     </FrameLayout>
 
+    <View
+        android:id="@+id/bb_bottom_bar_background_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/bb_bottom_bar_outer_container"
+        android:layout_alignBottom="@+id/bb_bottom_bar_outer_container"
+        android:background="#FFFFFF" />
+
+    <View
+        android:id="@+id/bb_bottom_bar_background_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/bb_bottom_bar_outer_container"
+        android:layout_alignBottom="@+id/bb_bottom_bar_outer_container"
+        android:visibility="invisible" />
+
     <FrameLayout
         android:id="@+id/bb_bottom_bar_outer_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
-
-        <FrameLayout
-            android:id="@+id/bb_bottom_bar_background_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FFFFFF" />
-
-        <FrameLayout
-            android:id="@+id/bb_bottom_bar_background_overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/bb_bottom_bar_top_shadow"
-            android:visibility="invisible" />
 
         <LinearLayout
             android:id="@+id/bb_bottom_bar_item_container"
