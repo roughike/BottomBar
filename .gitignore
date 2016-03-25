@@ -26,7 +26,7 @@ gh-pages
 build
 
 # IDEA
-*.iml
+**/*.iml
 *.ipr
 *.iws
 out
