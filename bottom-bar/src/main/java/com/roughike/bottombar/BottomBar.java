@@ -1107,6 +1107,10 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
                 mItemContainer.addView(bottomBarTab);
             }
 
+            if (bottomBarItemBase.color != 0) {
+                mapColorForTab(index, bottomBarItemBase.color);
+            }
+
             bottomBarTab.setOnClickListener(this);
             bottomBarTab.setOnLongClickListener(this);
             index++;
