@@ -252,6 +252,12 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     }
 
     /**
+     * Deprecated.
+     * <p/>
+     * Use either {@link #setItems(BottomBarTab...)} or
+     * {@link #setItemsFromMenu(int, OnMenuTabClickListener)} and add a listener using
+     * {@link #setOnTabClickListener(OnTabClickListener)} to handle tab changes by yourself.
+     * <p/>
      * Set tabs and fragments for this BottomBar. When setting more than 3 items,
      * only the icons will show by default, but the selected item
      * will have the text visible.
@@ -260,6 +266,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      * @param containerResource id for the layout to inflate Fragments to.
      * @param fragmentItems     an array of {@link BottomBarFragment} objects.
      */
+    @Deprecated
     public void setFragmentItems(android.support.v4.app.FragmentManager fragmentManager, @IdRes int containerResource,
                                  BottomBarFragment... fragmentItems) {
         if (fragmentItems.length > 0) {
@@ -319,6 +326,11 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         mItems = MiscUtils.inflateMenuFromResource((Activity) getContext(), menuRes);
         mMenuListener = listener;
         updateItems(mItems);
+
+        if (mItems != null && mItems.length > 0
+                && mItems instanceof BottomBarTab[]) {
+            listener.onMenuTabSelected(((BottomBarTab) mItems[mCurrentTabPosition]).id);
+        }
     }
 
     public int getItemCount() {
@@ -344,6 +356,10 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      */
     public void setOnTabClickListener(OnTabClickListener listener) {
         mListener = listener;
+
+        if (mItems != null && mItems.length > 0) {
+            listener.onTabSelected(mCurrentTabPosition);
+        }
     }
 
     /**
@@ -1131,8 +1147,6 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
                 mItemContainer.addView(bottomBarView);
             }
         }
-
-        updateCurrentFragment();
 
         if (mPendingTextAppearance != -1) {
             mPendingTextAppearance = -1;

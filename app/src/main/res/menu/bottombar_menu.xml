@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bb_menu_recents"
+        android:icon="@drawable/ic_recents"
+        android:title="Recents" />
+    <item
+        android:id="@+id/bb_menu_favorites"
+        android:icon="@drawable/ic_favorites"
+        android:title="Favorites" />
+    <item
+        android:id="@+id/bb_menu_nearby"
+        android:icon="@drawable/ic_nearby"
+        android:title="Nearby" />
+    <item
+        android:id="@+id/bb_menu_friends"
+        android:icon="@drawable/ic_friends"
+        android:title="Friends" />
+    <item
+        android:id="@+id/bb_menu_food"
+        android:icon="@drawable/ic_restaurants"
+        android:title="Food" />
+</menu>
