@@ -55,17 +55,22 @@ public class BadgeCircle {
         indicator.getPaint().setStyle(Paint.Style.FILL);
         indicator.getPaint().setColor(color);
 
-        ShapeDrawable indicator2 = new ShapeDrawable(new OvalShape());
-        indicator2.setIntrinsicWidth(size);
-        indicator2.setIntrinsicHeight(size);
-        indicator2.getPaint().setColor(strokeColor);
-        indicator2.getPaint().setStrokeWidth(strokeWidth);
-        indicator2.getPaint().setStyle(Paint.Style.STROKE);
+        if (strokeColor != 0 && strokeWidth > 0) {
+            ShapeDrawable indicator2 = new ShapeDrawable(new OvalShape());
+            indicator2.setIntrinsicWidth(size);
+            indicator2.setIntrinsicHeight(size);
+            indicator2.getPaint().setColor(strokeColor);
+            indicator2.getPaint().setStrokeWidth(strokeWidth);
+            indicator2.getPaint().setStyle(Paint.Style.STROKE);
 
-        int s = (int) strokeWidth;
-        final LayerDrawable drawable = new LayerDrawable(new Drawable[]{indicator, indicator2});
-        drawable.setLayerInset(0, s, s, s, s);
-        drawable.setLayerInset(1, s, s, s, s);
-        return drawable;
+            int s = (int) (strokeWidth / 2);
+            int s2 = (int) (strokeWidth);
+            final LayerDrawable drawable = new LayerDrawable(new Drawable[]{indicator, indicator2});
+            drawable.setLayerInset(0, s2, s2, s2, s2);
+            drawable.setLayerInset(1, s, s, s, s);
+            return drawable;
+        } else {
+            return indicator;
+        }
     }
 }

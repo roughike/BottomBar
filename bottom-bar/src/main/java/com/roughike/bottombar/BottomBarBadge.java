@@ -136,7 +136,7 @@ public class BottomBarBadge extends View {
     private SoftReference<View> mTabToAddTo;
 
     protected BottomBarBadge(Context context, final View tabToAddTo, // Rhyming accidentally! That's a Smoove Move!
-                             int backgroundColor) {
+                             int backgroundColor, int strokeColor, float strokeSize) {
         super(context);
         mTabToAddTo = new SoftReference<>(tabToAddTo);
 
@@ -146,8 +146,6 @@ public class BottomBarBadge extends View {
 //        MiscUtils.setTextAppearance(this,
 //                R.style.BB_BottomBarBadge_Text);
 
-        int strokeColor = MiscUtils.getColor(context, R.attr.colorAccent);
-        float strokeSize = MiscUtils.dpToPixelf(context, 1);
 //        int three = MiscUtils.dpToPixel(context, 20);
         Drawable backgroundCircle = BadgeCircle.make(100, backgroundColor, strokeColor, strokeSize);
 //        setPadding(three, three, three, three);

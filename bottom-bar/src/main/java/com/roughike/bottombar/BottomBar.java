@@ -497,17 +497,6 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     }
 
     /**
-     * Map a background color for a Tab, that changes the whole BottomBar
-     * background color when the Tab is selected.
-     *
-     * @param tabPosition zero-based index for the tab.
-     * @param color       a hex color for the tab, such as "#00FF000".
-     */
-    public void mapColorForTab(int tabPosition, String color) {
-        mapColorForTab(tabPosition, Color.parseColor(color));
-    }
-
-    /**
      * Use dark theme instead of the light one.
      * <p/>
      * NOTE: You might want to change your active tab color to something else
@@ -585,22 +574,12 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      * the specified position.
      *
      * @param tabPosition     zero-based index for the tab.
-     * @param backgroundColor a color for this badge, such as "#FF0000".
-     * @return a {@link BottomBarBadge} object.
-     */
-    public BottomBarBadge makeBadgeForTabAt(int tabPosition, String backgroundColor) {
-        return makeBadgeForTabAt(tabPosition, Color.parseColor(backgroundColor));
-    }
-
-    /**
-     * Creates a new Badge (for example, an indicator for unread messages) for a Tab at
-     * the specified position.
-     *
-     * @param tabPosition     zero-based index for the tab.
      * @param backgroundColor a color for this badge, such as 0xFFFF0000.
+     * @param strokeColor a color for this badge stroke, such as 0xFFFF0000.
+     * @param strokeSize badge stroke width
      * @return a {@link BottomBarBadge} object.
      */
-    public BottomBarBadge makeBadgeForTabAt(int tabPosition, int backgroundColor) {
+    public BottomBarBadge makeBadgeForTabAt(int tabPosition, int backgroundColor, int strokeColor, float strokeSize) {
         if (mItems == null || mItems.length == 0) {
             throw new UnsupportedOperationException("You have no BottomBar Tabs set yet. " +
                     "Please set them first before calling the makeBadgeForTabAt() method.");
@@ -610,9 +589,9 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         }
 
         // bottombar badge size
-        int size = MiscUtils.dpToPixel(getContext(), 10);
+        int size = MiscUtils.dpToPixel(getContext(), 12);
         BottomBarBadge badge = new BottomBarBadge(mContext,
-                mItemContainer.getChildAt(tabPosition), backgroundColor);
+                mItemContainer.getChildAt(tabPosition), backgroundColor, strokeColor, strokeSize);
         badge.setTag(TAG_BADGE + tabPosition);
         // badge.setCount(initialCount);
         badge.setLayoutParams(new ViewGroup.LayoutParams(size, size));
