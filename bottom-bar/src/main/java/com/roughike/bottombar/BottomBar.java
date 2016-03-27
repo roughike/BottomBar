@@ -366,8 +366,11 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      * Select a tab at the specified position.
      *
      * @param position the position to select.
+     * @param notify   notify the listeners about the position changed. This is useful for instance when you have a ViewPager
+     *                 which manages your fragments and you want to update the BottomBar selected tab without being notified
+     *                 about the tab changes.
      */
-    public void selectTabAtPosition(int position, boolean animate) {
+    public void selectTabAtPosition(int position, boolean animate, boolean notify) {
         if (mItems == null || mItems.length == 0) {
             throw new UnsupportedOperationException("Can't select tab at " +
                     "position " + position + ". This BottomBar has no items set yet.");
@@ -379,7 +382,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         unselectTab(mItemContainer.findViewWithTag(TAG_BOTTOM_BAR_VIEW_ACTIVE), animate);
         selectTab(mItemContainer.getChildAt(position), animate);
 
-        updateSelectedTab(position);
+        updateSelectedTab(position, notify);
     }
 
     /**
@@ -387,8 +390,9 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      * the selection.
      *
      * @param defaultTabPosition the default tab position.
+     * @param notify Notify the listeners about the position change.
      */
-    public void setDefaultTabPosition(int defaultTabPosition) {
+    public void setDefaultTabPosition(int defaultTabPosition, boolean notify) {
         if (mItems == null || mItems.length == 0) {
             throw new UnsupportedOperationException("Can't set default tab at " +
                     "position " + defaultTabPosition + ". This BottomBar has no items set yet.");
@@ -398,7 +402,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         }
 
         if (!mIsComingFromRestoredState) {
-            selectTabAtPosition(defaultTabPosition, false);
+            selectTabAtPosition(defaultTabPosition, false, notify);
         }
     }
 
@@ -565,7 +569,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         mCustomActiveTabColor = activeTabColor;
 
         if (mItems != null && mItems.length > 0) {
-            selectTabAtPosition(mCurrentTabPosition, false);
+            selectTabAtPosition(mCurrentTabPosition, false, false);
         }
     }
 
@@ -926,12 +930,12 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
             unselectTab(findViewWithTag(TAG_BOTTOM_BAR_VIEW_ACTIVE), true);
             selectTab(v, true);
         }
-        updateSelectedTab(findItemPosition(v));
+        updateSelectedTab(findItemPosition(v), true);
     }
 
-    private void updateSelectedTab(int newPosition) {
-        final boolean notifyMenuListener = mMenuListener != null && mItems instanceof BottomBarTab[];
-        final boolean notifyRegularListener = mListener != null;
+    private void updateSelectedTab(int newPosition, boolean notify) {
+        final boolean notifyMenuListener = notify && (mMenuListener != null && mItems instanceof BottomBarTab[]);
+        final boolean notifyRegularListener = notify && mListener != null;
 
         if (newPosition != mCurrentTabPosition) {
             handleBadgeVisibility(mCurrentTabPosition, newPosition);
