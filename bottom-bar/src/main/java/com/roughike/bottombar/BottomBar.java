@@ -664,13 +664,13 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
             mPendingTextAppearance = resId;
         }
     }
-
     /**
-     * Hide the shadow that's normally above the BottomBar.
+     * Show the shadow that's adobe the BottomBar.
+     * It's hidden by default
      */
-    public void hideShadow() {
-        if (mShadowView != null) {
-            mShadowView.setVisibility(GONE);
+    public void showShadow() {
+        if(null != mShadowView) {
+            mShadowView.setVisibility(View.VISIBLE);
         }
     }
 
