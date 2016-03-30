@@ -935,13 +935,14 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
             mIsDarkTheme = true;
         }
 
+        if (mContext instanceof Activity) {
+            navBarMagic((Activity) mContext, this);
+        }
+
         if (!mIsTabletMode && mIsShiftingMode) {
             mDefaultBackgroundColor = mCurrentBackgroundColor = mPrimaryColor;
             mBackgroundView.setBackgroundColor(mDefaultBackgroundColor);
 
-            if (mContext instanceof Activity) {
-                navBarMagic((Activity) mContext, this);
-            }
         } else if (mIsDarkTheme) {
             darkThemeMagic();
         }
