@@ -1070,7 +1070,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
 
         if (!mIsShiftingMode || mIsTabletMode) {
             int activeColor = mCustomActiveTabColor != 0 ?
-                    mCustomActiveTabColor : mPrimaryColor;
+                    mCustomActiveTabColor : (mIsDarkTheme ? mWhiteColor : mPrimaryColor);
             icon.setColorFilter(activeColor);
 
             if (title != null) {
