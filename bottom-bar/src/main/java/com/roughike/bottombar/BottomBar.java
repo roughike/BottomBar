@@ -1073,9 +1073,9 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
 
     private void darkThemeMagic() {
         if (!mIsTabletMode) {
-            mBackgroundView.setBackgroundColor(mDarkBackgroundColor);
+            mBackgroundView.setBackgroundColor(mPrimaryColor);
         } else {
-            mItemContainer.setBackgroundColor(mDarkBackgroundColor);
+            mItemContainer.setBackgroundColor(mPrimaryColor);
             mTabletRightBorder.setBackgroundColor(ContextCompat.getColor(mContext, R.color.bb_tabletRightBorderDark));
         }
     }
