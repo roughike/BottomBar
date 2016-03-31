@@ -1,5 +1,5 @@
 # BottomBar
-<img src="https://raw.githubusercontent.com/roughike/BottomBar/master/scrolling_demo.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/demo2-badge.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/screenshot_tablet.png" width="33%" /> 
+<img src="https://raw.githubusercontent.com/roughike/BottomBar/master/scrolling_demo.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/demo_shifting.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/screenshot_tablet.png" width="33%" /> 
 
 **Don't send me pull requests just yet, not until the dust settles.**
 
@@ -22,7 +22,7 @@ Your uncle Bob's Galaxy S Mini will probably be supported in the future though.
 ## Gimme that Gradle sweetness, pls?
 
 ```groovy
-compile 'com.roughike:bottom-bar:1.2.4'
+compile 'com.roughike:bottom-bar:1.2.6'
 ```
 
 **Maven:**
@@ -30,7 +30,7 @@ compile 'com.roughike:bottom-bar:1.2.4'
 <dependency>
   <groupId>com.roughike</groupId>
   <artifactId>bottom-bar</artifactId>
-  <version>1.2.4</version>
+  <version>1.2.6</version>
   <type>pom</type>
 </dependency>
 ```
@@ -248,11 +248,14 @@ Just give me some time and **all your dreams will come true**.
 
 ## Apps using BottomBar
 
+  * [FragNav](https://github.com/ncapdevi/FragNav) : An Android Library for managing multiple stacks of Fragments. BottomBar is used in the sample app.
+  
 Send me a pull request with modified README.md to get a shoutout!
 
 ## Contributions
 
 Feel free to create issues. 
+
 
 **Don't send me pull requests just yet, not until the dust settles.**
 

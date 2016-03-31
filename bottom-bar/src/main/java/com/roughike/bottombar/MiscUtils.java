@@ -2,6 +2,7 @@ package com.roughike.bottombar;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.util.TypedValue;
 import android.util.Xml;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -167,6 +169,28 @@ class MiscUtils {
         } else {
             return new BottomBarTab[0];
         }
+    }
+
+    /**
+     * A method for animating width for the tabs.
+     * @param tab tab to animate.
+     * @param start starting width.
+     * @param end final width after animation.
+     */
+    protected static void resizeTab(final View tab, float start, float end) {
+        ValueAnimator animator = ValueAnimator.ofFloat(start, end);
+        animator.setDuration(150);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tab.getLayoutParams();
+                if (params == null) return;
+
+                params.width = Math.round((float) animator.getAnimatedValue());
+                tab.setLayoutParams(params);
+            }
+        });
+        animator.start();
     }
 
     /**
