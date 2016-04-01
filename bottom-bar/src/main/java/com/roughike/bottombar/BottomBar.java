@@ -442,12 +442,9 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      * NOTE: You might want to change your active tab color to something else
      * using {@link #setActiveTabColor(int)}, as the default primary color might
      * not have enough contrast for the dark background.
-     *
-     * @param darkThemeEnabled whether the dark the should be enabled or not.
      */
-    public void useDarkTheme(boolean darkThemeEnabled) {
-        if (!mIsDarkTheme && darkThemeEnabled
-                && mItems != null && mItems.length > 0) {
+    public void useDarkTheme() {
+        if (!mIsDarkTheme && mItems != null && mItems.length > 0) {
             darkThemeMagic();
 
             for (int i = 0; i < mItemContainer.getChildCount(); i++) {
@@ -463,7 +460,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
             }
         }
 
-        mIsDarkTheme = darkThemeEnabled;
+        mIsDarkTheme = true;
     }
 
     /**
@@ -1225,7 +1222,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     }
 
     private void handleBackgroundColorChange(int tabPosition, View tab) {
-        if (!mIsShiftingMode || mIsTabletMode) return;
+        if (mIsDarkTheme || !mIsShiftingMode || mIsTabletMode) return;
 
         if (mColorMap != null && mColorMap.containsKey(tabPosition)) {
             handleBackgroundColorChange(
