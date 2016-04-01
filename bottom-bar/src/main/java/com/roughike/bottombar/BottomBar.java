@@ -311,10 +311,14 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
                     position + ". This BottomBar has no items at that position.");
         }
 
-        unselectTab(mItemContainer.findViewWithTag(TAG_BOTTOM_BAR_VIEW_ACTIVE), animate);
-        selectTab(mItemContainer.getChildAt(position), animate);
+        View oldTab = mItemContainer.findViewWithTag(TAG_BOTTOM_BAR_VIEW_ACTIVE);
+        View newTab = mItemContainer.getChildAt(position);
+
+        unselectTab(oldTab, animate);
+        selectTab(newTab, animate);
 
         updateSelectedTab(position, notify);
+        shiftingMagic(oldTab, newTab);
     }
 
     /**
@@ -322,19 +326,19 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
      * the selection.
      *
      * @param defaultTabPosition the default tab position.
-     * @param notify Notify the listeners about the position change.
      */
-    public void setDefaultTabPosition(int defaultTabPosition, boolean notify) {
-        if (mItems == null || mItems.length == 0) {
-            throw new UnsupportedOperationException("Can't set default tab at " +
-                    "position " + defaultTabPosition + ". This BottomBar has no items set yet.");
-        } else if (defaultTabPosition > mItems.length - 1 || defaultTabPosition < 0) {
+    public void setDefaultTabPosition(int defaultTabPosition) {
+        if (mItems == null) {
+            mCurrentTabPosition = defaultTabPosition;
+            return;
+        } else if (mItems.length == 0 || defaultTabPosition > mItems.length - 1
+                || defaultTabPosition < 0) {
             throw new IndexOutOfBoundsException("Can't set default tab at position " +
                     defaultTabPosition + ". This BottomBar has no items at that position.");
         }
 
         if (!mIsComingFromRestoredState) {
-            selectTabAtPosition(defaultTabPosition, false, notify);
+            selectTabAtPosition(defaultTabPosition, false, false);
         }
     }
 
@@ -874,12 +878,16 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
             unselectTab(oldTab, true);
             selectTab(v, true);
 
-            if (!mIsTabletMode && mIsShiftingMode && !mIgnoreShiftingResize) {
-                MiscUtils.resizeTab(oldTab, oldTab.getWidth(), mInActiveShiftingItemWidth);
-                MiscUtils.resizeTab(v, v.getWidth(), mActiveShiftingItemWidth);
-            }
+            shiftingMagic(oldTab, v);
         }
         updateSelectedTab(findItemPosition(v), true);
+    }
+
+    private void shiftingMagic(View oldTab, View newTab) {
+        if (!mIsTabletMode && mIsShiftingMode && !mIgnoreShiftingResize) {
+            MiscUtils.resizeTab(oldTab, oldTab.getWidth(), mInActiveShiftingItemWidth);
+            MiscUtils.resizeTab(newTab, newTab.getWidth(), mActiveShiftingItemWidth);
+        }
     }
 
     private void updateSelectedTab(int newPosition, boolean notify) {
