@@ -24,6 +24,8 @@ gh-pages
 # Gradle
 .gradle
 build
+gradlew.bat
+gradlew
 
 # IDEA
 **/*.iml
