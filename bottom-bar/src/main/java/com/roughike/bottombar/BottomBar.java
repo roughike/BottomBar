@@ -421,7 +421,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
                     "index " + tabPosition + ". You have no BottomBar Tabs at that position.");
         }
 
-        if (!mIsShiftingMode || mIsTabletMode) return;
+        if (mIsDarkTheme || !mIsShiftingMode || mIsTabletMode) return;
 
         if (mColorMap == null) {
             mColorMap = new HashMap<>();
