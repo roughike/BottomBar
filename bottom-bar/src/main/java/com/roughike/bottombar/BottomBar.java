@@ -525,7 +525,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         }
 
         // bottombar badge size
-        int size = MiscUtils.dpToPixel(getContext(), 12);
+        int size = MiscUtils.dpToPixel(getContext(), 8);
         BottomBarBadge badge = new BottomBarBadge(mContext,
                 mItemContainer.getChildAt(tabPosition), backgroundColor, strokeColor, strokeSize);
         badge.setTag(TAG_BADGE + tabPosition);
