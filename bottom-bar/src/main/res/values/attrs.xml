@@ -1,3 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base attributes that are available to all Item objects. -->
+    <declare-styleable name="BB_MenuItem">
+        <!-- The ID of the item. -->
+        <attr name="android:id" />
+        <!-- The title associated with the item. -->
+        <attr name="android:title" />
+        <!-- The condensed title associated with the item.  This is used in situations where the
+             normal title may be too long to be displayed. -->
+        <attr name="android:titleCondensed" />
+        <!-- The icon associated with this item.  This icon will not always be shown, so
+             the title should be sufficient in describing this item. -->
+        <attr name="android:icon" />
+        <!-- Whether the item is enabled. -->
+        <attr name="android:enabled" />
+        <attr name="android:color" />
+
+    </declare-styleable>
 </resources>

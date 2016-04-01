@@ -8,21 +8,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.os.Build;
-import android.support.annotation.MenuRes;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Xml;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import org.xmlpull.v1.XmlPullParser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * BottomBar library for Android
@@ -61,6 +64,19 @@ class MiscUtils {
     }
 
     /**
+     * Converts dps to pixels nicely to floats.
+     *
+     * @param context the Context for getting the resources
+     * @param dp      dimension in dps
+     * @return dimension in pixels
+     */
+    protected static float dpToPixelf(Context context, float dp) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return (dp * (metrics.densityDpi / 160f));
+    }
+
+    /**
      * Returns screen width.
      *
      * @param context Context to get resources and device specific display metrics
@@ -79,24 +95,80 @@ class MiscUtils {
      * @param menuRes  the xml menu resource to inflate
      * @return an Array of BottomBarTabs.
      */
-    protected static BottomBarTab[] inflateMenuFromResource(Activity activity, @MenuRes int menuRes) {
-        // A bit hacky, but hey hey what can I do
-        PopupMenu popupMenu = new PopupMenu(activity, null);
-        Menu menu = popupMenu.getMenu();
-        activity.getMenuInflater().inflate(menuRes, menu);
+    protected static BottomBarTab[] inflateMenuFromResource(Activity activity, int menuRes) {
+        List<BottomBarTab> list = new ArrayList<>();
 
-        int menuSize = menu.size();
-        BottomBarTab[] tabs = new BottomBarTab[menuSize];
+        try {
+            final XmlResourceParser parser = activity.getResources().getLayout(menuRes);
+            AttributeSet attrs = Xml.asAttributeSet(parser);
 
-        for (int i = 0; i < menuSize; i++) {
-            MenuItem item = menu.getItem(i);
-            BottomBarTab tab = new BottomBarTab(item.getIcon(),
-                    String.valueOf(item.getTitle()));
-            tab.id = item.getItemId();
-            tabs[i] = tab;
+            String tagName;
+            int eventType = parser.getEventType();
+            boolean lookingForEndOfUnknownTag = false;
+            String unknownTagName = null;
+
+            do {
+                if (eventType == XmlPullParser.START_TAG) {
+                    tagName = parser.getName();
+                    if (tagName.equals("menu")) {
+                        eventType = parser.next();
+                        break;
+                    }
+                    throw new RuntimeException("Expecting menu, got " + tagName);
+                }
+                eventType = parser.next();
+            } while (eventType != XmlPullParser.END_DOCUMENT);
+
+            boolean reachedEndOfMenu = false;
+            MenuParser menuParser = new MenuParser();
+
+            while (!reachedEndOfMenu) {
+                switch (eventType) {
+                    case XmlPullParser.START_TAG:
+                        if (lookingForEndOfUnknownTag) {
+                            break;
+                        }
+                        tagName = parser.getName();
+                        if (tagName.equals("item")) {
+                            menuParser.readItem(activity, attrs);
+                        } else {
+                            lookingForEndOfUnknownTag = true;
+                            unknownTagName = tagName;
+                        }
+                        break;
+
+                    case XmlPullParser.END_TAG:
+                        tagName = parser.getName();
+                        if (lookingForEndOfUnknownTag && tagName.equals(unknownTagName)) {
+                            lookingForEndOfUnknownTag = false;
+                            unknownTagName = null;
+                        } else if (tagName.equals("item")) {
+                            if(menuParser.hasItem()) {
+                                MenuParser.MenuItem item = menuParser.pull();
+                                BottomBarTab tab = new BottomBarTab(item.getItemIconResId(), String.valueOf(item.getItemTitle()));
+                                tab.id = item.getItemId();
+                                tab.color = item.getItemColor();
+                                list.add(tab);
+                            }
+                        } else if (tagName.equals("menu")) {
+                            reachedEndOfMenu = true;
+                        }
+                        break;
+
+                    case XmlPullParser.END_DOCUMENT:
+                        throw new RuntimeException("Unexpected end of document");
+                }
+                eventType = parser.next();
+            }
+        } catch (Exception e) {
+            return null;
         }
 
-        return tabs;
+        if (list.size() > 0) {
+            return list.toArray(new BottomBarTab[list.size()]);
+        } else {
+            return new BottomBarTab[0];
+        }
     }
 
     /**

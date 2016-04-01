@@ -18,15 +18,16 @@
 package com.roughike.bottombar;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.TextView;
+
+import java.lang.ref.SoftReference;
 
 /*
  * BottomBar library for Android
@@ -44,30 +45,30 @@ import android.widget.TextView;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class BottomBarBadge extends TextView {
-    private int count;
+public class BottomBarBadge extends View {
+//    private int count;
     private boolean isVisible = false;
     private long animationDuration = 150;
     private boolean autoShowAfterUnSelection = false;
 
-    /**
-     * Set the unread / new item / whatever count for this Badge.
-     *
-     * @param count the value this Badge should show.
-     */
-    public void setCount(int count) {
-        this.count = count;
-        setText(String.valueOf(count));
-    }
+//    /**
+//     * Set the unread / new item / whatever count for this Badge.
+//     *
+//     * @param count the value this Badge should show.
+//     */
+//    public void setCount(int count) {
+//        this.count = count;
+//         setText(String.valueOf(count));
+//    }
 
-    /**
-     * Get the currently showing count for this Badge.
-     *
-     * @return current count for the Badge.
-     */
-    public int getCount() {
-        return count;
-    }
+//    /**
+//     * Get the currently showing count for this Badge.
+//     *
+//     * @return current count for the Badge.
+//     */
+//    public int getCount() {
+//        return count;
+//    }
 
     /**
      * Controls whether you want this Badge to be shown automatically when the
@@ -132,44 +133,67 @@ public class BottomBarBadge extends TextView {
         return isVisible;
     }
 
+    private SoftReference<View> mTabToAddTo;
+
     protected BottomBarBadge(Context context, final View tabToAddTo, // Rhyming accidentally! That's a Smoove Move!
-                             int backgroundColor) {
+                             int backgroundColor, int strokeColor, float strokeSize) {
         super(context);
+        mTabToAddTo = new SoftReference<>(tabToAddTo);
 
-        setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        setGravity(Gravity.CENTER);
-        MiscUtils.setTextAppearance(this,
-                R.style.BB_BottomBarBadge_Text);
+//        setLayoutParams(new ViewGroup.LayoutParams(
+//                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        setGravity(Gravity.CENTER);
+//        MiscUtils.setTextAppearance(this,
+//                R.style.BB_BottomBarBadge_Text);
 
-        int three = MiscUtils.dpToPixel(context, 3);
-        ShapeDrawable backgroundCircle = BadgeCircle.make(three * 3, backgroundColor);
-        setPadding(three, three, three, three);
+//        int three = MiscUtils.dpToPixel(context, 20);
+        Drawable backgroundCircle = BadgeCircle.make(100, backgroundColor, strokeColor, strokeSize);
+//        setPadding(three, three, three, three);
         setBackgroundCompat(backgroundCircle);
+//
+//        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @SuppressWarnings("deprecation")
+//            @Override
+//            public void onGlobalLayout() {
+//                adjustPositionAndSize(tabToAddTo);
+//                ViewTreeObserver obs = getViewTreeObserver();
+//
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                    obs.removeOnGlobalLayoutListener(this);
+//                } else {
+//                    obs.removeGlobalOnLayoutListener(this);
+//                }
+//            }
+//        });
+    }
 
-        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @SuppressWarnings("deprecation")
-            @Override
-            public void onGlobalLayout() {
-                adjustPositionAndSize(tabToAddTo);
-                ViewTreeObserver obs = getViewTreeObserver();
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    obs.removeOnGlobalLayoutListener(this);
-                } else {
-                    obs.removeGlobalOnLayoutListener(this);
-                }
-            }
-        });
+    @Override
+    protected void onSizeChanged(final int w, final int h, final int oldw, final int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        adjustPositionAndSize(mTabToAddTo.get());
     }
 
     private void adjustPositionAndSize(View tabToAddTo) {
-        setX((float) (tabToAddTo.getX() + (tabToAddTo.getWidth() / 1.75)));
-        setTranslationY(10);
+        if (null == tabToAddTo) {
+            return;
+        }
 
-        int size = Math.max(getWidth(), getHeight());
-        getLayoutParams().width = size;
-        getLayoutParams().height = size;
+        View image = tabToAddTo.findViewById(R.id.bb_bottom_bar_icon);
+//        Log.v(getClass().getSimpleName(), "tab position: " + tabToAddTo.getX() + "x" + tabToAddTo.getY());
+//        Log.v(getClass().getSimpleName(), "image position: " + image.getX() + "x" + image.getY());
+
+        setX(tabToAddTo.getX() + image.getX() + image.getWidth() - getWidth() / 2);
+        setTranslationY(image.getY() - getHeight() / 2);
+
+//        setX((float) (tabToAddTo.getX() + (tabToAddTo.getWidth() / 1.75)));
+//        setY(tabToAddTo.getTop());
+//         setTranslationY(MiscUtils.dpToPixel(getContext(), 6));
+
+//        Log.v(getClass().getSimpleName(), "final position: " + getX() + ", " + getTranslationY());
+
+//        int size = Math.max(getWidth(), getHeight());
+//        getLayoutParams().width = size;
+//        getLayoutParams().height = size;
     }
 
     @SuppressWarnings("deprecation")

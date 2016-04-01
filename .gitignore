@@ -28,7 +28,7 @@ gradlew.bat
 gradlew
 
 # IDEA
-*.iml
+**/*.iml
 *.ipr
 *.iws
 out

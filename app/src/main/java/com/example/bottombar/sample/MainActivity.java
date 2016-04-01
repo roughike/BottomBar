@@ -1,5 +1,6 @@
 package com.example.bottombar.sample;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,11 +38,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Setting colors for different tabs when there's more than three of them.
         // You can set colors for tabs in three different ways as shown below.
-        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
-        mBottomBar.mapColorForTab(1, 0xFF5D4037);
-        mBottomBar.mapColorForTab(2, "#7B1FA2");
-        mBottomBar.mapColorForTab(3, "#FF5252");
-        mBottomBar.mapColorForTab(4, "#FF9800");
+//        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
+//        mBottomBar.mapColorForTab(1, 0xFF5D4037);
+//        mBottomBar.mapColorForTab(2, 0xFF7B1FA2);
+//        mBottomBar.mapColorForTab(3, 0xFFFF5252);
+//        mBottomBar.mapColorForTab(4, 0xFFFF9800);
+
+        final BottomBarBadge badge1 = mBottomBar.makeBadgeForTabAt(1, 0xffbb0000, 0, 0);
+        final BottomBarBadge badge2 = mBottomBar.makeBadgeForTabAt(4, 0xffbb0000, 0, 0);
+
+        badge1.show();
+        badge2.show();
     }
 
     private String getMessage(int menuItemId, boolean isReselection) {
