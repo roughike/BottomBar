@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +34,8 @@ import android.widget.Toast;
 import com.roughike.bottombar.scrollsweetness.BottomNavigationBehavior;
 
 import java.util.HashMap;
+
+import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
 
 /*
  * BottomBar library for Android
@@ -344,6 +345,14 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
     @Deprecated
     public void setOnItemSelectedListener(OnTabSelectedListener listener) {
         mListener = listener;
+    }
+
+    public int getItemCount() {
+        return mItems.length;
+    }
+
+    public BottomBarItemBase getItem(int index) {
+        return mItems[index];
     }
 
     /**
@@ -1531,6 +1540,7 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         }
 
         if (!bottomBar.drawBehindNavBar()
+                || !((activity.getWindow().getAttributes().flags & FLAG_TRANSLUCENT_NAVIGATION) == FLAG_TRANSLUCENT_NAVIGATION)
                 || navBarHeight == 0
                 || (!(softMenuIdentifier > 0 && res.getBoolean(softMenuIdentifier)))) {
             return;
@@ -1573,7 +1583,6 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
                 && res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            activity.getWindow().getAttributes().flags |= WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
 
             if (bottomBar.useTopOffset()) {
                 int offset;
@@ -1615,6 +1624,15 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
                         bottomBar.setTranslationY(defaultOffset);
                         ((CoordinatorLayout.LayoutParams) bottomBar.getLayoutParams())
                                 .setBehavior(new BottomNavigationBehavior(newHeight, defaultOffset, bottomBar.isShy(), bottomBar.mIsTabletMode));
+                    }
+
+                    final View view = bottomBar.getUserContainer().getChildAt(0);
+                    if (navBarHeightCopy > 0 && ViewCompat.getFitsSystemWindows(view)) {
+
+                        view.setPadding(
+                            view.getPaddingLeft(), view.getPaddingTop(), view.getPaddingRight(),
+                            view.getPaddingBottom() - navBarHeightCopy
+                        );
                     }
 
                     ViewTreeObserver obs = outerContainer.getViewTreeObserver();
