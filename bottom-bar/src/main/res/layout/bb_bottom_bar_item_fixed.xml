@@ -11,6 +11,7 @@
         android:id="@+id/bb_bottom_bar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/BB_BottomBarItem_Fixed.Title"/>
+        android:textAppearance="@style/BB_BottomBarItem_Fixed.Title"
+        android:lines="1" />
 
 </LinearLayout>
