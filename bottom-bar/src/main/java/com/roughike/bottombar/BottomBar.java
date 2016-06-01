@@ -1185,6 +1185,8 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
             if (mContext instanceof Activity) {
                 navBarMagic((Activity) mContext, this);
             }
+        } else if(!mIsShiftingMode && mContext instanceof Activity){
+            navBarMagic((Activity) mContext, this);
         }
 
         View[] viewsToAdd = new View[bottomBarItems.length];
