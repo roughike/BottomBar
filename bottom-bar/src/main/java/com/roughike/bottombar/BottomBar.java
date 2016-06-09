@@ -1323,9 +1323,10 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
             index = 0;
             for (View bottomBarView : viewsToAdd) {
                 LinearLayout.LayoutParams params;
+                int itemWidth = itemWidths[index];
 
-                mInActiveShiftingItemWidths[index] = (int) (itemWidths[index] * 0.9);
-                mActiveShiftingItemWidths[index] = (int) (itemWidths[index] + totalWidth * 0.1);
+                mInActiveShiftingItemWidths[index] = (int) (itemWidth * 0.9);
+                mActiveShiftingItemWidths[index] = (int) (itemWidth + totalWidth * 0.1);
 
                 if (mIsShiftingMode && !mIgnoreShiftingResize) {
                     if (TAG_BOTTOM_BAR_VIEW_ACTIVE.equals(bottomBarView.getTag())) {
@@ -1334,10 +1335,10 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                         params = new LinearLayout.LayoutParams(mInActiveShiftingItemWidths[index], height);
                     }
                 } else {
-                    params = new LinearLayout.LayoutParams(itemWidths[index], height);
+                    params = new LinearLayout.LayoutParams(itemWidth, height);
                 }
 
-                ViewCompat.setPivotX(bottomBarView, proposedItemWidth / 2);
+                ViewCompat.setPivotX(bottomBarView, itemWidth / 2);
                 ViewCompat.setScaleX(bottomBarView, mHeightScale);
 
                 bottomBarView.setLayoutParams(params);
