@@ -91,7 +91,6 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     private int mSixDp;
     private int mSixteenDp;
     private int mEightDp;
-    private int mMaxFixedItemWidth;
     private int mMaxInActiveShiftingItemWidth;
     private int mInActiveShiftingItemWidth;
     private int mActiveShiftingItemWidth;
@@ -923,7 +922,6 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         mSixteenDp = MiscUtils.dpToPixel(mContext, 16);
         mSixDp = MiscUtils.dpToPixel(mContext, 6);
         mEightDp = MiscUtils.dpToPixel(mContext, 8);
-        mMaxFixedItemWidth = MiscUtils.dpToPixel(mContext, 168);
         mMaxInActiveShiftingItemWidth = MiscUtils.dpToPixel(mContext, 96);
     }
 
@@ -1288,17 +1286,25 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         }
 
         if (!mIsTabletMode) {
-            int proposedItemWidth = Math.min(
-                    MiscUtils.dpToPixel(mContext, mScreenWidth / bottomBarItems.length),
-                    mMaxFixedItemWidth
-            );
-
-            mInActiveShiftingItemWidth = (int) (proposedItemWidth * 0.9);
-            mActiveShiftingItemWidth = (int) (proposedItemWidth + (proposedItemWidth * (bottomBarItems.length * 0.1)));
+            int bottomBarWidth = 0;
+            int[] itemWidths = new int[bottomBarItems.length];
+            for (int i = 0; i < bottomBarItems.length; i++) {
+                int proposedItemWidth = Math.min(
+                        MiscUtils.dpToPixel(mContext, mScreenWidth / bottomBarItems.length),
+                        bottomBarItems[i].getMaxWidth(mContext)
+                );
+                itemWidths[i] = proposedItemWidth;
+                bottomBarWidth += proposedItemWidth;
+            }
 
             int height = Math.round(mContext.getResources().getDimension(R.dimen.bb_height));
+            index = 0;
             for (View bottomBarView : viewsToAdd) {
                 LinearLayout.LayoutParams params;
+
+                int proposedItemWidth = itemWidths[index];
+                mInActiveShiftingItemWidth = (int) (proposedItemWidth * 0.9);
+                mActiveShiftingItemWidth = (int) (proposedItemWidth + bottomBarWidth * 0.1);
 
                 if (mIsShiftingMode && !mIgnoreShiftingResize) {
                     if (TAG_BOTTOM_BAR_VIEW_ACTIVE.equals(bottomBarView.getTag())) {
@@ -1312,6 +1318,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
                 bottomBarView.setLayoutParams(params);
                 mItemContainer.addView(bottomBarView);
+                index++;
             }
         }
 
