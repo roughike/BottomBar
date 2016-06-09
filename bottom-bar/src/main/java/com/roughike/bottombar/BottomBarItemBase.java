@@ -43,7 +43,8 @@ class BottomBarItemBase {
     protected int titleResource;
     protected String title;
     protected int color;
-    
+    private int maxWidth;
+
     protected Drawable getIcon(Context context) {
         if (this.iconResource != 0) {
             return ContextCompat.getDrawable(context, this.iconResource);
@@ -58,5 +59,13 @@ class BottomBarItemBase {
         } else {
             return this.title;
         }
+    }
+
+    public void setMaxWidth(int maxWidth){
+        this.maxWidth = maxWidth;
+    }
+
+    public int getMaxWidth(Context context) {
+        return maxWidth != 0 ? maxWidth : MiscUtils.dpToPixel(context, 168);
     }
 }
