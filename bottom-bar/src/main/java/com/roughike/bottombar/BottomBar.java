@@ -130,6 +130,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     private boolean mShouldUpdateFragmentInitially;
 
     private int mMaxFixedTabCount = 3;
+    private float mHeightScale = 1f;
 
     /**
      * Bind the BottomBar to your Activity, and inflate your layout here.
@@ -771,6 +772,13 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     }
 
     /**
+     * Scale the phone's bottom bar and it's contents by specified value.
+     */
+    public void setHeightScale(float heightScale) {
+        mHeightScale = heightScale;
+    }
+
+    /**
      * Hide the shadow that's normally above the BottomBar.
      */
     public void hideShadow() {
@@ -1329,10 +1337,25 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                     params = new LinearLayout.LayoutParams(itemWidths[index], height);
                 }
 
+                ViewCompat.setPivotX(bottomBarView, proposedItemWidth / 2);
+                ViewCompat.setScaleX(bottomBarView, mHeightScale);
+
                 bottomBarView.setLayoutParams(params);
                 mItemContainer.addView(bottomBarView);
                 index++;
             }
+
+            ViewCompat.setPivotY(mOuterContainer, height);
+            ViewCompat.setScaleY(mOuterContainer, mHeightScale);
+
+            ViewCompat.setPivotY(mBackgroundOverlay, height);
+            ViewCompat.setScaleY(mBackgroundOverlay, mHeightScale);
+
+            ViewCompat.setPivotY(mBackgroundView, height);
+            ViewCompat.setScaleY(mBackgroundView, mHeightScale);
+
+            ViewCompat.setPivotY(mShadowView, height);
+            ViewCompat.setScaleY(mShadowView, mHeightScale);
         }
 
         if (mPendingTextAppearance != -1) {
