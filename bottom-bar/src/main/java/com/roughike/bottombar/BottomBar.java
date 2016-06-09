@@ -94,6 +94,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     private int mMaxInActiveShiftingItemWidth;
     private int mInActiveShiftingItemWidth;
     private int mActiveShiftingItemWidth;
+    private int mBarHeight;
 
     private Object mListener;
     private Object mMenuListener;
@@ -822,6 +823,13 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     }
 
     /**
+     * Set custom bar height for mobile layout. The default is 56dp.
+     */
+    public void setCustomHeight(int mBarHeight) {
+        this.mBarHeight = mBarHeight;
+    }
+
+    /**
      * Get this BottomBar's height (or width), depending if the BottomBar
      * is on the bottom (phones) or the left (tablets) of the screen.
      *
@@ -1297,7 +1305,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                 bottomBarWidth += proposedItemWidth;
             }
 
-            int height = Math.round(mContext.getResources().getDimension(R.dimen.bb_height));
+            int height = mBarHeight != 0 ? mBarHeight : Math.round(mContext.getResources().getDimension(R.dimen.bb_height));
             index = 0;
             for (View bottomBarView : viewsToAdd) {
                 LinearLayout.LayoutParams params;
