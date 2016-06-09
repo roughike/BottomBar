@@ -93,8 +93,8 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     private int mEightDp;
     private int mMaxFixedItemWidth;
     private int mMaxInActiveShiftingItemWidth;
-    private int mInActiveShiftingItemWidth;
-    private int mActiveShiftingItemWidth;
+    private int[] mInActiveShiftingItemWidths;
+    private int[] mActiveShiftingItemWidths;
 
     private Object mListener;
     private Object mMenuListener;
@@ -1087,12 +1087,14 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                 newTab = ((FrameLayout) newTab).getChildAt(0);
             }
 
+            int oldTabIndex = mItemContainer.indexOfChild(oldTab);
+            int newTabIndex = mItemContainer.indexOfChild(newTab);
             if (animate) {
-                MiscUtils.resizeTab(oldTab, oldTab.getWidth(), mInActiveShiftingItemWidth);
-                MiscUtils.resizeTab(newTab, newTab.getWidth(), mActiveShiftingItemWidth);
+                MiscUtils.resizeTab(oldTab, oldTab.getWidth(), mInActiveShiftingItemWidths[oldTabIndex]);
+                MiscUtils.resizeTab(newTab, newTab.getWidth(), mActiveShiftingItemWidths[newTabIndex]);
             } else {
-                oldTab.getLayoutParams().width = mInActiveShiftingItemWidth;
-                newTab.getLayoutParams().width = mActiveShiftingItemWidth;
+                oldTab.getLayoutParams().width = mInActiveShiftingItemWidths[oldTabIndex];
+                newTab.getLayoutParams().width = mActiveShiftingItemWidths[newTabIndex];
             }
         }
     }
@@ -1288,30 +1290,48 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         }
 
         if (!mIsTabletMode) {
-            int proposedItemWidth = Math.min(
-                    MiscUtils.dpToPixel(mContext, mScreenWidth / bottomBarItems.length),
-                    mMaxFixedItemWidth
-            );
+            int weightSum = 0;
+            for (BottomBarItemBase item : bottomBarItems) {
+                weightSum += item.getWeight();
+            }
 
-            mInActiveShiftingItemWidth = (int) (proposedItemWidth * 0.9);
-            mActiveShiftingItemWidth = (int) (proposedItemWidth + (proposedItemWidth * (bottomBarItems.length * 0.1)));
+            int[] itemWidths = new int[bottomBarItems.length];
+            int totalWidth = 0;
+            for (int i = 0; i < bottomBarItems.length; i++) {
+                float weightRatio = (float) bottomBarItems[i].getWeight() / weightSum;
+
+                itemWidths[i] = Math.min(
+                        MiscUtils.dpToPixel(mContext, mScreenWidth * weightRatio),
+                        mMaxFixedItemWidth
+                );
+                totalWidth += itemWidths[i];
+            }
 
             int height = Math.round(mContext.getResources().getDimension(R.dimen.bb_height));
+
+            mInActiveShiftingItemWidths = new int[bottomBarItems.length];
+            mActiveShiftingItemWidths = new int[bottomBarItems.length];
+
+            index = 0;
             for (View bottomBarView : viewsToAdd) {
                 LinearLayout.LayoutParams params;
 
+                mInActiveShiftingItemWidths[index] = (int) (itemWidths[index] * 0.9);
+                mActiveShiftingItemWidths[index] = (int) (itemWidths[index] + totalWidth * 0.1);
+
                 if (mIsShiftingMode && !mIgnoreShiftingResize) {
                     if (TAG_BOTTOM_BAR_VIEW_ACTIVE.equals(bottomBarView.getTag())) {
-                        params = new LinearLayout.LayoutParams(mActiveShiftingItemWidth, height);
+                        params = new LinearLayout.LayoutParams(mActiveShiftingItemWidths[index], height);
                     } else {
-                        params = new LinearLayout.LayoutParams(mInActiveShiftingItemWidth, height);
+                        params = new LinearLayout.LayoutParams(mInActiveShiftingItemWidths[index], height);
                     }
                 } else {
-                    params = new LinearLayout.LayoutParams(proposedItemWidth, height);
+                    params = new LinearLayout.LayoutParams(itemWidths[index], height);
                 }
 
                 bottomBarView.setLayoutParams(params);
                 mItemContainer.addView(bottomBarView);
+                index++;
             }
         }
 

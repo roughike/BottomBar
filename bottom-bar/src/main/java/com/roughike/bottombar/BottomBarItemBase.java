@@ -43,7 +43,8 @@ class BottomBarItemBase {
     protected int titleResource;
     protected String title;
     protected int color;
-    
+    private int weight = 100;
+
     protected Drawable getIcon(Context context) {
         if (this.iconResource != 0) {
             return ContextCompat.getDrawable(context, this.iconResource);
@@ -58,5 +59,16 @@ class BottomBarItemBase {
         } else {
             return this.title;
         }
+    }
+
+    /**
+     * Sets the width weight for this item for phone layout. Default weight is 100.
+     */
+    public void setWidthWeight(int maxWidth){
+        this.weight = maxWidth;
+    }
+
+    public int getWeight() {
+        return weight;
     }
 }
