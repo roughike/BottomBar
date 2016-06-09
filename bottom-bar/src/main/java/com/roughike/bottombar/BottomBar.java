@@ -155,7 +155,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         return bottomBar;
     }
 
-    private void setPendingUserContentView(View oldLayout) {
+    protected void setPendingUserContentView(View oldLayout) {
         mPendingUserContentView = oldLayout;
     }
 
