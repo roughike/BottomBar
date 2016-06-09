@@ -838,7 +838,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
      */
     public void getBarSize(final OnSizeDeterminedListener listener) {
         final int sizeCandidate = mIsTabletMode ?
-                mOuterContainer.getWidth() : mOuterContainer.getHeight();
+                mOuterContainer.getWidth() : mBackgroundOverlay.getHeight();
 
         if (sizeCandidate == 0) {
             mOuterContainer.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -847,7 +847,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                         @Override
                         public void onGlobalLayout() {
                             listener.onSizeReady(mIsTabletMode ?
-                                    mOuterContainer.getWidth() : mOuterContainer.getHeight());
+                                    mOuterContainer.getWidth() : mBackgroundOverlay.getHeight());
                             ViewTreeObserver obs = mOuterContainer.getViewTreeObserver();
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -964,6 +964,12 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                 params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
             }
+
+            float height = mContext.getResources().getDimension(R.dimen.bb_height);
+            if (!mIsTabletMode && mHeightScale != 1f){
+                height *= mHeightScale;
+            }
+            mBackgroundOverlay.getLayoutParams().height = Math.round(height);
 
             if (mIsTabletMode && mIsShy) {
                 ((ViewGroup) mPendingUserContentView.getParent()).removeView(mPendingUserContentView);
@@ -1348,9 +1354,6 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
             ViewCompat.setPivotY(mOuterContainer, height);
             ViewCompat.setScaleY(mOuterContainer, mHeightScale);
-
-            ViewCompat.setPivotY(mBackgroundOverlay, height);
-            ViewCompat.setScaleY(mBackgroundOverlay, mHeightScale);
 
             ViewCompat.setPivotY(mBackgroundView, height);
             ViewCompat.setScaleY(mBackgroundView, mHeightScale);
