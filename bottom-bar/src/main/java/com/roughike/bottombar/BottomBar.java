@@ -32,10 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.roughike.bottombar.scrollsweetness.BottomNavigationBehavior;
-
 import java.util.HashMap;
 
 /*
@@ -98,6 +95,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
     private Object mListener;
     private Object mMenuListener;
+    private Object mMenuLongClickListener;
 
     private int mCurrentTabPosition;
     private boolean mIsShiftingMode;
@@ -396,6 +394,10 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                 && mItems instanceof BottomBarTab[]) {
             listener.onMenuTabSelected(((BottomBarTab) mItems[mCurrentTabPosition]).id);
         }
+    }
+
+    public void setOnMenuTabLongClickListener(@Nullable OnMenuTabLongClickListener listener) {
+        mMenuLongClickListener = listener;
     }
 
     /**
@@ -1195,10 +1197,12 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     }
 
     private boolean handleLongClick(View v) {
-        if ((mIsShiftingMode || mIsTabletMode) && v.getTag().equals(TAG_BOTTOM_BAR_VIEW_INACTIVE)) {
-            Toast.makeText(mContext, mItems[findItemPosition(v)].getTitle(mContext), Toast.LENGTH_SHORT).show();
+        if (mMenuLongClickListener == null) {
+            return true;
         }
 
+        boolean isActiveTabLongClicked = TAG_BOTTOM_BAR_VIEW_ACTIVE.equals(v.getTag());
+        ((OnMenuTabLongClickListener) mMenuLongClickListener).onMenuTabLongClicked(v.getId(), isActiveTabLongClicked);
         return true;
     }
 
