@@ -1013,6 +1013,22 @@ public class BottomBar extends FrameLayout implements View.OnClickListener, View
         }
     }
 
+    /**
+     * set dark theme background color
+     * @param colorRes color resources
+     */
+    public void setDarThemeColorRes(@IdRes int colorRes) {
+        mDarkBackgroundColor = ContextCompat.getColor(getContext(), colorRes);
+    }
+
+    /**
+     * set dark theme background color
+     * @param color background color
+     */
+    public void setDarThemeColor(int color) {
+        mDarkBackgroundColor = color;
+    }
+
     @Override
     public void onClick(View v) {
         handleClick(v);
