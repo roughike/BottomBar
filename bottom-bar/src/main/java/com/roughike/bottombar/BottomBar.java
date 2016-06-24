@@ -1471,7 +1471,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         ImageView icon = (ImageView) tab.findViewById(R.id.bb_bottom_bar_icon);
         TextView title = (TextView) tab.findViewById(R.id.bb_bottom_bar_title);
 
-        if (!mIsShiftingMode || mIsTabletMode) {
+        if (mForceUseCustomActiveColor || !mIsShiftingMode || mIsTabletMode) {
             int inActiveColor = mIsDarkTheme ? mWhiteColor : mInActiveColor;
             icon.setColorFilter(inActiveColor);
 
