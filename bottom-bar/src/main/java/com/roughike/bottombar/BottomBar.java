@@ -1380,7 +1380,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         }
     }
 
-    private void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             mCurrentTabPosition = savedInstanceState.getInt(STATE_CURRENT_SELECTED_TAB, -1);
             mBadgeStateMap = (HashMap<Integer, Boolean>) savedInstanceState
