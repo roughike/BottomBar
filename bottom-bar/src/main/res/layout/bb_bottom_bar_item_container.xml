@@ -5,7 +5,7 @@
         android:id="@+id/bb_user_content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bb_bottom_bar_outer_container">
+        android:layout_above="@+id/bb_bottom_bar_background_overlay">
 
         <ImageView
             android:id="@+id/bb_bottom_bar_shadow"
@@ -24,12 +24,12 @@
         android:layout_alignBottom="@+id/bb_bottom_bar_outer_container"
         android:background="#FFFFFF" />
 
+    <!-- height for this view is set programmatically in BottomBar.initializeViews() -->
     <View
         android:id="@+id/bb_bottom_bar_background_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignTop="@+id/bb_bottom_bar_outer_container"
-        android:layout_alignBottom="@+id/bb_bottom_bar_outer_container"
+        android:layout_alignParentBottom="true"
         android:visibility="invisible" />
 
     <FrameLayout

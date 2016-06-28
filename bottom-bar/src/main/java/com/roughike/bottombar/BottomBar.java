@@ -93,8 +93,8 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     private int mEightDp;
     private int mMaxFixedItemWidth;
     private int mMaxInActiveShiftingItemWidth;
-    private int mInActiveShiftingItemWidth;
-    private int mActiveShiftingItemWidth;
+    private int[] mInActiveShiftingItemWidths;
+    private int[] mActiveShiftingItemWidths;
 
     private Object mListener;
     private Object mMenuListener;
@@ -130,6 +130,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     private boolean mShouldUpdateFragmentInitially;
 
     private int mMaxFixedTabCount = 3;
+    private float mHeightScale = 1f;
 
     /**
      * Bind the BottomBar to your Activity, and inflate your layout here.
@@ -155,7 +156,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         return bottomBar;
     }
 
-    private void setPendingUserContentView(View oldLayout) {
+    protected void setPendingUserContentView(View oldLayout) {
         mPendingUserContentView = oldLayout;
     }
 
@@ -771,6 +772,13 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     }
 
     /**
+     * Scale the phone's bottom bar and it's contents by specified value.
+     */
+    public void setHeightScale(float heightScale) {
+        mHeightScale = heightScale;
+    }
+
+    /**
      * Hide the shadow that's normally above the BottomBar.
      */
     public void hideShadow() {
@@ -830,7 +838,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
      */
     public void getBarSize(final OnSizeDeterminedListener listener) {
         final int sizeCandidate = mIsTabletMode ?
-                mOuterContainer.getWidth() : mOuterContainer.getHeight();
+                mOuterContainer.getWidth() : mBackgroundOverlay.getHeight();
 
         if (sizeCandidate == 0) {
             mOuterContainer.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -839,7 +847,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                         @Override
                         public void onGlobalLayout() {
                             listener.onSizeReady(mIsTabletMode ?
-                                    mOuterContainer.getWidth() : mOuterContainer.getHeight());
+                                    mOuterContainer.getWidth() : mBackgroundOverlay.getHeight());
                             ViewTreeObserver obs = mOuterContainer.getViewTreeObserver();
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -956,6 +964,12 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                 params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
             }
+
+            float height = mContext.getResources().getDimension(R.dimen.bb_height);
+            if (!mIsTabletMode && mHeightScale != 1f){
+                height *= mHeightScale;
+            }
+            mBackgroundOverlay.getLayoutParams().height = Math.round(height);
 
             if (mIsTabletMode && mIsShy) {
                 ((ViewGroup) mPendingUserContentView.getParent()).removeView(mPendingUserContentView);
@@ -1087,12 +1101,14 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                 newTab = ((FrameLayout) newTab).getChildAt(0);
             }
 
+            int oldTabIndex = mItemContainer.indexOfChild(oldTab);
+            int newTabIndex = mItemContainer.indexOfChild(newTab);
             if (animate) {
-                MiscUtils.resizeTab(oldTab, oldTab.getWidth(), mInActiveShiftingItemWidth);
-                MiscUtils.resizeTab(newTab, newTab.getWidth(), mActiveShiftingItemWidth);
+                MiscUtils.resizeTab(oldTab, oldTab.getWidth(), mInActiveShiftingItemWidths[oldTabIndex]);
+                MiscUtils.resizeTab(newTab, newTab.getWidth(), mActiveShiftingItemWidths[newTabIndex]);
             } else {
-                oldTab.getLayoutParams().width = mInActiveShiftingItemWidth;
-                newTab.getLayoutParams().width = mActiveShiftingItemWidth;
+                oldTab.getLayoutParams().width = mInActiveShiftingItemWidths[oldTabIndex];
+                newTab.getLayoutParams().width = mActiveShiftingItemWidths[newTabIndex];
             }
         }
     }
@@ -1288,31 +1304,62 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         }
 
         if (!mIsTabletMode) {
-            int proposedItemWidth = Math.min(
-                    MiscUtils.dpToPixel(mContext, mScreenWidth / bottomBarItems.length),
-                    mMaxFixedItemWidth
-            );
+            int weightSum = 0;
+            for (BottomBarItemBase item : bottomBarItems) {
+                weightSum += item.getWeight();
+            }
 
-            mInActiveShiftingItemWidth = (int) (proposedItemWidth * 0.9);
-            mActiveShiftingItemWidth = (int) (proposedItemWidth + (proposedItemWidth * (bottomBarItems.length * 0.1)));
+            int[] itemWidths = new int[bottomBarItems.length];
+            int totalWidth = 0;
+            for (int i = 0; i < bottomBarItems.length; i++) {
+                float weightRatio = (float) bottomBarItems[i].getWeight() / weightSum;
+
+                itemWidths[i] = Math.min(
+                        MiscUtils.dpToPixel(mContext, mScreenWidth * weightRatio),
+                        mMaxFixedItemWidth
+                );
+                totalWidth += itemWidths[i];
+            }
 
             int height = Math.round(mContext.getResources().getDimension(R.dimen.bb_height));
+
+            mInActiveShiftingItemWidths = new int[bottomBarItems.length];
+            mActiveShiftingItemWidths = new int[bottomBarItems.length];
+
+            index = 0;
             for (View bottomBarView : viewsToAdd) {
                 LinearLayout.LayoutParams params;
+                int itemWidth = itemWidths[index];
+
+                mInActiveShiftingItemWidths[index] = (int) (itemWidth * 0.9);
+                mActiveShiftingItemWidths[index] = (int) (itemWidth + totalWidth * 0.1);
 
                 if (mIsShiftingMode && !mIgnoreShiftingResize) {
                     if (TAG_BOTTOM_BAR_VIEW_ACTIVE.equals(bottomBarView.getTag())) {
-                        params = new LinearLayout.LayoutParams(mActiveShiftingItemWidth, height);
+                        params = new LinearLayout.LayoutParams(mActiveShiftingItemWidths[index], height);
                     } else {
-                        params = new LinearLayout.LayoutParams(mInActiveShiftingItemWidth, height);
+                        params = new LinearLayout.LayoutParams(mInActiveShiftingItemWidths[index], height);
                     }
                 } else {
-                    params = new LinearLayout.LayoutParams(proposedItemWidth, height);
+                    params = new LinearLayout.LayoutParams(itemWidth, height);
                 }
+
+                ViewCompat.setPivotX(bottomBarView, itemWidth / 2);
+                ViewCompat.setScaleX(bottomBarView, mHeightScale);
 
                 bottomBarView.setLayoutParams(params);
                 mItemContainer.addView(bottomBarView);
+                index++;
             }
+
+            ViewCompat.setPivotY(mOuterContainer, height);
+            ViewCompat.setScaleY(mOuterContainer, mHeightScale);
+
+            ViewCompat.setPivotY(mBackgroundView, height);
+            ViewCompat.setScaleY(mBackgroundView, mHeightScale);
+
+            ViewCompat.setPivotY(mShadowView, height);
+            ViewCompat.setScaleY(mShadowView, mHeightScale);
         }
 
         if (mPendingTextAppearance != -1) {
@@ -1333,7 +1380,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         }
     }
 
-    private void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             mCurrentTabPosition = savedInstanceState.getInt(STATE_CURRENT_SELECTED_TAB, -1);
             mBadgeStateMap = (HashMap<Integer, Boolean>) savedInstanceState
