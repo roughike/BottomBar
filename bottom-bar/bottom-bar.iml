@@ -102,8 +102,8 @@
     <orderEntry type="jdk" jdkName="Android API 23 Platform (3)" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.3.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.3.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.3.0" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-23.3.0" level="project" />
