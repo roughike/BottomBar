@@ -21,10 +21,7 @@
         <activity android:name=".FiveColorChangingTabsActivity" />
         <activity android:name=".ThreeTabsQRActivity" />
         <activity android:name=".BadgeActivity" />
-        <activity
-            android:name=".CustomColorActivity"
-            android:label="@string/title_activity_custom_color"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".CustomColorActivity" />
     </application>
 
 </manifest>
