@@ -4,7 +4,7 @@ ext {
     bintrayRepo = 'maven'
     bintrayName = 'bottom-bar'
 
-    publishedGroupId = 'com.roughike'
+    publishedGroupId = 'com.github.NegreaVlad'
     libraryName = 'bottom-bar'
     artifact = 'bottom-bar'
 
