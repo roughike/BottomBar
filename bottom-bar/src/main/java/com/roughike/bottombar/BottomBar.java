@@ -1671,7 +1671,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
             if (childCount > 0) {
                 for (int i = 0; i < childCount; i++) {
-                    mItemContainer.removeView(mItemContainer.getChildAt(i));
+                    mItemContainer.removeView(mItemContainer.getChildAt(0));
                 }
             }
         }
