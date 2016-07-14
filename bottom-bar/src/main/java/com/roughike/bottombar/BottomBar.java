@@ -703,7 +703,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
         if (mItems != null && mItems.length > 0) {
             throw new UnsupportedOperationException("This BottomBar " +
-                "already has items! You must call setFixedInactiveIconColor() " +
+                "already has items! You must call setFixedInactiveTextColor() " +
                 "before setting any items.");
         }
     }
