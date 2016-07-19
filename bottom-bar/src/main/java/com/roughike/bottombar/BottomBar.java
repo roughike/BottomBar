@@ -132,6 +132,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     private boolean mShouldUpdateFragmentInitially;
 
     private int mMaxFixedTabCount = 3;
+    private boolean mIsCustomColors;
 
     /**
      * Bind the BottomBar to your Activity, and inflate your layout here.
@@ -568,7 +569,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                     "index " + tabPosition + ". You have no BottomBar Tabs at that position.");
         }
 
-        if (mIsDarkTheme || !mIsShiftingMode || mIsTabletMode) return;
+        if (mIsDarkTheme || !mIsShiftingMode || (mIsTabletMode&&!mIsCustomColors)) return;
 
         if (mColorMap == null) {
             mColorMap = new HashMap<>();
@@ -960,6 +961,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
     public BottomBar(Context context, int backgroundColor, int activeColor, float alpha) {
         super(context);
+        mIsCustomColors = true;
         mTabAlpha = alpha;
         mWhiteColor = activeColor;
         mPrimaryColor = backgroundColor;
@@ -1344,7 +1346,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                 }
             }
 
-            if (mIsDarkTheme || (!mIsTabletMode && mIsShiftingMode)) {
+            if (mIsDarkTheme || (!mIsTabletMode && mIsShiftingMode)|| mIsCustomColors) {
                 icon.setColorFilter(mWhiteColor);
             }
 
@@ -1484,19 +1486,22 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
         int tabPosition = findItemPosition(tab);
 
-        if (!mIsShiftingMode || mIsTabletMode) {
+        if (!mIsShiftingMode || (mIsTabletMode && !mIsCustomColors)) {
             int activeColor = mCustomActiveTabColor != 0 ?
                     mCustomActiveTabColor : mPrimaryColor;
             icon.setColorFilter(activeColor);
-
             if (title != null) {
                 title.setTextColor(activeColor);
             }
+
         } else {
-            title.setTextColor(mWhiteColor);
+            if (title != null) {
+                title.setTextColor(mWhiteColor);
+            }
+
         }
 
-        if (mIsDarkTheme) {
+        if (mIsDarkTheme  || mIsCustomColors) {
             if (title != null) {
                 ViewCompat.setAlpha(title, 1.0f);
             }
@@ -1551,7 +1556,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         AppCompatImageView icon = (AppCompatImageView) tab.findViewById(R.id.bb_bottom_bar_icon);
         TextView title = (TextView) tab.findViewById(R.id.bb_bottom_bar_title);
 
-        if (!mIsShiftingMode || mIsTabletMode) {
+        if (!mIsShiftingMode || (mIsTabletMode && !mIsCustomColors)) {
             int inActiveColor = mIsDarkTheme ? mWhiteColor : mInActiveColor;
             icon.setColorFilter(inActiveColor);
 
@@ -1560,7 +1565,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
             }
         }
 
-        if (mIsDarkTheme) {
+        if (mIsDarkTheme || mIsCustomColors) {
             if (title != null) {
                 ViewCompat.setAlpha(title, mTabAlpha);
             }
@@ -1609,7 +1614,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     }
 
     private void handleBackgroundColorChange(int tabPosition, View tab) {
-        if (mIsDarkTheme || !mIsShiftingMode || mIsTabletMode) return;
+        if (mIsDarkTheme || !mIsShiftingMode || (mIsTabletMode && !mIsCustomColors)) return;
 
         if (mColorMap != null && mColorMap.containsKey(tabPosition)) {
             handleBackgroundColorChange(

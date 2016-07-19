@@ -24,7 +24,7 @@
         <activity
             android:name=".CustomColorActivity"
             android:label="@string/title_activity_custom_color"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            />
     </application>
 
 </manifest>
