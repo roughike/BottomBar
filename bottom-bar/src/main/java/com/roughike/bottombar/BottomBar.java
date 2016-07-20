@@ -423,6 +423,27 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     }
 
     /**
+     * Unselect a tab at the specified position.
+     *
+     * @param position the position to unselect.
+     */
+    public void unselectTabAtPosition(int position, boolean animate) {
+        if (mItems == null || mItems.length == 0) {
+            throw new UnsupportedOperationException("Can't select tab at " +
+                    "position " + position + ". This BottomBar has no items set yet.");
+        } else if (position > mItems.length - 1 || position < 0) {
+            throw new IndexOutOfBoundsException("Can't select tab at position " +
+                    position + ". This BottomBar has no items at that position.");
+        }
+
+        View tab = mItemContainer.getChildAt(position);
+
+        unselectTab(tab, animate);
+
+        updateSelectedTab(position);
+    }
+
+    /**
      * Sets the default tab for this BottomBar that is shown until the user changes
      * the selection.
      *
@@ -1067,10 +1088,15 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         if (v.getTag().equals(TAG_BOTTOM_BAR_VIEW_INACTIVE)) {
             View oldTab = findViewWithTag(TAG_BOTTOM_BAR_VIEW_ACTIVE);
 
-            unselectTab(oldTab, true);
+            if (oldTab != null) {
+                unselectTab(oldTab, true);
+            }
+
             selectTab(v, true);
 
-            shiftingMagic(oldTab, v, true);
+            if (oldTab != null) {
+                shiftingMagic(oldTab, v, true);
+            }
         }
         updateSelectedTab(findItemPosition(v));
     }
