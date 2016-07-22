@@ -83,6 +83,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
     private Integer mPrimaryColor;
     private Integer mInActiveColor;
+    private Integer mInActiveTextColor;
     private Integer mDarkBackgroundColor;
     private Integer mWhiteColor;
     private float mTabAlpha = 0.6f;
@@ -687,6 +688,23 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
             throw new UnsupportedOperationException("This BottomBar " +
                     "already has items! You must call setFixedInactiveIconColor() " +
                     "before setting any items.");
+        }
+    }
+
+    /**
+     * Set a custom color for inactive text in fixed mode.
+     * <p/>
+     * NOTE: This value is ignored if not in fixed mode.
+     *
+     * @param textColor a hex color used for icons, such as 0xFF00FF00.
+     */
+    public void setFixedInactiveTextColor(int textColor) {
+        mInActiveTextColor = textColor;
+
+        if (mItems != null && mItems.length > 0) {
+            throw new UnsupportedOperationException("This BottomBar " +
+                "already has items! You must call setFixedInactiveTextColor() " +
+                "before setting any items.");
         }
     }
 
@@ -1552,11 +1570,16 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         TextView title = (TextView) tab.findViewById(R.id.bb_bottom_bar_title);
 
         if (!mIsShiftingMode || mIsTabletMode) {
-            int inActiveColor = mIsDarkTheme ? mWhiteColor : mInActiveColor;
-            icon.setColorFilter(inActiveColor);
+            Integer inActiveColor = mIsDarkTheme ? mWhiteColor : mInActiveColor;
+            if (inActiveColor == null) {
+                icon.clearColorFilter();
+            } else {
+                icon.setColorFilter(inActiveColor);
+            }
 
             if (title != null) {
-                title.setTextColor(inActiveColor);
+                int inActiveTextColor = mInActiveTextColor == null ? inActiveColor : mInActiveTextColor;
+                title.setTextColor(inActiveTextColor);
             }
         }
 
