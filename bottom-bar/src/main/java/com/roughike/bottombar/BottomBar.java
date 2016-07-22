@@ -132,6 +132,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     private boolean mShouldUpdateFragmentInitially;
 
     private int mMaxFixedTabCount = 3;
+    private boolean mForceUseCustomActiveColor = false;
 
     /**
      * Bind the BottomBar to your Activity, and inflate your layout here.
@@ -628,6 +629,13 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         }
 
         mIsDarkTheme = true;
+    }
+
+    /**
+     * Always use custom color for selected tab
+     */
+    public void forceUseCustomColor() {
+         mForceUseCustomActiveColor = true;
     }
 
     /**
@@ -1484,7 +1492,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
         int tabPosition = findItemPosition(tab);
 
-        if (!mIsShiftingMode || mIsTabletMode) {
+        if (mForceUseCustomActiveColor || (!mIsShiftingMode || mIsTabletMode)) {
             int activeColor = mCustomActiveTabColor != 0 ?
                     mCustomActiveTabColor : mPrimaryColor;
             icon.setColorFilter(activeColor);
@@ -1551,7 +1559,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         AppCompatImageView icon = (AppCompatImageView) tab.findViewById(R.id.bb_bottom_bar_icon);
         TextView title = (TextView) tab.findViewById(R.id.bb_bottom_bar_title);
 
-        if (!mIsShiftingMode || mIsTabletMode) {
+        if (mForceUseCustomActiveColor || !mIsShiftingMode || mIsTabletMode) {
             int inActiveColor = mIsDarkTheme ? mWhiteColor : mInActiveColor;
             icon.setColorFilter(inActiveColor);
 
