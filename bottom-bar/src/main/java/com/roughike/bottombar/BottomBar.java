@@ -1491,9 +1491,11 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
             if (title != null) {
                 title.setTextColor(activeColor);
+                title.setSelected(true);
             }
         } else {
             title.setTextColor(mWhiteColor);
+            title.setSelected(true);
         }
 
         if (mIsDarkTheme) {
@@ -1557,6 +1559,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
             if (title != null) {
                 title.setTextColor(inActiveColor);
+                title.setSelected(false);
             }
         }
 
