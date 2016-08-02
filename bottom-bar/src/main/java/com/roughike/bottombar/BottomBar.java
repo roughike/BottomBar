@@ -963,6 +963,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         mTabAlpha = alpha;
         mWhiteColor = activeColor;
         mPrimaryColor = backgroundColor;
+        mInActiveColor = ContextCompat.getColor(context, R.color.bb_inActiveBottomBarItemColor);
         init(context, null, 0, 0);
     }
 
@@ -993,15 +994,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
             mPrimaryColor = MiscUtils.getColor(getContext(), R.attr.colorPrimary);
             mInActiveColor = ContextCompat.getColor(getContext(), R.color.bb_inActiveBottomBarItemColor);
         }
-
-        //mWhiteColor = ContextCompat.getColor(getContext(), R.color.white);
-        //mPrimaryColor = MiscUtils.getColor(getContext(), R.attr.colorPrimary);
-        //mInActiveColor = ContextCompat.getColor(getContext(), R.color.bb_inActiveBottomBarItemColor);
-
-
-        //mWhiteColor = Color.parseColor("#000000");
-        //mPrimaryColor = Color.parseColor("#555555");
-        //mInActiveColor = Color.parseColor("#ffffff");
+        
 
         mScreenWidth = MiscUtils.getScreenWidth(mContext);
         mTenDp = MiscUtils.dpToPixel(mContext, 10);
