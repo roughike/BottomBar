@@ -155,7 +155,7 @@ public class BottomBarBadge extends TextView {
         return isVisible;
     }
 
-    protected BottomBarBadge(Context context, int position, final View tabToAddTo, // Rhyming accidentally! That's a Smoove Move!
+    protected BottomBarBadge(Context context, final int position, final View tabToAddTo, // Rhyming accidentally! That's a Smoove Move!
                              int backgroundColor) {
         super(context);
 
@@ -191,17 +191,21 @@ public class BottomBarBadge extends TextView {
             public void onGlobalLayout() {
                 container.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 
-                adjustPositionAndSize(tabToAddTo);
+                adjustPositionAndSize(tabToAddTo, position);
             }
         });
     }
 
-    protected void adjustPosition(View tabToAddTo) {
-        setX((float) (tabToAddTo.getX() + (tabToAddTo.getWidth() / 1.75)));
+    protected void adjustPosition(View tabToAddTo, int position) {
+        if (position == 0) {
+            setX((float) (tabToAddTo.getX() + (tabToAddTo.getWidth() / 2.75)));
+        }else{
+            setX((float) (tabToAddTo.getX() + (tabToAddTo.getWidth() / 1.75)));
+        }
     }
 
-    private void adjustPositionAndSize(View tabToAddTo) {
-        adjustPosition(tabToAddTo);
+    private void adjustPositionAndSize(View tabToAddTo, int position) {
+        adjustPosition(tabToAddTo, position);
         setTranslationY(10);
 
         int size = Math.max(getWidth(), getHeight());
