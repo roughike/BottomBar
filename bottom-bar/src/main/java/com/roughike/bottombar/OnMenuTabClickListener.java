@@ -1,6 +1,7 @@
 package com.roughike.bottombar;
 
 import android.support.annotation.IdRes;
+import android.support.annotation.IntDef;
 
 /*
  * BottomBar library for Android
@@ -19,6 +20,19 @@ import android.support.annotation.IdRes;
  * limitations under the License.
  */
 public interface OnMenuTabClickListener {
+    /**
+     * The method being called when user trying to change the currently visible
+     * {@link BottomBarTab}.
+     *
+     * This listener is fired after user click on a tab and before the selected
+     * tab really changed. Return true if this menu is selectable, false if it's
+     * not.
+     *
+     * @param menuItemId the new visible tab's id that
+     *                   was assigned in the menu xml resource file.
+     * @return if this tab selectable.
+     */
+    boolean onAttemptSelectMenuTab(@IdRes int menuItemId);
     /**
      * The method being called when currently visible {@link BottomBarTab} changes.
      *

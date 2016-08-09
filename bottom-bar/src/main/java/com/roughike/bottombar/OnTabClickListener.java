@@ -19,6 +19,19 @@ package com.roughike.bottombar;
 
 public interface OnTabClickListener {
     /**
+     * The method being called when user trying to change the currently visible
+     * {@link BottomBarTab}.
+     *
+     * This listener is fired after user click on a tab and before the selected
+     * tab really changed. Return true if this menu is selectable, false if it's
+     * not.
+     *
+     * @param position the new visible {@link BottomBarTab}
+     *
+     * @return if this tab selectable.
+     */
+    boolean onAttemptSelectTab(int position);
+    /**
      * The method being called when currently visible {@link BottomBarTab} changes.
      *
      * This listener is fired for the first time after the items have been set and

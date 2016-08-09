@@ -28,6 +28,11 @@ public class ThreeTabsActivity extends Activity {
         mBottomBar.setItems(R.menu.bottombar_menu_three_items);
         mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
             @Override
+            public boolean onAttemptSelectMenuTab(@IdRes int menuItemId) {
+                return true;
+            }
+
+            @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 mMessageView.setText(TabMessage.get(menuItemId, false));
             }
