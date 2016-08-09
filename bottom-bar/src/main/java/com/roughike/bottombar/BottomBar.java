@@ -1150,6 +1150,17 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     }
 
     private void handleClick(View v) {
+        int position = findItemPosition(v);
+        if (mMenuListener != null) {
+            if (!attemptSelectMenuTab(mMenuListener, ((BottomBarTab) mItems[position]).id)) {
+                return;
+            }
+        }
+        if (mListener != null) {
+            if (!attemptSelectRegularTab(mListener, position)) {
+                return;
+            }
+        }
         if (v.getTag().equals(TAG_BOTTOM_BAR_VIEW_INACTIVE)) {
             View oldTab = findViewWithTag(TAG_BOTTOM_BAR_VIEW_ACTIVE);
 
@@ -1158,7 +1169,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
             shiftingMagic(oldTab, v, true);
         }
-        updateSelectedTab(findItemPosition(v));
+        updateSelectedTab(position);
     }
 
     private void shiftingMagic(View oldTab, View newTab, boolean animate) {
@@ -1209,6 +1220,22 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                 notifyMenuListener(mMenuListener, true, ((BottomBarTab) mItems[mCurrentTabPosition]).id);
             }
         }
+    }
+
+    private boolean attemptSelectRegularTab(Object listener, int position) {
+        if (listener instanceof OnTabClickListener) {
+            OnTabClickListener onTabClickListener = (OnTabClickListener) listener;
+            return onTabClickListener.onAttemptSelectTab(position);
+        }
+        return true;
+    }
+
+    private boolean attemptSelectMenuTab(Object listener, int position) {
+        if (listener instanceof OnMenuTabClickListener) {
+            OnMenuTabClickListener onMenuClickListener = (OnMenuTabClickListener) listener;
+            return onMenuClickListener.onAttemptSelectMenuTab(position);
+        }
+        return true;
     }
 
     @SuppressWarnings("deprecation")

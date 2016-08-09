@@ -28,6 +28,11 @@ public class ThreeTabsQRActivity extends AppCompatActivity {
         // from ThreeTabsActivity on how to use it.
         mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
             @Override
+            public boolean onAttemptSelectMenuTab(@IdRes int menuItemId) {
+                return true;
+            }
+
+            @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
 
             }
