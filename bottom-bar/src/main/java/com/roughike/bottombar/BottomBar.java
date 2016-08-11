@@ -70,6 +70,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
     private boolean mIsShy;
     private boolean mShyHeightAlreadyCalculated;
     private boolean mUseExtraOffset;
+    private boolean mResizeIconOnChange;
 
     private ViewGroup mUserContentContainer;
     private ViewGroup mOuterContainer;
@@ -987,7 +988,6 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
         mDarkBackgroundColor = ContextCompat.getColor(getContext(), R.color.bb_darkBackgroundColor);
 
-
         if (mWhiteColor == null) {
             mWhiteColor = ContextCompat.getColor(getContext(), R.color.white);
             mPrimaryColor = MiscUtils.getColor(getContext(), R.attr.colorPrimary);
@@ -1003,6 +1003,7 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         //mPrimaryColor = Color.parseColor("#555555");
         //mInActiveColor = Color.parseColor("#ffffff");
 
+        mResizeIconOnChange = true;
         mScreenWidth = MiscUtils.getScreenWidth(mContext);
         mTenDp = MiscUtils.dpToPixel(mContext, 10);
         mSixteenDp = MiscUtils.dpToPixel(mContext, 16);
@@ -1332,6 +1333,15 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
             icon.setImageDrawable(bottomBarItemBase.getIcon(mContext));
 
             if (!mIsTabletMode) {
+                if (!mResizeIconOnChange) {
+                    int bottom = bottomBarTab.getPaddingBottom();
+                    int top = mSixDp;
+                    int left = bottomBarTab.getPaddingLeft();
+                    int right = bottomBarTab.getPaddingRight();
+
+                    bottomBarTab.setPadding(left, top, right, bottom);
+                }
+
                 TextView title = (TextView) bottomBarTab.findViewById(R.id.bb_bottom_bar_title);
                 title.setText(bottomBarItemBase.getTitle(mContext));
 
@@ -1509,20 +1519,25 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         }
 
         if (animate) {
-            ViewPropertyAnimatorCompat titleAnimator = ViewCompat.animate(title)
-                    .setDuration(ANIMATION_DURATION)
-                    .scaleX(1)
-                    .scaleY(1);
+            if (mResizeIconOnChange) {
+                ViewPropertyAnimatorCompat titleAnimator = ViewCompat.animate(title)
+                        .setDuration(ANIMATION_DURATION)
+                        .scaleX(1)
+                        .scaleY(1);
 
-            if (mIsShiftingMode) {
-                titleAnimator.alpha(1.0f);
+
+                if (mIsShiftingMode) {
+                    titleAnimator.alpha(1.0f);
+                }
+
+                titleAnimator.start();
+
+                // We only want to animate the icon to avoid moving the title
+                // Shifting or fixed the padding above icon is always 6dp
+                MiscUtils.resizePaddingTop(icon, icon.getPaddingTop(), mSixDp, ANIMATION_DURATION);
+            } else {
+                title.setAlpha(1.0f);
             }
-
-            titleAnimator.start();
-
-            // We only want to animate the icon to avoid moving the title
-            // Shifting or fixed the padding above icon is always 6dp
-            MiscUtils.resizePaddingTop(icon, icon.getPaddingTop(), mSixDp, ANIMATION_DURATION);
 
             if (mIsShiftingMode) {
                 ViewCompat.animate(icon)
@@ -1533,10 +1548,12 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
 
             handleBackgroundColorChange(tabPosition, tab);
         } else {
-            ViewCompat.setScaleX(title, 1);
-            ViewCompat.setScaleY(title, 1);
-            icon.setPadding(icon.getPaddingLeft(), mSixDp, icon.getPaddingRight(),
-                icon.getPaddingBottom());
+            if (mResizeIconOnChange) {
+                ViewCompat.setScaleX(title, 1);
+                ViewCompat.setScaleY(title, 1);
+                icon.setPadding(icon.getPaddingLeft(), mSixDp, icon.getPaddingRight(),
+                        icon.getPaddingBottom());
+            }
 
             if (mIsShiftingMode) {
                 ViewCompat.setAlpha(icon, 1.0f);
@@ -1576,18 +1593,22 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
         int iconPaddingTop = mIsShiftingMode ? mSixteenDp : mEightDp;
 
         if (animate) {
-            ViewPropertyAnimatorCompat titleAnimator = ViewCompat.animate(title)
-                    .setDuration(ANIMATION_DURATION)
-                    .scaleX(scale)
-                    .scaleY(scale);
+            if (mResizeIconOnChange) {
+                ViewPropertyAnimatorCompat titleAnimator = ViewCompat.animate(title)
+                        .setDuration(ANIMATION_DURATION)
+                        .scaleX(scale)
+                        .scaleY(scale);
 
-            if (mIsShiftingMode) {
-                titleAnimator.alpha(0);
+                if (mIsShiftingMode) {
+                    titleAnimator.alpha(0);
+                }
+
+                titleAnimator.start();
+
+                MiscUtils.resizePaddingTop(icon, icon.getPaddingTop(), iconPaddingTop, ANIMATION_DURATION);
+            } else {
+                title.setAlpha(0);
             }
-
-            titleAnimator.start();
-
-            MiscUtils.resizePaddingTop(icon, icon.getPaddingTop(), iconPaddingTop, ANIMATION_DURATION);
 
             if (mIsShiftingMode) {
                 ViewCompat.animate(icon)
@@ -1596,10 +1617,12 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                         .start();
             }
         } else {
-            ViewCompat.setScaleX(title, scale);
-            ViewCompat.setScaleY(title, scale);
-            icon.setPadding(icon.getPaddingLeft(), iconPaddingTop, icon.getPaddingRight(),
-                icon.getPaddingBottom());
+            if (mResizeIconOnChange) {
+                ViewCompat.setScaleX(title, scale);
+                ViewCompat.setScaleY(title, scale);
+                icon.setPadding(icon.getPaddingLeft(), iconPaddingTop, icon.getPaddingRight(),
+                        icon.getPaddingBottom());
+            }
 
             if (mIsShiftingMode) {
                 ViewCompat.setAlpha(icon, mTabAlpha);
@@ -1797,5 +1820,15 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                 }
             });
         }
+    }
+
+    public void noResizeIconOnChange() {
+        if (mItems != null) {
+            throw new UnsupportedOperationException("This BottomBar already has items! " +
+                    "You must call setResizeIconOnChange() before setting the items, preferably " +
+                    "right after attaching it to your layout.");
+        }
+
+        this.mResizeIconOnChange = false;
     }
 }
