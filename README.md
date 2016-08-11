@@ -134,6 +134,9 @@ unreadMessages.setAutoShowAfterUnSelection(false);
 ## Customization
 
 ```java
+// Disable resize and change of padding of icon during selection.
+mBottomBar.noResizeIconOnChange();
+
 // Disable the left bar on tablets and behave exactly the same on mobile and tablets instead.
 mBottomBar.noTabletGoodness();
 
