@@ -7,7 +7,8 @@
     <item
         android:id="@+id/bb_menu_nearby"
         android:icon="@drawable/ic_nearby"
-        android:title="Nearby" />
+        android:title="Nearby"
+        android:enabled="false" />
     <item
         android:id="@+id/bb_menu_friends"
         android:icon="@drawable/ic_friends"

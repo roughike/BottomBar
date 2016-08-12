@@ -12,6 +12,7 @@
     <item
         android:id="@+id/bb_menu_nearby"
         android:icon="@drawable/ic_nearby"
+        android:enabled="false"
         android:title="Nearby" />
     <item
         android:id="@+id/bb_menu_friends"
@@ -20,5 +21,6 @@
     <item
         android:id="@+id/bb_menu_food"
         android:icon="@drawable/ic_restaurants"
+        android:enabled="false"
         android:title="Food" />
 </menu>
