@@ -26,8 +26,6 @@ public class FiveColorChangingTabsActivity extends AppCompatActivity {
         mMessageView = (TextView) findViewById(R.id.messageView);
 
         mBottomBar = BottomBar.attach(this, savedInstanceState);
-        mBottomBar.noTabletGoodness();
-        mBottomBar.noResizeIconOnChange();
         mBottomBar.setItems(R.menu.bottombar_menu);
         mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
             @Override
