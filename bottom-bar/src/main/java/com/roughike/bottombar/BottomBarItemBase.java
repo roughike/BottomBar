@@ -19,7 +19,6 @@ package com.roughike.bottombar;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.AppCompatDrawableManager;
 
 /*
@@ -44,7 +43,8 @@ class BottomBarItemBase {
     protected int titleResource;
     protected String title;
     protected int color;
-    
+    private boolean enabled;
+
     protected Drawable getIcon(Context context) {
         if (this.iconResource != 0) {
             return AppCompatDrawableManager.get().getDrawable(context, iconResource);
@@ -52,12 +52,18 @@ class BottomBarItemBase {
             return this.icon;
         }
     }
-
     protected String getTitle(Context context) {
         if (this.titleResource != 0) {
             return context.getString(this.titleResource);
         } else {
             return this.title;
         }
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    public boolean isEnabled() {
+        return enabled;
     }
 }

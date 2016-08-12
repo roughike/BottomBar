@@ -97,6 +97,7 @@ class MiscUtils {
             BottomBarTab tab = new BottomBarTab(item.getIcon(),
                     String.valueOf(item.getTitle()));
             tab.id = item.getItemId();
+            tab.setEnabled(item.isEnabled());
             tabs[i] = tab;
         }
 

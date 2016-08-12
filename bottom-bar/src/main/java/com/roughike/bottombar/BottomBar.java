@@ -1378,8 +1378,13 @@ public class BottomBar extends RelativeLayout implements View.OnClickListener, V
                 mItemContainer.addView(bottomBarTab);
             }
 
-            bottomBarTab.setOnClickListener(this);
-            bottomBarTab.setOnLongClickListener(this);
+            if (bottomBarItemBase.isEnabled()) {
+                bottomBarTab.setOnClickListener(this);
+                bottomBarTab.setOnLongClickListener(this);
+            } else {
+                bottomBarTab.setEnabled(false);
+                bottomBarTab.setAlpha(0.4f);
+            }
             index++;
         }
 
