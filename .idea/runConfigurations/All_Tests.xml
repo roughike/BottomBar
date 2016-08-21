@@ -18,17 +18,28 @@
     <option name="PREFERRED_AVD" value="" />
     <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
     <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
-    <Native>
+    <Auto>
+      <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
       <option name="WORKING_DIR" value="" />
       <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
-    </Native>
-    <Java />
+    </Auto>
     <Hybrid>
+      <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
       <option name="WORKING_DIR" value="" />
       <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
     </Hybrid>
+    <Java />
+    <Native>
+      <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+      <option name="WORKING_DIR" value="" />
+      <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+    </Native>
     <Profilers>
+      <option name="ENABLE_ADVANCED_PROFILING" value="true" />
+      <option name="GAPID_ENABLED" value="false" />
       <option name="GAPID_DISABLE_PCS" value="false" />
+      <option name="SUPPORT_LIB_ENABLED" value="true" />
+      <option name="INSTRUMENTATION_ENABLED" value="true" />
     </Profilers>
     <method />
   </configuration>
