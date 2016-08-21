@@ -26,6 +26,7 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +76,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private int titleTextAppearance;
     private String titleTypeFace;
 
+    private ImageView bottomBarTopShadow;
     private View backgroundOverlay;
     private ViewGroup outerContainer;
     private ViewGroup tabContainer;
@@ -174,6 +176,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                 isTabletMode ? R.layout.bb_bottom_bar_item_container_tablet : R.layout.bb_bottom_bar_item_container, this);
         rootView.setLayoutParams(params);
 
+        bottomBarTopShadow = (ImageView) rootView.findViewById(R.id.bb_bottom_bar_shadow);
         backgroundOverlay = rootView.findViewById(R.id.bb_bottom_bar_background_overlay);
         outerContainer = (ViewGroup) rootView.findViewById(R.id.bb_bottom_bar_outer_container);
         tabContainer = (ViewGroup) rootView.findViewById(R.id.bb_bottom_bar_item_container);
@@ -491,7 +494,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
             if (currentHeight != 0 && !navBarAccountedHeightCalculated) {
                 navBarAccountedHeightCalculated = true;
-                tabContainer.getLayoutParams().height = currentHeight;
+                tabContainer.getLayoutParams().height = currentHeight - bottomBarTopShadow.getHeight();
 
                 int navbarHeight = NavbarUtils.getNavbarHeight(getContext());
                 getLayoutParams().height = currentHeight + navbarHeight;
