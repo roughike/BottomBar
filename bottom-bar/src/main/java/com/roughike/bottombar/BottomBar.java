@@ -67,7 +67,6 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private int maxFixedItemWidth;
 
     // XML Attributes
-    private int tabHeight;
     private int tabXmlResource;
     private boolean isTabletMode;
     private int behaviors;
@@ -122,22 +121,10 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         eightDp = MiscUtils.dpToPixel(getContext(), 8);
         maxFixedItemWidth = MiscUtils.dpToPixel(getContext(), 168);
 
-        int[] systemAttrs = {android.R.attr.layout_height};
-        TypedArray a = context.obtainStyledAttributes(attrs, systemAttrs);
         TypedArray ta = context.getTheme().obtainStyledAttributes(
                 attrs, R.styleable.BottomBar, 0, 0);
 
-        String tabHeightString = a.getString(0);
-        boolean safeToGetPixelSize = true;
-        // check user has not used MATCH_PARENT or WRAP_CONTENT
-        // without this check, if user selects either app will crash when getting pixel size
-        if (TextUtils.equals(tabHeightString, "-1") || TextUtils.equals(tabHeightString, "-2")) {
-            safeToGetPixelSize = false;
-        }
-
         try {
-            tabHeight = safeToGetPixelSize ? a.getDimensionPixelSize(0, 0) : 0;
-
             tabXmlResource = ta.getResourceId(R.styleable.BottomBar_bb_tabXmlResource, 0);
             isTabletMode = ta.getBoolean(R.styleable.BottomBar_bb_tabletMode, false);
             behaviors = ta.getInteger(R.styleable.BottomBar_bb_behavior, BEHAVIOR_NONE);
@@ -156,7 +143,6 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             titleTypeFace = ta.getString(R.styleable.BottomBar_bb_titleTypeFace);
         } finally {
             ta.recycle();
-            a.recycle();
         }
     }
 
@@ -289,7 +275,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
         inActiveShiftingItemWidth = (int) (proposedItemWidth * 0.9);
         activeShiftingItemWidth = (int) (proposedItemWidth + (proposedItemWidth * (bottomBarItems.size() * 0.1)));
-        int height = tabHeight;
+        int height = Math.round(getContext().getResources().getDimension(R.dimen.bb_height));
 
         for (BottomBarTab bottomBarView : viewsToAdd) {
             LayoutParams params;
