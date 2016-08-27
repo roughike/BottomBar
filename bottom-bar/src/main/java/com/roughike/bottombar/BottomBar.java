@@ -20,12 +20,14 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,7 +63,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
     private int primaryColor;
     private int screenWidth;
-    private int tenDp;
+    private int eightDp;
     private int maxFixedItemWidth;
 
     // XML Attributes
@@ -75,6 +77,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private int titleTextAppearance;
     private String titleTypeFace;
 
+    private ImageView bottomBarTopShadow;
     private View backgroundOverlay;
     private ViewGroup outerContainer;
     private ViewGroup tabContainer;
@@ -115,7 +118,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private void populateAttributes(Context context, AttributeSet attrs) {
         primaryColor = MiscUtils.getColor(getContext(), R.attr.colorPrimary);
         screenWidth = MiscUtils.getScreenWidth(getContext());
-        tenDp = MiscUtils.dpToPixel(getContext(), 10);
+        eightDp = MiscUtils.dpToPixel(getContext(), 8);
         maxFixedItemWidth = MiscUtils.dpToPixel(getContext(), 168);
 
         TypedArray ta = context.getTheme().obtainStyledAttributes(
@@ -174,6 +177,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                 isTabletMode ? R.layout.bb_bottom_bar_item_container_tablet : R.layout.bb_bottom_bar_item_container, this);
         rootView.setLayoutParams(params);
 
+        bottomBarTopShadow = (ImageView) rootView.findViewById(R.id.bb_bottom_bar_shadow);
         backgroundOverlay = rootView.findViewById(R.id.bb_bottom_bar_background_overlay);
         outerContainer = (ViewGroup) rootView.findViewById(R.id.bb_bottom_bar_outer_container);
         tabContainer = (ViewGroup) rootView.findViewById(R.id.bb_bottom_bar_item_container);
@@ -454,7 +458,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             int baseline = title.getBaseline();
             int height = title.getHeight();
             int paddingInsideTitle = height - baseline;
-            int missingPadding = tenDp - paddingInsideTitle;
+            int missingPadding = eightDp - paddingInsideTitle;
 
             if (missingPadding > 0) {
                 title.setPadding(title.getPaddingLeft(), title.getPaddingTop(),
@@ -491,7 +495,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
             if (currentHeight != 0 && !navBarAccountedHeightCalculated) {
                 navBarAccountedHeightCalculated = true;
-                tabContainer.getLayoutParams().height = currentHeight;
+                tabContainer.getLayoutParams().height = currentHeight - bottomBarTopShadow.getHeight();
 
                 int navbarHeight = NavbarUtils.getNavbarHeight(getContext());
                 getLayoutParams().height = currentHeight + navbarHeight;
