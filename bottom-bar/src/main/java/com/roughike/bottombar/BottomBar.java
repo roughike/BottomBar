@@ -62,7 +62,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
     private int primaryColor;
     private int screenWidth;
-    private int tenDp;
+    private int eightDp;
     private int maxFixedItemWidth;
 
     // XML Attributes
@@ -117,7 +117,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private void populateAttributes(Context context, AttributeSet attrs) {
         primaryColor = MiscUtils.getColor(getContext(), R.attr.colorPrimary);
         screenWidth = MiscUtils.getScreenWidth(getContext());
-        tenDp = MiscUtils.dpToPixel(getContext(), 10);
+        eightDp = MiscUtils.dpToPixel(getContext(), 8);
         maxFixedItemWidth = MiscUtils.dpToPixel(getContext(), 168);
 
         TypedArray ta = context.getTheme().obtainStyledAttributes(
@@ -457,7 +457,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             int baseline = title.getBaseline();
             int height = title.getHeight();
             int paddingInsideTitle = height - baseline;
-            int missingPadding = tenDp - paddingInsideTitle;
+            int missingPadding = eightDp - paddingInsideTitle;
 
             if (missingPadding > 0) {
                 title.setPadding(title.getPaddingLeft(), title.getPaddingTop(),
