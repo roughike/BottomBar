@@ -11,7 +11,7 @@
     <style name="AppTheme.TransNav" parent="AppTheme" />
 
     <style name="CustomTitleTextAppearance">
-        <item name="android:textSize">23sp</item>
+        <item name="android:textSize">21sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
