@@ -445,8 +445,10 @@ public class BottomBarTab extends LinearLayout {
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         if (state instanceof Bundle) {
-            badge = new BottomBarBadge(getContext());
-            badge.attachToTab(this, badgeBackgroundColor);
+            if (badge == null) {
+                badge = new BottomBarBadge(getContext());
+                badge.attachToTab(this, badgeBackgroundColor);
+            }
 
             Bundle bundle = (Bundle) state;
             badge.restoreState(bundle, indexInContainer);
