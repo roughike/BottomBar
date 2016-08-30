@@ -65,6 +65,7 @@ public class BottomBarTab extends LinearLayout {
     BottomBarBadge badge;
     private int titleTextAppearanceResId;
     private Typeface titleTypeFace;
+    private boolean isOneTime;
 
     enum Type {
         FIXED, SHIFTING, TABLET
@@ -284,13 +285,21 @@ public class BottomBarTab extends LinearLayout {
         return 0;
     }
 
+    public void setOneTime() {
+        isOneTime = true;
+    }
+
+    public void setBadgeDot() {
+        removeBadge();
+        if (badge == null) {
+            badge = new BottomBarBadge(getContext());
+            badge.attachToTab(this, badgeBackgroundColor);
+        }
+    }
+
     public void setBadgeCount(int count) {
         if (count <= 0) {
-            if (badge != null) {
-                badge.removeFromTab(this);
-                badge = null;
-            }
-
+            removeBadge();
             return;
         }
 
@@ -303,7 +312,10 @@ public class BottomBarTab extends LinearLayout {
     }
 
     public void removeBadge() {
-        setBadgeCount(0);
+        if (badge != null) {
+            badge.removeFromTab(this);
+            badge = null;
+        }
     }
 
     boolean isActive() {
@@ -361,6 +373,10 @@ public class BottomBarTab extends LinearLayout {
         }
 
         if (badge != null) {
+            if (isOneTime) {
+                removeBadge();
+                return;
+            }
             badge.hide();
         }
     }

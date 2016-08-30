@@ -42,5 +42,10 @@ public class BadgeActivity extends AppCompatActivity {
 
         BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_nearby);
         nearby.setBadgeCount(5);
+
+        BottomBarTab friends = bottomBar.getTabWithId(R.id.tab_friends);
+        friends.setBadgeDot();
+        friends.setOneTime();
+
     }
 }

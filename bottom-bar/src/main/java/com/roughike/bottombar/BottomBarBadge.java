@@ -34,7 +34,7 @@ class BottomBarBadge extends TextView {
     @VisibleForTesting
     static final String STATE_COUNT = "STATE_BADGE_COUNT_FOR_TAB_";
 
-    private int count;
+    private int count = -1;
     private boolean isVisible = false;
 
     BottomBarBadge(Context context) {
@@ -151,14 +151,20 @@ class BottomBarBadge extends TextView {
         ViewGroup.LayoutParams params = getLayoutParams();
 
         int size = Math.max(getWidth(), getHeight());
+        final boolean isDot = count == -1;
+
+        if (isDot) {
+            size /= 4;
+        }
+
         float xOffset = iconView.getWidth();
 
         if (tab.getType() == BottomBarTab.Type.TABLET) {
             xOffset /= 1.25;
         }
 
-        setX(iconView.getX() + xOffset);
-        setTranslationY(10);
+        setTranslationX(iconView.getX() + xOffset);
+        setTranslationY(isDot ? getHeight() / 5 : 10);
 
         if (params.width != size || params.height != size) {
             params.width = size;
