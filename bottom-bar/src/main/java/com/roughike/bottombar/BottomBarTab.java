@@ -7,8 +7,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.ViewCompat;
@@ -531,28 +529,6 @@ public class BottomBarTab extends LinearLayout {
 
         ViewCompat.setScaleX(titleView, scale);
         ViewCompat.setScaleY(titleView, scale);
-    }
-
-    @Override
-    public Parcelable onSaveInstanceState() {
-        if (badge != null) {
-            Bundle bundle = badge.saveState(indexInContainer);
-            bundle.putParcelable("superstate", super.onSaveInstanceState());
-            return bundle;
-        }
-
-        return super.onSaveInstanceState();
-    }
-
-    @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        if (badge != null && state instanceof Bundle) {
-            Bundle bundle = (Bundle) state;
-            badge.restoreState(bundle, indexInContainer);
-
-            state = bundle.getParcelable("superstate");
-        }
-        super.onRestoreInstanceState(state);
     }
 
     public static class Config {

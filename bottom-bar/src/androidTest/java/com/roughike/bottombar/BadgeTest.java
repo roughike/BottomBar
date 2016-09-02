@@ -1,12 +1,11 @@
 package com.roughike.bottombar;
 
-import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.annotation.UiThreadTest;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,12 +74,9 @@ public class BadgeTest {
         nearby.setBadgeCount(1);
         assertEquals(1, nearby.badge.getCount());
 
-
-        int tabIndex = nearby.getIndexInTabContainer();
-        Bundle savedInstanceState = new Bundle();
-        savedInstanceState.putInt(BottomBarBadge.STATE_COUNT + tabIndex, 2);
-        nearby.badge.restoreState(savedInstanceState, tabIndex);
-
+        nearby.badge.setCount(2);
+        Parcelable state = nearby.badge.onSaveInstanceState();
+        nearby.badge.onRestoreInstanceState(state);
         assertEquals(2, nearby.badge.getCount());
     }
 

@@ -1,6 +1,5 @@
 package com.roughike.bottombar;
 
-import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.FrameLayout;
@@ -51,13 +50,7 @@ public class BottomBarTabTest {
         tab.setIndexInContainer(69);
         assertEquals(69, tab.getIndexInTabContainer());
 
-        Bundle savedState = (Bundle) tab.onSaveInstanceState();
-        assertEquals(5, savedState.getInt(BottomBarBadge.STATE_COUNT + 69));
-
         tab.setBadgeCount(9);
         assertEquals(9, tab.badge.getCount());
-
-        tab.onRestoreInstanceState(savedState);
-        assertEquals(5, tab.badge.getCount());
     }
 }

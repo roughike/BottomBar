@@ -17,6 +17,7 @@ import com.roughike.bottombar.OnTabSelectListener;
  */
 public class BadgeActivity extends AppCompatActivity {
     private TextView messageView;
+    private BottomBar bottomBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,7 +26,7 @@ public class BadgeActivity extends AppCompatActivity {
 
         messageView = (TextView) findViewById(R.id.messageView);
 
-        final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -39,7 +40,11 @@ public class BadgeActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), TabMessage.get(tabId, true), Toast.LENGTH_LONG).show();
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_nearby);
         nearby.setBadgeCount(5);
     }
