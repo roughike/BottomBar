@@ -75,9 +75,16 @@ public class BadgeTest {
         assertEquals(1, nearby.badge.getCount());
 
         nearby.badge.setCount(2);
-        Parcelable state = nearby.badge.onSaveInstanceState();
-        nearby.badge.onRestoreInstanceState(state);
+        Parcelable stateGood = nearby.badge.onSaveInstanceState();
+        nearby.badge.onRestoreInstanceState(stateGood);
         assertEquals(2, nearby.badge.getCount());
+
+        nearby.badge.setCount(4);
+        BottomBarBadge barBadge = new BottomBarBadge(InstrumentationRegistry.getContext());
+        Parcelable stateBad = barBadge.onSaveInstanceState();
+        nearby.badge.onRestoreInstanceState(stateBad);
+
+        assertNotEquals(4, nearby.badge.getCount());
     }
 
     @Test

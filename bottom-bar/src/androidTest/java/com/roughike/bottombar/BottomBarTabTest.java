@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by iiro on 22.8.2016.
@@ -52,5 +54,18 @@ public class BottomBarTabTest {
 
         tab.setBadgeCount(9);
         assertEquals(9, tab.badge.getCount());
+    }
+
+    @Test
+    public void testBadgeVisibility_BadgeNull() {
+        tab.setBadgeCount(0);
+        assertNull(tab.badge);
+    }
+
+    @Test
+    public void testBadgeVisibility_BadgeNotNull() {
+        tab.setBadgeCount(0);
+        tab.setBadgeCount(5);
+        assertNotNull(tab.badge);
     }
 }
