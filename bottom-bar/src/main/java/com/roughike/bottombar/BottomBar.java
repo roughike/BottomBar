@@ -98,6 +98,9 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private boolean shyHeightAlreadyCalculated;
     private boolean navBarAccountedHeightCalculated;
 
+    private List<BottomBarTab> mBottomBarItems;
+    private BottomBarTab[] tabViews;
+
     public BottomBar(Context context) {
         super(context);
         init(context, null);
@@ -294,14 +297,27 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             index++;
         }
 
+        mBottomBarItems = bottomBarItems;
+        tabViews = viewsToAdd;
+
         if (!isTabletMode) {
             resizeTabsToCorrectSizes(bottomBarItems, viewsToAdd);
         }
     }
 
     private void resizeTabsToCorrectSizes(List<BottomBarTab> bottomBarItems, BottomBarTab[] viewsToAdd) {
+        if (tabContainer.getChildCount() != 0) {
+            tabContainer.removeAllViews();
+        }
+
+        int viewWidth = MiscUtils.pixelToDp(getContext(), getWidth());
+
+        if (viewWidth <= 0) {
+            viewWidth = screenWidth;
+        }
+
         int proposedItemWidth = Math.min(
-                MiscUtils.dpToPixel(getContext(), screenWidth / bottomBarItems.size()),
+                MiscUtils.dpToPixel(getContext(), viewWidth / bottomBarItems.size()),
                 maxFixedItemWidth
         );
 
@@ -529,6 +545,10 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         super.onLayout(changed, left, top, right, bottom);
 
         if (changed) {
+            if (!isTabletMode) {
+                resizeTabsToCorrectSizes(mBottomBarItems, tabViews);
+            }
+
             updateTitleBottomPadding();
 
             if (isShy()) {

@@ -50,6 +50,18 @@ class MiscUtils {
     }
 
     /**
+     * Converts pixels to dps just as well.
+     *
+     * @param context the Context for getting the resources
+     * @param px      dimension in pixels
+     * @return dimension in dps
+     */
+    protected static int pixelToDp(Context context, int px) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        return Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    /**
      * Returns screen width.
      *
      * @param context Context to get resources and device specific display metrics

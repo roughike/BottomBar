@@ -1,4 +1,7 @@
 # BottomBar
+
+[![Build Status](https://travis-ci.org/roughike/BottomBar.svg?branch=master)](https://travis-ci.org/roughike/BottomBar) [![Coverage Status](https://coveralls.io/repos/github/roughike/BottomBar/badge.svg?branch=development)](https://coveralls.io/github/roughike/BottomBar?branch=master)
+
 <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/shy-demo.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/shifting-demo.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/screenshot_tablet.png" width="33%" />
 
 ## Version 2.0 released!
@@ -288,7 +291,7 @@ nearby.removeBadge/();
 
 ## All customization options
 
-**For the BottomBar:**
+### For the BottomBar
 
 ```xml
 <com.roughike.bottombar.BottomBar
@@ -333,7 +336,7 @@ nearby.removeBadge/();
     <dd>controls whether the shadow is shown or hidden, defaults to true.</dd>
 </dl>
 
-**For the tabs:**
+### For the tabs
 
 ```xml
 <tab
@@ -367,6 +370,7 @@ nearby.removeBadge/();
   * [BottomNavigationBar](https://github.com/pocheshire/BottomNavigationBar) : BottomBar ported to C# for Xamarin developers
   * [KyudoScoreBookTeam](https://play.google.com/store/apps/details?id=com.bowyer.app.android.kyudoscoreteam&hl=en) : BottomBar is used in the KyudoScoreBookTeam app.
   * [memeham](https://play.google.com/store/apps/details?id=com.memeham.beyourself.memeham) : BottomBar is used in the memeham app.
+  * [NewsCatchr](https://play.google.com/store/apps/details?id=jlelse.readit) : A newsreader app, which uses this BottomBar library.
   
 Send me a pull request with modified README.md to get a shoutout!
 
