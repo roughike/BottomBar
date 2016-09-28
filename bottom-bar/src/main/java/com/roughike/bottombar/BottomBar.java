@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.XmlRes;
@@ -31,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -250,6 +252,31 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                 .titleTextAppearance(titleTextAppearance)
                 .titleTypeFace(titleTypeFace)
                 .build();
+    }
+
+    @Override
+    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+
+        boolean someViewsGone = false;
+        ArrayList<BottomBarTab> visibleTabs = new ArrayList<>();
+        int tabIndex = 0;
+        for (int i = 0; i < getTabCount(); i++) {
+            BottomBarTab currentTab = getTabAtPosition(i);
+            if (currentTab.getVisibility() == VISIBLE) {
+                currentTab.setIndexInContainer(tabIndex);
+                visibleTabs.add(currentTab);
+                tabIndex++;
+            }
+            if (currentTab.getVisibility() == GONE && !someViewsGone) {
+                someViewsGone = true;
+            }
+
+        }
+        if (someViewsGone) {
+            tabContainer.removeAllViews();
+            updateItems(visibleTabs);
+        }
     }
 
     private void updateItems(final List<BottomBarTab> bottomBarItems) {
