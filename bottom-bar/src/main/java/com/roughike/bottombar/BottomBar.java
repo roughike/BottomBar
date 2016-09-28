@@ -273,6 +273,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             }
 
         }
+
         if (someViewsGone) {
             tabContainer.removeAllViews();
             updateItems(visibleTabs);
