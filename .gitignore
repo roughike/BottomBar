@@ -40,6 +40,10 @@ captures/
 # Keystore files
 *.jks
 
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
 .idea/
-.idea
-*.idea/*
+out/
