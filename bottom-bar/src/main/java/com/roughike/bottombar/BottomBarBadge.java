@@ -194,7 +194,7 @@ class BottomBarBadge extends TextView {
         setCount(count);
     }
 
-    static class SavedState extends BaseSavedState {
+    public static class SavedState extends BaseSavedState {
         int savedCount;
 
         SavedState(Parcelable superState) {
