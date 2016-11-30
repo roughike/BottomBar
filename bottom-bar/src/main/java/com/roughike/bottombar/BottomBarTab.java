@@ -180,11 +180,11 @@ public class BottomBarTab extends LinearLayout {
         return title;
     }
 
-    TextView getTitleView() {
+    public TextView getTitleView() {
         return titleView;
     }
 
-    void setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
