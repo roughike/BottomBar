@@ -1,6 +1,5 @@
 package com.roughike.bottombar;
 
-import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.FrameLayout;
@@ -10,6 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by iiro on 22.8.2016.
@@ -51,13 +52,20 @@ public class BottomBarTabTest {
         tab.setIndexInContainer(69);
         assertEquals(69, tab.getIndexInTabContainer());
 
-        Bundle savedState = (Bundle) tab.onSaveInstanceState();
-        assertEquals(5, savedState.getInt(BottomBarBadge.STATE_COUNT + 69));
-
         tab.setBadgeCount(9);
         assertEquals(9, tab.badge.getCount());
+    }
 
-        tab.onRestoreInstanceState(savedState);
-        assertEquals(5, tab.badge.getCount());
+    @Test
+    public void testBadgeVisibility_BadgeNull() {
+        tab.setBadgeCount(0);
+        assertNull(tab.badge);
+    }
+
+    @Test
+    public void testBadgeVisibility_BadgeNotNull() {
+        tab.setBadgeCount(0);
+        tab.setBadgeCount(5);
+        assertNotNull(tab.badge);
     }
 }
