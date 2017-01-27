@@ -77,6 +77,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private int titleTextAppearance;
     private Typeface titleTypeFace;
     private boolean showShadow;
+    private boolean showTabText;
 
     private View backgroundOverlay;
     private ViewGroup outerContainer;
@@ -151,6 +152,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             titleTextAppearance = ta.getResourceId(R.styleable.BottomBar_bb_titleTextAppearance, 0);
             titleTypeFace = getTypeFaceFromAsset(ta.getString(R.styleable.BottomBar_bb_titleTypeFace));
             showShadow = ta.getBoolean(R.styleable.BottomBar_bb_showShadow, true);
+            showTabText = ta.getBoolean(R.styleable.BottomBar_bb_showTabText, true);
         } finally {
             ta.recycle();
         }
@@ -256,6 +258,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                 .badgeBackgroundColor(badgeBackgroundColor)
                 .titleTextAppearance(titleTextAppearance)
                 .titleTypeFace(titleTypeFace)
+                .showTabText(showTabText)
                 .build();
     }
 
@@ -351,7 +354,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
     /**
      * Set a listener that gets fired when the selected tab changes.
-     *
+     * <p>
      * Note: Will be immediately called for the currently selected tab
      * once when set.
      *
@@ -363,11 +366,11 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
     /**
      * Set a listener that gets fired when the selected tab changes.
-     *
+     * <p>
      * If shouldFireInitially is set to false, this listener isn't fired straight away
      * it's set, but you'll get all events normally for consecutive tab selection changes.
      *
-     * @param listener a listener for monitoring changes in tab selection.
+     * @param listener            a listener for monitoring changes in tab selection.
      * @param shouldFireInitially whether the listener should be fired the first time it's set.
      */
     public void setOnTabSelectListener(@Nullable OnTabSelectListener listener, boolean shouldFireInitially) {
@@ -429,7 +432,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      * Select a tab at the specified position.
      *
      * @param position the position to select.
-     * @param animate should the tab change be animated or not.
+     * @param animate  should the tab change be animated or not.
      */
     public void selectTabAtPosition(int position, boolean animate) {
         if (position > getTabCount() - 1 || position < 0) {

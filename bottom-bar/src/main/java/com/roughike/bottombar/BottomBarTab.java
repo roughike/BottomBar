@@ -61,6 +61,7 @@ public class BottomBarTab extends LinearLayout {
     private AppCompatImageView iconView;
     private TextView titleView;
     private boolean isActive;
+    private boolean showTitleText;
 
     private int indexInContainer;
 
@@ -90,6 +91,7 @@ public class BottomBarTab extends LinearLayout {
         setBadgeBackgroundColor(config.badgeBackgroundColor);
         setTitleTextAppearance(config.titleTextAppearance);
         setTitleTypeface(config.titleTypeFace);
+        setShowTitleText(config.showTabText);
     }
 
     void prepareLayout() {
@@ -108,6 +110,7 @@ public class BottomBarTab extends LinearLayout {
 
         updateCustomTextAppearance();
         updateCustomTypeface();
+        updateTextViewVisibility();
     }
 
     @VisibleForTesting
@@ -351,6 +354,29 @@ public class BottomBarTab extends LinearLayout {
         return titleTypeFace;
     }
 
+    public boolean isShowTitleText() {
+        return showTitleText;
+    }
+
+    public void setShowTitleText(boolean showTitleText) {
+        this.showTitleText = showTitleText;
+        updateTextViewVisibility();
+    }
+
+    public void updateTextViewVisibility() {
+        if (titleView != null) {
+            if (showTitleText) {
+                titleView.setVisibility(VISIBLE);
+                this.setGravity(Gravity.CENTER_HORIZONTAL);
+                iconView.setPadding(0, eightDps, 0, 0);
+            } else {
+                titleView.setVisibility(GONE);
+                this.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER);
+                iconView.setPadding(0, eightDps, 0, eightDps);
+            }
+        }
+    }
+
     void select(boolean animate) {
         isActive = true;
 
@@ -403,7 +429,7 @@ public class BottomBarTab extends LinearLayout {
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-               setColors((Integer) valueAnimator.getAnimatedValue());
+                setColors((Integer) valueAnimator.getAnimatedValue());
             }
         });
 
@@ -586,6 +612,7 @@ public class BottomBarTab extends LinearLayout {
         private final int badgeBackgroundColor;
         private final int titleTextAppearance;
         private final Typeface titleTypeFace;
+        private final boolean showTabText;
 
         private Config(Builder builder) {
             this.inActiveTabAlpha = builder.inActiveTabAlpha;
@@ -596,6 +623,7 @@ public class BottomBarTab extends LinearLayout {
             this.badgeBackgroundColor = builder.badgeBackgroundColor;
             this.titleTextAppearance = builder.titleTextAppearance;
             this.titleTypeFace = builder.titleTypeFace;
+            this.showTabText = builder.showTabText;
         }
 
         public static class Builder {
@@ -607,6 +635,7 @@ public class BottomBarTab extends LinearLayout {
             private int badgeBackgroundColor;
             private int titleTextAppearance;
             private Typeface titleTypeFace;
+            private boolean showTabText;
 
             public Builder inActiveTabAlpha(float alpha) {
                 this.inActiveTabAlpha = alpha;
@@ -645,6 +674,11 @@ public class BottomBarTab extends LinearLayout {
 
             public Builder titleTypeFace(Typeface titleTypeFace) {
                 this.titleTypeFace = titleTypeFace;
+                return this;
+            }
+
+            public Builder showTabText(boolean showTabText) {
+                this.showTabText = showTabText;
                 return this;
             }
 
