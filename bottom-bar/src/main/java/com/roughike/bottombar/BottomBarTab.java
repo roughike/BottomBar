@@ -57,6 +57,7 @@ public class BottomBarTab extends LinearLayout {
     private int activeColor;
     private int barColorWhenSelected;
     private int badgeBackgroundColor;
+    private int fixedWidth;
 
     private AppCompatImageView iconView;
     private TextView titleView;
@@ -79,6 +80,8 @@ public class BottomBarTab extends LinearLayout {
         sixDps = MiscUtils.dpToPixel(context, 6);
         eightDps = MiscUtils.dpToPixel(context, 8);
         sixteenDps = MiscUtils.dpToPixel(context, 16);
+
+        fixedWidth = -1;
     }
 
     void setConfig(Config config) {
@@ -539,6 +542,18 @@ public class BottomBarTab extends LinearLayout {
         ViewCompat.setScaleY(titleView, scale);
     }
 
+    public int getFixedWidth() {
+        return fixedWidth;
+    }
+
+    public void setFixedWidth(int fixedWidth) {
+        this.fixedWidth = fixedWidth;
+    }
+
+    public boolean hasFixedWidth() {
+        return getFixedWidth() > -1;
+    }
+
     @Override
     public Parcelable onSaveInstanceState() {
         if (badge != null) {
@@ -653,4 +668,5 @@ public class BottomBarTab extends LinearLayout {
             }
         }
     }
+
 }

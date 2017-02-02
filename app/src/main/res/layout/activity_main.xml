@@ -43,4 +43,16 @@
         android:layout_height="wrap_content"
         android:text="Using Badges" />
 
+    <Button
+        android:id="@+id/center_tab_with_fixed_width"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Center tab with fixed width" />
+
+    <Button
+        android:id="@+id/two_tabs_with_fixed_width"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Two tabs with fixed width" />
+
 </LinearLayout>

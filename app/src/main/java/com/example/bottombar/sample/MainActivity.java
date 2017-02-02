@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.five_tabs_changing_colors).setOnClickListener(this);
         findViewById(R.id.three_tabs_quick_return).setOnClickListener(this);
         findViewById(R.id.five_tabs_custom_colors).setOnClickListener(this);
+        findViewById(R.id.center_tab_with_fixed_width).setOnClickListener(this);
+        findViewById(R.id.two_tabs_with_fixed_width).setOnClickListener(this);
         findViewById(R.id.badges).setOnClickListener(this);
     }
 
@@ -38,6 +40,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.badges:
                 clazz = BadgeActivity.class;
+                break;
+            case R.id.center_tab_with_fixed_width:
+                clazz = CenterTabWithFixedWidthActivity.class;
+                break;
+            case R.id.two_tabs_with_fixed_width:
+                clazz = TwoTabsWithFixedWidthActivity.class;
                 break;
         }
 
