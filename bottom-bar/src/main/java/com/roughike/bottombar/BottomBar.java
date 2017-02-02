@@ -318,11 +318,60 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             viewWidth = screenWidth;
         }
 
+        // calculate first proposed width
         int proposedItemWidth = Math.min(
                 MiscUtils.dpToPixel(getContext(), viewWidth / tabsToAdd.length),
                 maxFixedItemWidth
         );
 
+        // check the tabs that don't have fixed width for correct calc
+        int tabsWithoutFixedSize = 0;
+
+        for (BottomBarTab tabView : tabsToAdd) {
+            if (!tabView.hasFixedWidth()) {
+                tabsWithoutFixedSize += 1;
+            }
+        }
+
+        // calculate correct width for tabs without fixed width
+        int totalOffset = 0;
+
+        for (BottomBarTab tabView : tabsToAdd) {
+            if (tabView.hasFixedWidth()) {
+                int fixedWidthPX = MiscUtils.dpToPixel(getContext(), tabView.getFixedWidth());
+                int offset = Math.abs(proposedItemWidth - fixedWidthPX);
+                totalOffset += offset;
+            }
+        }
+
+        if (totalOffset > 0 && tabsWithoutFixedSize > 0) {
+            proposedItemWidth += (totalOffset / tabsWithoutFixedSize);
+        }
+
+        // calculate the size for all tabs that need fill the view port
+        // it corrects the calc because of variable: maxFixedItemWidth
+        int totalSizePX = 0;
+        int viewWidthPX = MiscUtils.dpToPixel(getContext(), viewWidth);
+
+        for (BottomBarTab tabView : tabsToAdd) {
+            if (tabView.hasFixedWidth()) {
+                totalSizePX += MiscUtils.dpToPixel(getContext(), tabView.getFixedWidth());
+            } else {
+                totalSizePX += proposedItemWidth;
+            }
+        }
+
+        if (totalSizePX < viewWidthPX) {
+            int offset = (viewWidthPX - totalSizePX) / tabsWithoutFixedSize;
+
+            for (BottomBarTab tabView : tabsToAdd) {
+                if (!tabView.hasFixedWidth()) {
+                    proposedItemWidth += offset;
+                }
+            }
+        }
+
+        // setup tabs
         inActiveShiftingItemWidth = (int) (proposedItemWidth * 0.9);
         activeShiftingItemWidth = (int) (proposedItemWidth + (proposedItemWidth * (tabsToAdd.length * 0.1)));
         int height = Math.round(getContext().getResources().getDimension(R.dimen.bb_height));
@@ -331,14 +380,18 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             ViewGroup.LayoutParams params = tabView.getLayoutParams();
             params.height = height;
 
-            if (isShiftingMode()) {
-                if (tabView.isActive()) {
-                    params.width = activeShiftingItemWidth;
-                } else {
-                    params.width = inActiveShiftingItemWidth;
-                }
+            if (tabView.hasFixedWidth()) {
+                params.width = MiscUtils.dpToPixel(getContext(), tabView.getFixedWidth());
             } else {
-                params.width = proposedItemWidth;
+                if (isShiftingMode()) {
+                    if (tabView.isActive()) {
+                        params.width = activeShiftingItemWidth;
+                    } else {
+                        params.width = inActiveShiftingItemWidth;
+                    }
+                } else {
+                    params.width = proposedItemWidth;
+                }
             }
 
             if (tabView.getParent() == null) {
@@ -351,7 +404,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
     /**
      * Set a listener that gets fired when the selected tab changes.
-     *
+     * <p>
      * Note: Will be immediately called for the currently selected tab
      * once when set.
      *
@@ -363,11 +416,11 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
     /**
      * Set a listener that gets fired when the selected tab changes.
-     *
+     * <p>
      * If shouldFireInitially is set to false, this listener isn't fired straight away
      * it's set, but you'll get all events normally for consecutive tab selection changes.
      *
-     * @param listener a listener for monitoring changes in tab selection.
+     * @param listener            a listener for monitoring changes in tab selection.
      * @param shouldFireInitially whether the listener should be fired the first time it's set.
      */
     public void setOnTabSelectListener(@Nullable OnTabSelectListener listener, boolean shouldFireInitially) {
@@ -429,7 +482,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      * Select a tab at the specified position.
      *
      * @param position the position to select.
-     * @param animate should the tab change be animated or not.
+     * @param animate  should the tab change be animated or not.
      */
     public void selectTabAtPosition(int position, boolean animate) {
         if (position > getTabCount() - 1 || position < 0) {

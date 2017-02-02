@@ -106,6 +106,9 @@ class TabParser {
                         workingTab.setBadgeBackgroundColor(badgeBackgroundColor);
                     }
                     break;
+                case "fixedWidth":
+                    workingTab.setFixedWidth(parser.getAttributeIntValue(i, -1));
+                    break;
             }
         }
     }
