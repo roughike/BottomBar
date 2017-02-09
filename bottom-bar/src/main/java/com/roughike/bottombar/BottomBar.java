@@ -432,6 +432,10 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      * @param animate should the tab change be animated or not.
      */
     public void selectTabAtPosition(int position, boolean animate) {
+        selectTabAtPosition(position, animate, true);
+    }
+
+    public void selectTabAtPosition(int position, boolean animate, boolean triggerListeners) {
         if (position > getTabCount() - 1 || position < 0) {
             throw new IndexOutOfBoundsException("Can't select tab at position " +
                     position + ". This BottomBar has no items at that position.");
@@ -443,7 +447,11 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         oldTab.deselect(animate);
         newTab.select(animate);
 
-        updateSelectedTab(position);
+        if(triggerListeners)
+            updateSelectedTab(position);
+        else
+            currentTabPosition = position;
+
         shiftingMagic(oldTab, newTab, animate);
         handleBackgroundColorChange(newTab, animate);
     }
