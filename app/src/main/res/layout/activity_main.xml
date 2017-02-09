@@ -1,7 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/messageView"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"/>
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:ignore="HardcodedText">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Check out these samples and their sources for the most basic use cases."
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/simple_three_tabs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Simple example with three tabs" />
+
+    <Button
+        android:id="@+id/five_tabs_custom_colors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Using custom colors and fonts" />
+
+    <Button
+        android:id="@+id/five_tabs_changing_colors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Five tabs with changing colors" />
+
+    <Button
+        android:id="@+id/three_tabs_quick_return"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Three tabs with Quick Return" />
+
+    <Button
+        android:id="@+id/badges"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Using Badges" />
+
+</LinearLayout>

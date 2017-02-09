@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="BB_BottomBarItem_Fixed">
+    <style name="BB_BottomBarItem">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:gravity">bottom|center_horizontal</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">10dp</item>
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:paddingRight">12dp</item>
+        <!-- layout_height is ignored since the height is set programmatically in BottomBar
+        .updateItems() -->
+        <item name="android:layout_height">@dimen/bb_height</item>
     </style>
 
-    <style name="BB_BottomBarItem_Fixed.Title" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textSize">14sp</item>
+    <style name="BB_BottomBarItem_TitleStyle">
+        <!-- Material spec: "Avoid long text labels as these labels do not truncate or wrap." -->
         <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
         <item name="android:gravity">center_horizontal</item>
     </style>
 
-    <style name="BB_BottomBarItem_Shifting">
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:gravity">bottom|center_horizontal</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">56dp</item>
-        <item name="android:paddingTop">16dp</item>
+    <style name="BB_BottomBarItem_Fixed.TitleAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="BB_BottomBarItem_Shifting.Title" parent="BB_BottomBarItem_Fixed.Title">
+    <style name="BB_BottomBarItem_Shifting.TitleAppearance" parent="BB_BottomBarItem_Fixed.TitleAppearance">
         <item name="android:textColor">#FFFFFF</item>
     </style>
 

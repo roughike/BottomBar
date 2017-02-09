@@ -1,0 +1,46 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="All Tests" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+    <module name="bottom-bar" />
+    <option name="TESTING_TYPE" value="1" />
+    <option name="INSTRUMENTATION_RUNNER_CLASS" value="android.support.test.runner.AndroidJUnitRunner" />
+    <option name="METHOD_NAME" value="" />
+    <option name="CLASS_NAME" value="" />
+    <option name="PACKAGE_NAME" value="com.roughike.bottombar" />
+    <option name="EXTRA_OPTIONS" value="" />
+    <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+    <option name="PREFERRED_AVD" value="" />
+    <option name="CLEAR_LOGCAT" value="false" />
+    <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+    <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+    <option name="FORCE_STOP_RUNNING_APP" value="true" />
+    <option name="DEBUGGER_TYPE" value="Java" />
+    <option name="USE_LAST_SELECTED_DEVICE" value="true" />
+    <option name="PREFERRED_AVD" value="" />
+    <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+    <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+    <Auto>
+      <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+      <option name="WORKING_DIR" value="" />
+      <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+    </Auto>
+    <Hybrid>
+      <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+      <option name="WORKING_DIR" value="" />
+      <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+    </Hybrid>
+    <Java />
+    <Native>
+      <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+      <option name="WORKING_DIR" value="" />
+      <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+    </Native>
+    <Profilers>
+      <option name="ENABLE_ADVANCED_PROFILING" value="true" />
+      <option name="GAPID_ENABLED" value="false" />
+      <option name="GAPID_DISABLE_PCS" value="false" />
+      <option name="SUPPORT_LIB_ENABLED" value="true" />
+      <option name="INSTRUMENTATION_ENABLED" value="true" />
+    </Profilers>
+    <method />
+  </configuration>
+</component>

@@ -36,15 +36,15 @@ import android.graphics.drawable.shapes.OvalShape;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class BadgeCircle {
+class BadgeCircle {
     /**
      * Creates a new circle for the Badge background.
      *
      * @param size  the width and height for the circle
-     * @param color the color for the circle
+     * @param color the activeIconColor for the circle
      * @return a nice and adorable circle.
      */
-    protected static ShapeDrawable make(int size, int color) {
+    static ShapeDrawable make(int size, int color) {
         ShapeDrawable indicator = new ShapeDrawable(new OvalShape());
         indicator.setIntrinsicWidth(size);
         indicator.setIntrinsicHeight(size);

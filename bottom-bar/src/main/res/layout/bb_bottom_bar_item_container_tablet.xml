@@ -1,41 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="bottom">
-
-    <FrameLayout
-        android:id="@+id/bb_user_content_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/bb_bottom_bar_outer_container"
-        android:layout_toEndOf="@+id/bb_bottom_bar_outer_container"/>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <FrameLayout
         android:id="@+id/bb_bottom_bar_outer_container"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_width="60dp"
+        android:layout_height="match_parent">
 
         <View
-            android:id="@+id/bb_tablet_right_border"
-            android:layout_width="1dp"
+            android:id="@+id/bb_bottom_bar_background_overlay"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="right|end"
-            android:background="#EAEAEA"/>
+            android:visibility="invisible" />
 
         <LinearLayout
             android:id="@+id/bb_bottom_bar_item_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="1dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginEnd="1dp"
-            android:paddingTop="8dp"
+            android:layout_marginRight="1dp"
+            android:orientation="vertical"
             android:paddingBottom="8dp"
-            android:background="#FFFFFF"
-            android:orientation="vertical" />
+            android:paddingTop="8dp" />
 
     </FrameLayout>
 
-</RelativeLayout>
+    <View
+        android:id="@+id/bb_bottom_bar_shadow"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#EAEAEA" />
+
+</merge>

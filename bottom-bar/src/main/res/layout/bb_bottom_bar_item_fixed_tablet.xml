@@ -7,7 +7,7 @@
     android:paddingTop="16dp"
     android:paddingBottom="16dp">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/bb_bottom_bar_icon"
         style="@style/BB_BottomBarItem_Tablet" />
 

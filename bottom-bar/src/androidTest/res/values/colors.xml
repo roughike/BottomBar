@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="test_random_color">#FAB123</color>
+    <color name="test_random_color_two">#DAD666</color>
+</resources>

@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/BB_BottomBarItem_Shifting">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/bb_bottom_bar_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.6"/>
 
+    <!-- We use this empty space to push the text to the bottom -->
+    <android.support.v4.widget.Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
     <TextView
         android:id="@+id/bb_bottom_bar_title"
-        android:textAppearance="@style/BB_BottomBarItem_Shifting.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleX="0"
-        android:scaleY="0" />
+        android:textAppearance="@style/BB_BottomBarItem_Shifting.TitleAppearance"
+        style="@style/BB_BottomBarItem_TitleStyle"/>
 
-</LinearLayout>
+</merge>

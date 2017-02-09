@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab inActiveColor="#00FF00" activeColor="#FF0000" id="@+id/tab_recents" title="Recents" icon="@drawable/empty_icon" barColorWhenSelected="#FF0000" badgeBackgroundColor="#FF0000" />
+    <tab inActiveColor="#0000FF" activeColor="@color/test_random_color" id="@+id/tab_favorites" title="@string/favorites" icon="@drawable/empty_icon" barColorWhenSelected="#00FF00" badgeBackgroundColor="#00FF00" />
+    <tab inActiveColor="#FF0000" activeColor="#0000FF" id="@+id/tab_nearby" title="Nearby" icon="@drawable/empty_icon" barColorWhenSelected="#F00000" badgeBackgroundColor="#F00000" />
+    <tab inActiveColor="#F0F000" activeColor="@color/test_random_color_two" id="@+id/tab_friends" title="@string/friends" icon="@drawable/empty_icon" barColorWhenSelected="#00F000" badgeBackgroundColor="#00F000" />
+    <tab inActiveColor="#F00F00" activeColor="#F00F00" id="@+id/tab_food" title="Food" icon="@drawable/empty_icon" barColorWhenSelected="#00F0F0" badgeBackgroundColor="#00F0F0" />
+</tabs>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/messageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomBar"
+        android:gravity="center"
+        android:text="Hi mom!" />
+
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        app:bb_tabXmlResource="@xml/bottombar_tabs_five"
+        app:bb_behavior="shifting"
+        app:bb_inActiveTabAlpha="0.3"
+        app:bb_inActiveTabColor="@color/colorAccent"
+        app:bb_activeTabColor="@color/colorAccent"
+        app:bb_titleTypeFace="fonts/GreatVibes-Regular.otf"
+        app:bb_titleTextAppearance="@style/CustomTitleTextAppearance"/>
+
+</RelativeLayout>
