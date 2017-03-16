@@ -43,7 +43,7 @@ class MiscUtils {
         DisplayMetrics metrics = resources.getDisplayMetrics();
 
         try {
-            return (int) (dp * (metrics.densityDpi / 160f));
+            return (int) (dp * metrics.density);
         } catch (NoSuchFieldError ignored) {
             return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
         }
@@ -58,7 +58,7 @@ class MiscUtils {
      */
     protected static int pixelToDp(Context context, int px) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        return Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return Math.round(px / displayMetrics.density);
     }
 
     /**
