@@ -31,6 +31,21 @@ import static com.roughike.bottombar.TabParser.TabAttribute.TITLE;
 
 /**
  * Created by iiro on 21.7.2016.
+ *
+ * BottomBar library for Android
+ * Copyright (c) 2016 Iiro Krankka (http://github.com/roughike).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 class TabParser {
     private static final String TAB_TAG = "tab";
@@ -99,22 +114,22 @@ class TabParser {
                     workingTab.setTitle(getTitleValue(parser, i));
                     break;
                 case INACTIVE_COLOR:
-                    Integer inActiveColor = getColorValue(parser, i);
-                    if (inActiveColor == COLOR_NOT_SET) continue;
-                    workingTab.setInActiveColor(inActiveColor);
+                    int inactiveColor = getColorValue(parser, i);
+                    if (inactiveColor == COLOR_NOT_SET) continue;
+                    workingTab.setInActiveColor(inactiveColor);
                     break;
                 case ACTIVE_COLOR:
-                    Integer activeColor = getColorValue(parser, i);
+                    int activeColor = getColorValue(parser, i);
                     if (activeColor == COLOR_NOT_SET) continue;
                     workingTab.setActiveColor(activeColor);
                     break;
                 case BAR_COLOR_WHEN_SELECTED:
-                    Integer barColorWhenSelected = getColorValue(parser, i);
+                    int barColorWhenSelected = getColorValue(parser, i);
                     if (barColorWhenSelected == COLOR_NOT_SET) continue;
                     workingTab.setBarColorWhenSelected(barColorWhenSelected);
                     break;
                 case BADGE_BACKGROUND_COLOR:
-                    Integer badgeBackgroundColor = getColorValue(parser, i);
+                    int badgeBackgroundColor = getColorValue(parser, i);
                     if (badgeBackgroundColor == COLOR_NOT_SET) continue;
                     workingTab.setBadgeBackgroundColor(badgeBackgroundColor);
                     break;
