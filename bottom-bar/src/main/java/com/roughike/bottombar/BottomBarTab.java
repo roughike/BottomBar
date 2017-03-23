@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
@@ -73,7 +74,7 @@ public class BottomBarTab extends LinearLayout {
         sixteenDps = MiscUtils.dpToPixel(context, 16);
     }
 
-    void setConfig(Config config) {
+    void setConfig(@NonNull Config config) {
         setInActiveAlpha(config.inActiveTabAlpha);
         setActiveAlpha(config.activeTabAlpha);
         setInActiveColor(config.inActiveTabColor);

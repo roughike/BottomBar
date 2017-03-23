@@ -13,7 +13,7 @@ class BatchTabPropertyApplier {
         this.bottomBar = bottomBar;
     }
 
-    void applyToAllTabs(TabPropertyUpdater propertyUpdater) {
+    void applyToAllTabs(@NonNull TabPropertyUpdater propertyUpdater) {
         int tabCount = bottomBar.getTabCount();
 
         if (tabCount > 0) {

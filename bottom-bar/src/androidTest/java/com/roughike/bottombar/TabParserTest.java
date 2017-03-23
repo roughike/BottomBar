@@ -33,7 +33,7 @@ public class TabParserTest {
                 context,
                 new BottomBarTab.Config.Builder().build(),
                 com.roughike.bottombar.test.R.xml.dummy_tabs_five
-        ).getTabs();
+        ).parseTabs();
     }
 
     @Test
