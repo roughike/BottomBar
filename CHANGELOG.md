@@ -2,11 +2,25 @@
 
 (or: y u no add shiny new things?!)
 
-### 2.0.3
+### 2.1.2
+
+* Merged [#703](https://github.com/roughike/BottomBar/pull/703) that allows controlling badge visibility for tabs that are active.
+
+### 2.1.1
+
+* A quick fix for a really critical bug that could affect some devices. More specifically, [this one.](https://github.com/roughike/BottomBar/issues/625)
+
+### 2.1.0
 
 * Fixed a bug in the Badge positioning, causing the Badges to clip when there was many tabs.
 * Fixed a bug where the lower portion of unselected titles were clipped off in fixed mode.
-*  Made changes to Badge restoration logic to fix [445](https://github.com/roughike/BottomBar/issues/445). Credit goes to [@Kevinrob](https://github.com/Kevinrob) for reporting and helping to reproduce the issue.
+* Made changes to Badge restoration logic to fix [445](https://github.com/roughike/BottomBar/issues/445). Credit goes to [@Kevinrob](https://github.com/Kevinrob) for reporting and helping to reproduce the issue.
+* Fixed [#448](https://github.com/roughike/BottomBar/issues/448), [#471](https://github.com/roughike/BottomBar/issues/471), [#436](https://github.com/roughike/BottomBar/issues/436) and [#591](https://github.com/roughike/BottomBar/issues/591)
+* Fixed a faulty behavior where the tabs' widths were calculated according to phone screen width, but should've been calculated according to the parent view's width by merging [#504](https://github.com/roughike/BottomBar/pull/504) 
+* Optimized the tab resizing calculations; now the tabs aren't needlessly removed and readded, only the layout params get changed.
+* Merged [#468](https://github.com/roughike/BottomBar/pull/468) and [#457](https://github.com/roughike/BottomBar/pull/457)
+* Fixed [#554](https://github.com/roughike/BottomBar/issues/554) by merging [#512](https://github.com/roughike/BottomBar/pull/512).
+* Made most of the BottomBarTab methods public.
 
 ### 2.0.2
 

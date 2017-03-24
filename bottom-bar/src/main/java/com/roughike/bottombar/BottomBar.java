@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.XmlRes;
@@ -50,15 +51,13 @@ import java.util.List;
  */
 public class BottomBar extends LinearLayout implements View.OnClickListener, View.OnLongClickListener {
     private static final String STATE_CURRENT_SELECTED_TAB = "STATE_CURRENT_SELECTED_TAB";
-
     private static final float DEFAULT_INACTIVE_SHIFTING_TAB_ALPHA = 0.6f;
-
     // Behaviors
     private static final int BEHAVIOR_NONE = 0;
     private static final int BEHAVIOR_SHIFTING = 1;
     private static final int BEHAVIOR_SHY = 2;
     private static final int BEHAVIOR_DRAW_UNDER_NAV = 4;
-
+    private BatchTabPropertyApplier batchPropertyApplier;
     private int primaryColor;
     private int screenWidth;
     private int tenDp;
@@ -73,6 +72,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private int inActiveTabColor;
     private int activeTabColor;
     private int badgeBackgroundColor;
+    private boolean hideBadgeWhenActive;
     private int titleTextAppearance;
     private Typeface titleTypeFace;
     private boolean showShadow;
@@ -89,7 +89,13 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private int inActiveShiftingItemWidth;
     private int activeShiftingItemWidth;
 
+    @Nullable
+    private TabSelectionInterceptor tabSelectionInterceptor;
+
+    @Nullable
     private OnTabSelectListener onTabSelectListener;
+
+    @Nullable
     private OnTabReselectListener onTabReselectListener;
 
     private boolean isComingFromRestoredState;
@@ -97,6 +103,8 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
     private boolean shyHeightAlreadyCalculated;
     private boolean navBarAccountedHeightCalculated;
+
+    private BottomBarTab[] currentTabs;
 
     public BottomBar(Context context) {
         super(context);
@@ -106,13 +114,18 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     public BottomBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
-        setItems(tabXmlResource);
     }
 
     private void init(Context context, AttributeSet attrs) {
+        batchPropertyApplier = new BatchTabPropertyApplier(this);
+
         populateAttributes(context, attrs);
         initializeViews();
         determineInitialBackgroundColor();
+
+        if (tabXmlResource != 0) {
+            setItems(tabXmlResource);
+        }
     }
 
     private void populateAttributes(Context context, AttributeSet attrs) {
@@ -140,6 +153,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             inActiveTabColor = ta.getColor(R.styleable.BottomBar_bb_inActiveTabColor, defaultInActiveColor);
             activeTabColor = ta.getColor(R.styleable.BottomBar_bb_activeTabColor, defaultActiveColor);
             badgeBackgroundColor = ta.getColor(R.styleable.BottomBar_bb_badgeBackgroundColor, Color.RED);
+            hideBadgeWhenActive = ta.getBoolean(R.styleable.BottomBar_bb_badgesHideWhenActive, true);
             titleTextAppearance = ta.getResourceId(R.styleable.BottomBar_bb_titleTextAppearance, 0);
             titleTypeFace = getTypeFaceFromAsset(ta.getString(R.styleable.BottomBar_bb_titleTypeFace));
             showShadow = ta.getBoolean(R.styleable.BottomBar_bb_showShadow, true);
@@ -235,7 +249,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         }
 
         TabParser parser = new TabParser(getContext(), defaultTabConfig, xmlRes);
-        updateItems(parser.getTabs());
+        updateItems(parser.parseTabs());
     }
 
     private BottomBarTab.Config getTabConfig() {
@@ -246,12 +260,15 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                 .activeTabColor(activeTabColor)
                 .barColorWhenSelected(defaultBackgroundColor)
                 .badgeBackgroundColor(badgeBackgroundColor)
+                .hideBadgeWhenSelected(hideBadgeWhenActive)
                 .titleTextAppearance(titleTextAppearance)
                 .titleTypeFace(titleTypeFace)
                 .build();
     }
 
     private void updateItems(final List<BottomBarTab> bottomBarItems) {
+        tabContainer.removeAllViews();
+
         int index = 0;
         int biggestWidth = 0;
 
@@ -294,62 +311,117 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             index++;
         }
 
+        currentTabs = viewsToAdd;
+
         if (!isTabletMode) {
-            resizeTabsToCorrectSizes(bottomBarItems, viewsToAdd);
+            resizeTabsToCorrectSizes(viewsToAdd);
         }
     }
 
-    private void resizeTabsToCorrectSizes(List<BottomBarTab> bottomBarItems, BottomBarTab[] viewsToAdd) {
+    private void resizeTabsToCorrectSizes(BottomBarTab[] tabsToAdd) {
+        int viewWidth = MiscUtils.pixelToDp(getContext(), getWidth());
+
+        if (viewWidth <= 0 || viewWidth > screenWidth) {
+            viewWidth = screenWidth;
+        }
+
         int proposedItemWidth = Math.min(
-                MiscUtils.dpToPixel(getContext(), screenWidth / bottomBarItems.size()),
+                MiscUtils.dpToPixel(getContext(), viewWidth / tabsToAdd.length),
                 maxFixedItemWidth
         );
 
         inActiveShiftingItemWidth = (int) (proposedItemWidth * 0.9);
-        activeShiftingItemWidth = (int) (proposedItemWidth + (proposedItemWidth * (bottomBarItems.size() * 0.1)));
+        activeShiftingItemWidth = (int) (proposedItemWidth + (proposedItemWidth * ((tabsToAdd.length - 1) * 0.1)));
         int height = Math.round(getContext().getResources().getDimension(R.dimen.bb_height));
 
-        for (BottomBarTab bottomBarView : viewsToAdd) {
-            LayoutParams params;
+        for (BottomBarTab tabView : tabsToAdd) {
+            ViewGroup.LayoutParams params = tabView.getLayoutParams();
+            params.height = height;
 
             if (isShiftingMode()) {
-                if (bottomBarView.isActive()) {
-                    params = new LayoutParams(activeShiftingItemWidth, height);
+                if (tabView.isActive()) {
+                    params.width = activeShiftingItemWidth;
                 } else {
-                    params = new LayoutParams(inActiveShiftingItemWidth, height);
+                    params.width = inActiveShiftingItemWidth;
                 }
             } else {
-                params = new LayoutParams(proposedItemWidth, height);
+                params.width = proposedItemWidth;
             }
 
-            bottomBarView.setLayoutParams(params);
-            tabContainer.addView(bottomBarView);
+            if (tabView.getParent() == null) {
+                tabContainer.addView(tabView);
+            }
+
+            tabView.requestLayout();
         }
     }
 
     /**
-     * Set a listener that gets fired when the selected tab changes.
+     * Set a listener that gets fired when the selected {@link BottomBarTab} is about to change.
      *
+     * @param interceptor a listener for potentially interrupting changes in tab selection.
+     */
+    public void setTabSelectionInterceptor(@NonNull TabSelectionInterceptor interceptor) {
+        tabSelectionInterceptor = interceptor;
+    }
+
+    /**
+     * Removes the current {@link TabSelectionInterceptor} listener
+     */
+    public void removeOverrideTabSelectionListener() {
+        tabSelectionInterceptor = null;
+    }
+
+    /**
+     * Set a listener that gets fired when the selected {@link BottomBarTab} changes.
+     * <p>
      * Note: Will be immediately called for the currently selected tab
      * once when set.
      *
      * @param listener a listener for monitoring changes in tab selection.
      */
-    public void setOnTabSelectListener(@Nullable OnTabSelectListener listener) {
+    public void setOnTabSelectListener(@NonNull OnTabSelectListener listener) {
+        setOnTabSelectListener(listener, true);
+    }
+
+    /**
+     * Set a listener that gets fired when the selected {@link BottomBarTab} changes.
+     * <p>
+     * If {@code shouldFireInitially} is set to false, this listener isn't fired straight away
+     * it's set, but you'll get all events normally for consecutive tab selection changes.
+     *
+     * @param listener            a listener for monitoring changes in tab selection.
+     * @param shouldFireInitially whether the listener should be fired the first time it's set.
+     */
+    public void setOnTabSelectListener(@NonNull OnTabSelectListener listener, boolean shouldFireInitially) {
         onTabSelectListener = listener;
 
-        if (onTabSelectListener != null && getTabCount() > 0) {
+        if (shouldFireInitially && getTabCount() > 0) {
             listener.onTabSelected(getCurrentTabId());
         }
     }
 
     /**
-     * Set a listener that gets fired when a currently selected tab is clicked.
+     * Removes the current {@link OnTabSelectListener} listener
+     */
+    public void removeOnTabSelectListener() {
+        onTabSelectListener = null;
+    }
+
+    /**
+     * Set a listener that gets fired when a currently selected {@link BottomBarTab} is clicked.
      *
      * @param listener a listener for handling tab reselections.
      */
-    public void setOnTabReselectListener(@Nullable OnTabReselectListener listener) {
+    public void setOnTabReselectListener(@NonNull OnTabReselectListener listener) {
         onTabReselectListener = listener;
+    }
+
+    /**
+     * Removes the current {@link OnTabReselectListener} listener
+     */
+    public void removeOnTabReselectListener() {
+        onTabReselectListener = null;
     }
 
     /**
@@ -387,12 +459,30 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      * @param position the position to select.
      */
     public void selectTabAtPosition(int position) {
+        selectTabAtPosition(position, false);
+    }
+
+    /**
+     * Select a tab at the specified position.
+     *
+     * @param position the position to select.
+     * @param animate  should the tab change be animated or not.
+     */
+    public void selectTabAtPosition(int position, boolean animate) {
         if (position > getTabCount() - 1 || position < 0) {
             throw new IndexOutOfBoundsException("Can't select tab at position " +
                     position + ". This BottomBar has no items at that position.");
         }
 
-        selectTabAtPosition(position, false);
+        BottomBarTab oldTab = getCurrentTab();
+        BottomBarTab newTab = getTabAtPosition(position);
+
+        oldTab.deselect(animate);
+        newTab.select(animate);
+
+        updateSelectedTab(position);
+        shiftingMagic(oldTab, newTab, animate);
+        handleBackgroundColorChange(newTab, animate);
     }
 
     public int getTabCount() {
@@ -453,7 +543,13 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      */
     public void setInActiveTabAlpha(float alpha) {
         inActiveTabAlpha = alpha;
-        refreshTabs();
+
+        batchPropertyApplier.applyToAllTabs(new BatchTabPropertyApplier.TabPropertyUpdater() {
+            @Override
+            public void update(BottomBarTab tab) {
+                tab.setInActiveAlpha(inActiveTabAlpha);
+            }
+        });
     }
 
     /**
@@ -461,12 +557,24 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      */
     public void setActiveTabAlpha(float alpha) {
         activeTabAlpha = alpha;
-        refreshTabs();
+
+        batchPropertyApplier.applyToAllTabs(new BatchTabPropertyApplier.TabPropertyUpdater() {
+            @Override
+            public void update(BottomBarTab tab) {
+                tab.setActiveAlpha(activeTabAlpha);
+            }
+        });
     }
 
     public void setInActiveTabColor(@ColorInt int color) {
         inActiveTabColor = color;
-        refreshTabs();
+
+        batchPropertyApplier.applyToAllTabs(new BatchTabPropertyApplier.TabPropertyUpdater() {
+            @Override
+            public void update(BottomBarTab tab) {
+                tab.setInActiveColor(inActiveTabColor);
+            }
+        });
     }
 
     /**
@@ -474,12 +582,41 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      */
     public void setActiveTabColor(@ColorInt int color) {
         activeTabColor = color;
-        refreshTabs();
+
+        batchPropertyApplier.applyToAllTabs(new BatchTabPropertyApplier.TabPropertyUpdater() {
+            @Override
+            public void update(BottomBarTab tab) {
+                tab.setActiveColor(activeTabColor);
+            }
+        });
     }
 
+    /**
+     * Set background color for the badge.
+     */
     public void setBadgeBackgroundColor(@ColorInt int color) {
         badgeBackgroundColor = color;
-        refreshTabs();
+
+        batchPropertyApplier.applyToAllTabs(new BatchTabPropertyApplier.TabPropertyUpdater() {
+            @Override
+            public void update(BottomBarTab tab) {
+                tab.setBadgeBackgroundColor(badgeBackgroundColor);
+            }
+        });
+    }
+
+    /**
+     * Controls whether the badge (if any) for active tabs
+     * should be hidden or not.
+     */
+    public void setBadgesHideWhenActive(final boolean hideWhenSelected) {
+        hideBadgeWhenActive = hideWhenSelected;
+        batchPropertyApplier.applyToAllTabs(new BatchTabPropertyApplier.TabPropertyUpdater() {
+            @Override
+            public void update(BottomBarTab tab) {
+                tab.setBadgeHidesWhenActive(hideWhenSelected);
+            }
+        });
     }
 
     /**
@@ -487,7 +624,13 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      */
     public void setTabTitleTextAppearance(int textAppearance) {
         titleTextAppearance = textAppearance;
-        refreshTabs();
+
+        batchPropertyApplier.applyToAllTabs(new BatchTabPropertyApplier.TabPropertyUpdater() {
+            @Override
+            public void update(BottomBarTab tab) {
+                tab.setTitleTextAppearance(titleTextAppearance);
+            }
+        });
     }
 
     /**
@@ -508,20 +651,13 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      */
     public void setTabTitleTypeface(Typeface typeface) {
         titleTypeFace = typeface;
-        refreshTabs();
-    }
 
-    private void refreshTabs() {
-        int tabCount = getTabCount();
-
-        if (tabCount > 0) {
-            BottomBarTab.Config newConfig = getTabConfig();
-
-            for (int i = 0; i < getTabCount(); i++) {
-                BottomBarTab tab = getTabAtPosition(i);
-                tab.setConfig(newConfig);
+        batchPropertyApplier.applyToAllTabs(new BatchTabPropertyApplier.TabPropertyUpdater() {
+            @Override
+            public void update(BottomBarTab tab) {
+                tab.setTitleTypeface(titleTypeFace);
             }
-        }
+        });
     }
 
     @Override
@@ -529,6 +665,10 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         super.onLayout(changed, left, top, right, bottom);
 
         if (changed) {
+            if (!isTabletMode) {
+                resizeTabsToCorrectSizes(currentTabs);
+            }
+
             updateTitleBottomPadding();
 
             if (isShy()) {
@@ -651,13 +791,14 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     }
 
     @Override
-    public void onClick(View v) {
-        handleClick(v);
+    public void onClick(View target) {
+        if (!(target instanceof BottomBarTab)) return;
+        handleClick((BottomBarTab) target);
     }
 
     @Override
-    public boolean onLongClick(View v) {
-        return handleLongClick(v);
+    public boolean onLongClick(View target) {
+        return !(target instanceof BottomBarTab) || handleLongClick((BottomBarTab) target);
     }
 
     private BottomBarTab findTabInLayout(ViewGroup child) {
@@ -672,9 +813,13 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         return null;
     }
 
-    private void handleClick(View v) {
+    private void handleClick(BottomBarTab newTab) {
         BottomBarTab oldTab = getCurrentTab();
-        BottomBarTab newTab = (BottomBarTab) v;
+
+        if (tabSelectionInterceptor != null
+                && tabSelectionInterceptor.shouldInterceptTabSelection(oldTab.getId(), newTab.getId())) {
+            return;
+        }
 
         oldTab.deselect(true);
         newTab.select(true);
@@ -684,28 +829,12 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         updateSelectedTab(newTab.getIndexInTabContainer());
     }
 
-    private boolean handleLongClick(View v) {
-        if (v instanceof BottomBarTab) {
-            BottomBarTab longClickedTab = (BottomBarTab) v;
-
-            if ((isShiftingMode() || isTabletMode) && !longClickedTab.isActive()) {
-                Toast.makeText(getContext(), longClickedTab.getTitle(), Toast.LENGTH_SHORT).show();
-            }
+    private boolean handleLongClick(BottomBarTab longClickedTab) {
+        if ((isShiftingMode() || isTabletMode) && !longClickedTab.isActive()) {
+            Toast.makeText(getContext(), longClickedTab.getTitle(), Toast.LENGTH_SHORT).show();
         }
 
         return true;
-    }
-
-    private void selectTabAtPosition(int position, boolean animate) {
-        BottomBarTab oldTab = getCurrentTab();
-        BottomBarTab newTab = getTabAtPosition(position);
-
-        oldTab.deselect(animate);
-        newTab.select(animate);
-
-        updateSelectedTab(position);
-        shiftingMagic(oldTab, newTab, animate);
-        handleBackgroundColorChange(newTab, false);
     }
 
     private void updateSelectedTab(int newPosition) {
