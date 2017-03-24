@@ -15,6 +15,7 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -91,6 +92,13 @@ public class BottomBarTab extends LinearLayout {
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
         setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+        // set a selectable item background
+        final TypedValue typedValue = new TypedValue();
+        int mBackground;
+        getContext().getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
+        mBackground = typedValue.resourceId;
+        setBackgroundResource(mBackground);
 
         iconView = (AppCompatImageView) findViewById(R.id.bb_bottom_bar_icon);
         iconView.setImageResource(iconResId);
