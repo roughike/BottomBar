@@ -63,7 +63,7 @@ public class BottomBarTest {
 
     private Context context;
 
-    private OverrideTabSelectionListener overrideTabSelectionListener;
+    private TabSelectionInterceptor tabSelectionInterceptor;
     private OnTabSelectListener selectListener;
     private OnTabReselectListener reselectListener;
 
@@ -73,7 +73,7 @@ public class BottomBarTest {
     public void setUp() {
         context = InstrumentationRegistry.getTargetContext();
 
-        overrideTabSelectionListener = mock(OverrideTabSelectionListener.class);
+        tabSelectionInterceptor = mock(TabSelectionInterceptor.class);
         selectListener = mock(OnTabSelectListener.class);
         reselectListener = mock(OnTabReselectListener.class);
 
@@ -122,24 +122,24 @@ public class BottomBarTest {
 
     @Test
     public void setOverrideTabSelectionListener_preventSelection() {
-        bottomBar.setOverrideTabSelectionListener(overrideTabSelectionListener);
+        bottomBar.setTabSelectionInterceptor(tabSelectionInterceptor);
 
-        when(overrideTabSelectionListener.shouldOverrideTabSelection(anyInt(), anyInt())).thenReturn(true);
+        when(tabSelectionInterceptor.shouldInterceptTabSelection(anyInt(), anyInt())).thenReturn(true);
 
         BottomBarTab oldTab = bottomBar.getCurrentTab();
         BottomBarTab newTab = bottomBar.getTabAtPosition(2);
         newTab.performClick();
 
-        verify(overrideTabSelectionListener, times(1)).shouldOverrideTabSelection(oldTab.getId(), newTab.getId());
+        verify(tabSelectionInterceptor, times(1)).shouldInterceptTabSelection(oldTab.getId(), newTab.getId());
         assertNotSame(bottomBar.getCurrentTab(), newTab);
     }
 
     @Test
     @UiThreadTest
     public void setOverrideTabSelectionListener_allowingSelection() {
-        bottomBar.setOverrideTabSelectionListener(overrideTabSelectionListener);
+        bottomBar.setTabSelectionInterceptor(tabSelectionInterceptor);
 
-        when(overrideTabSelectionListener.shouldOverrideTabSelection(anyInt(), anyInt())).thenReturn(false);
+        when(tabSelectionInterceptor.shouldInterceptTabSelection(anyInt(), anyInt())).thenReturn(false);
 
         BottomBarTab oldTab = bottomBar.getCurrentTab();
         final BottomBarTab newTab = bottomBar.getTabAtPosition(2);
@@ -151,7 +151,7 @@ public class BottomBarTest {
         });
 
 
-        verify(overrideTabSelectionListener, times(1)).shouldOverrideTabSelection(oldTab.getId(), newTab.getId());
+        verify(tabSelectionInterceptor, times(1)).shouldInterceptTabSelection(oldTab.getId(), newTab.getId());
         assertSame(bottomBar.getCurrentTab(), newTab);
     }
 
@@ -169,7 +169,7 @@ public class BottomBarTest {
             }
         });
 
-        verify(overrideTabSelectionListener, times(0)).shouldOverrideTabSelection(oldTab.getId(), newTab.getId());
+        verify(tabSelectionInterceptor, times(0)).shouldInterceptTabSelection(oldTab.getId(), newTab.getId());
         assertSame(bottomBar.getCurrentTab(), newTab);
     }
 

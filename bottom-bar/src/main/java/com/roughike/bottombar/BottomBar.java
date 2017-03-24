@@ -90,7 +90,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private int activeShiftingItemWidth;
 
     @Nullable
-    private OverrideTabSelectionListener overrideTabSelectionListener;
+    private TabSelectionInterceptor tabSelectionInterceptor;
 
     @Nullable
     private OnTabSelectListener onTabSelectListener;
@@ -359,17 +359,17 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     /**
      * Set a listener that gets fired when the selected {@link BottomBarTab} is about to change.
      *
-     * @param listener a listener for potentially interrupting changes in tab selection.
+     * @param interceptor a listener for potentially interrupting changes in tab selection.
      */
-    public void setOverrideTabSelectionListener(@NonNull OverrideTabSelectionListener listener) {
-        overrideTabSelectionListener = listener;
+    public void setTabSelectionInterceptor(@NonNull TabSelectionInterceptor interceptor) {
+        tabSelectionInterceptor = interceptor;
     }
 
     /**
-     * Removes the current {@link OverrideTabSelectionListener} listener
+     * Removes the current {@link TabSelectionInterceptor} listener
      */
     public void removeOverrideTabSelectionListener() {
-        overrideTabSelectionListener = null;
+        tabSelectionInterceptor = null;
     }
 
     /**
@@ -816,8 +816,8 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private void handleClick(BottomBarTab newTab) {
         BottomBarTab oldTab = getCurrentTab();
 
-        if (overrideTabSelectionListener != null
-                && overrideTabSelectionListener.shouldOverrideTabSelection(oldTab.getId(), newTab.getId())) {
+        if (tabSelectionInterceptor != null
+                && tabSelectionInterceptor.shouldInterceptTabSelection(oldTab.getId(), newTab.getId())) {
             return;
         }
 
