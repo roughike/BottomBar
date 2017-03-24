@@ -106,6 +106,10 @@ class TabParser {
                         workingTab.setBadgeBackgroundColor(badgeBackgroundColor);
                     }
                     break;
+                case "badgeHidesWhenActive":
+                    boolean badgeHidesWhenActive = parser.getAttributeBooleanValue(i, true);
+                    workingTab.setBadgeHidesWhenActive(badgeHidesWhenActive);
+                    break;
             }
         }
     }

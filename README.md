@@ -4,8 +4,6 @@
 
 <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/shy-demo.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/shifting-demo.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/screenshot_tablet.png" width="33%" />
 
-[Discussion about maintenance status](https://github.com/roughike/BottomBar/issues/606)
-
 ## Version 2.0 released!
 
 [The latest version before that can be found in the v1 branch](https://github.com/roughike/BottomBar/tree/v1)
@@ -33,7 +31,7 @@ Your uncle Bob's Galaxy S Mini will probably be supported in the future though.
 ## Gimme that Gradle sweetness, pls?
 
 ```groovy
-compile 'com.roughike:bottom-bar:2.1.1'
+compile 'com.roughike:bottom-bar:2.1.2'
 ```
 
 **Maven:**
@@ -41,7 +39,7 @@ compile 'com.roughike:bottom-bar:2.1.1'
 <dependency>
   <groupId>com.roughike</groupId>
   <artifactId>bottom-bar</artifactId>
-  <version>2.1.1</version>
+  <version>2.1.2</version>
   <type>pom</type>
 </dependency>
 ```
@@ -308,6 +306,7 @@ nearby.removeBadge/();
     app:bb_activeTabAlpha="1"
     app:bb_inActiveTabColor="#222222"
     app:bb_activeTabColor="@color/colorPrimary"
+    app:bb_badgesHideWhenActive="true"
     app:bb_titleTextAppearance="@style/MyTextAppearance"
     app:bb_titleTypeFace="fonts/MySuperDuperFont.ttf"
     app:bb_showShadow="true" />
@@ -330,6 +329,8 @@ nearby.removeBadge/();
     <dd>the color for active tabs, that's used in the tab icons and titles.</dd>
     <dt>bb_badgeBackgroundColor</dt>
     <dd>the background color for any Badges in this BottomBar.</dd>
+    <dt>bb_badgesHideWhenActive</dt>
+    <dd>whether badges should be hidden for active tabs, defaults to true.</dd>
     <dt>bb_titleTextAppearance</dt>
     <dd>custom textAppearance for the titles</dd>
     <dt>bb_titleTypeFace</dt>
@@ -348,7 +349,8 @@ nearby.removeBadge/();
     inActiveColor="#00FF00"
     activeColor="#FF0000"
     barColorWhenSelected="#FF0000"
-    badgeBackgroundColor="#FF0000" />
+    badgeBackgroundColor="#FF0000"
+    badgeHidesWhenActive="true" />
 ```
 
 <dl>
@@ -360,8 +362,8 @@ nearby.removeBadge/();
     <dd>the color that the whole BottomBar should be when selected this tab.</dd>
     <dt>badgeBackgroundColor</dt>
     <dd>the background color for any Badges in this tab.</dd>
-    <dt></dt>
-    <dd></dd>
+    <dt>badgeHidesWhenActive</dt>
+    <dd>whether or not the badge should be hidden when this tab is selected, defaults to true.</dd>
     <dt></dt>
     <dd></dd>
 </dl>

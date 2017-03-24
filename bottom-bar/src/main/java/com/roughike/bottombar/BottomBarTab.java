@@ -46,32 +46,24 @@ public class BottomBarTab extends LinearLayout {
     private final int sixDps;
     private final int eightDps;
     private final int sixteenDps;
-
+    @VisibleForTesting
+    BottomBarBadge badge;
     private Type type = Type.FIXED;
     private int iconResId;
     private String title;
-
     private float inActiveAlpha;
     private float activeAlpha;
     private int inActiveColor;
     private int activeColor;
     private int barColorWhenSelected;
     private int badgeBackgroundColor;
-
+    private boolean badgeHidesWhenActive;
     private AppCompatImageView iconView;
     private TextView titleView;
     private boolean isActive;
-
     private int indexInContainer;
-
-    @VisibleForTesting
-    BottomBarBadge badge;
     private int titleTextAppearanceResId;
     private Typeface titleTypeFace;
-
-    enum Type {
-        FIXED, SHIFTING, TABLET
-    }
 
     BottomBarTab(Context context) {
         super(context);
@@ -88,6 +80,7 @@ public class BottomBarTab extends LinearLayout {
         setActiveColor(config.activeTabColor);
         setBarColorWhenSelected(config.barColorWhenSelected);
         setBadgeBackgroundColor(config.badgeBackgroundColor);
+        setBadgeHidesWhenActive(config.badgeHidesWhenSelected);
         setTitleTextAppearance(config.titleTextAppearance);
         setTitleTypeface(config.titleTypeFace);
     }
@@ -262,6 +255,14 @@ public class BottomBarTab extends LinearLayout {
         }
     }
 
+    public boolean getBadgeHidesWhenActive() {
+        return badgeHidesWhenActive;
+    }
+
+    public void setBadgeHidesWhenActive(boolean hideWhenActive) {
+        this.badgeHidesWhenActive = hideWhenActive;
+    }
+
     int getCurrentDisplayedIconColor() {
         Object tag = iconView.getTag();
 
@@ -306,6 +307,10 @@ public class BottomBarTab extends LinearLayout {
         }
 
         badge.setCount(count);
+
+        if (isActive && badgeHidesWhenActive) {
+            badge.hide();
+        }
     }
 
     public void removeBadge() {
@@ -332,14 +337,14 @@ public class BottomBarTab extends LinearLayout {
         iconView.setColorFilter(tint);
     }
 
+    public int getTitleTextAppearance() {
+        return titleTextAppearanceResId;
+    }
+
     @SuppressWarnings("deprecation")
     void setTitleTextAppearance(int resId) {
         this.titleTextAppearanceResId = resId;
         updateCustomTextAppearance();
-    }
-
-    public int getTitleTextAppearance() {
-        return titleTextAppearanceResId;
     }
 
     public void setTitleTypeface(Typeface typeface) {
@@ -366,7 +371,7 @@ public class BottomBarTab extends LinearLayout {
             setAlphas(activeAlpha);
         }
 
-        if (badge != null) {
+        if (badge != null && badgeHidesWhenActive) {
             badge.hide();
         }
     }
@@ -391,7 +396,7 @@ public class BottomBarTab extends LinearLayout {
             setAlphas(inActiveAlpha);
         }
 
-        if (!isShifting && badge != null) {
+        if (!isShifting && badge != null && !badge.isVisible()) {
             badge.show();
         }
     }
@@ -403,7 +408,7 @@ public class BottomBarTab extends LinearLayout {
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-               setColors((Integer) valueAnimator.getAnimatedValue());
+                setColors((Integer) valueAnimator.getAnimatedValue());
             }
         });
 
@@ -577,6 +582,10 @@ public class BottomBarTab extends LinearLayout {
         setBadgeCount(previousBadgeCount);
     }
 
+    enum Type {
+        FIXED, SHIFTING, TABLET
+    }
+
     public static class Config {
         private final float inActiveTabAlpha;
         private final float activeTabAlpha;
@@ -586,6 +595,7 @@ public class BottomBarTab extends LinearLayout {
         private final int badgeBackgroundColor;
         private final int titleTextAppearance;
         private final Typeface titleTypeFace;
+        private boolean badgeHidesWhenSelected = true;
 
         private Config(Builder builder) {
             this.inActiveTabAlpha = builder.inActiveTabAlpha;
@@ -594,6 +604,7 @@ public class BottomBarTab extends LinearLayout {
             this.activeTabColor = builder.activeTabColor;
             this.barColorWhenSelected = builder.barColorWhenSelected;
             this.badgeBackgroundColor = builder.badgeBackgroundColor;
+            this.badgeHidesWhenSelected = builder.hidesBadgeWhenSelected;
             this.titleTextAppearance = builder.titleTextAppearance;
             this.titleTypeFace = builder.titleTypeFace;
         }
@@ -605,6 +616,7 @@ public class BottomBarTab extends LinearLayout {
             private int activeTabColor;
             private int barColorWhenSelected;
             private int badgeBackgroundColor;
+            private boolean hidesBadgeWhenSelected = true;
             private int titleTextAppearance;
             private Typeface titleTypeFace;
 
@@ -635,6 +647,11 @@ public class BottomBarTab extends LinearLayout {
 
             public Builder badgeBackgroundColor(@ColorInt int color) {
                 this.badgeBackgroundColor = color;
+                return this;
+            }
+
+            public Builder hideBadgeWhenSelected(boolean hide) {
+                this.hidesBadgeWhenSelected = hide;
                 return this;
             }
 

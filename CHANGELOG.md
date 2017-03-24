@@ -2,6 +2,10 @@
 
 (or: y u no add shiny new things?!)
 
+### 2.1.2
+
+* Merged [#703](https://github.com/roughike/BottomBar/pull/703) that allows controlling badge visibility for tabs that are active.
+
 ### 2.1.1
 
 * A quick fix for a really critical bug that could affect some devices. More specifically, [this one.](https://github.com/roughike/BottomBar/issues/625)
