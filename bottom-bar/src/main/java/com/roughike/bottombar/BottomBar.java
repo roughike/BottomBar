@@ -91,6 +91,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private int inActiveShiftingItemWidth;
     private int activeShiftingItemWidth;
 
+    private TabOverrideListener tabOverrideListener;
     private OnTabSelectListener onTabSelectListener;
     private OnTabReselectListener onTabReselectListener;
 
@@ -327,7 +328,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         );
 
         inActiveShiftingItemWidth = (int) (proposedItemWidth * 0.9);
-        activeShiftingItemWidth = (int) (proposedItemWidth + (proposedItemWidth * (tabsToAdd.length * 0.1)));
+        activeShiftingItemWidth = (int) (proposedItemWidth + (proposedItemWidth * ((tabsToAdd.length - 1) * 0.1)));
         int height = Math.round(getContext().getResources().getDimension(R.dimen.bb_height));
 
         for (BottomBarTab tabView : tabsToAdd) {
@@ -350,6 +351,15 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
             tabView.requestLayout();
         }
+    }
+
+    /**
+     * Set a listener that gets fired when the selected tab is about to change.
+     *
+     * @param listener a listener for potentially interrupting changes in tab selection.
+     */
+    public void setTabOverrideListener(@Nullable TabOverrideListener listener) {
+        tabOverrideListener = listener;
     }
 
     /**
@@ -781,6 +791,12 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private void handleClick(View v) {
         BottomBarTab oldTab = getCurrentTab();
         BottomBarTab newTab = (BottomBarTab) v;
+
+        if (tabOverrideListener != null) {
+            if (tabOverrideListener.shouldOverrideTabSelection(oldTab.getId(), newTab.getId())) {
+                return;
+            }
+        }
 
         oldTab.deselect(true);
         newTab.select(true);
