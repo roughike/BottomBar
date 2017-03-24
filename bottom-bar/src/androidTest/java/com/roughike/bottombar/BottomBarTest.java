@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -141,8 +142,14 @@ public class BottomBarTest {
         when(overrideTabSelectionListener.shouldOverrideTabSelection(anyInt(), anyInt())).thenReturn(false);
 
         BottomBarTab oldTab = bottomBar.getCurrentTab();
-        BottomBarTab newTab = bottomBar.getTabAtPosition(2);
-        newTab.performClick();
+        final BottomBarTab newTab = bottomBar.getTabAtPosition(2);
+        getInstrumentation().runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                newTab.performClick();
+            }
+        });
+
 
         verify(overrideTabSelectionListener, times(1)).shouldOverrideTabSelection(oldTab.getId(), newTab.getId());
         assertSame(bottomBar.getCurrentTab(), newTab);
@@ -154,10 +161,15 @@ public class BottomBarTest {
         bottomBar.removeOverrideTabSelectionListener();
 
         BottomBarTab oldTab = bottomBar.getCurrentTab();
-        BottomBarTab newTab = bottomBar.getTabAtPosition(2);
-        newTab.performClick();
+        final BottomBarTab newTab = bottomBar.getTabAtPosition(2);
+        getInstrumentation().runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                newTab.performClick();
+            }
+        });
 
-        verify(overrideTabSelectionListener, times(1)).shouldOverrideTabSelection(oldTab.getId(), newTab.getId());
+        verify(overrideTabSelectionListener, times(0)).shouldOverrideTabSelection(oldTab.getId(), newTab.getId());
         assertSame(bottomBar.getCurrentTab(), newTab);
     }
 
