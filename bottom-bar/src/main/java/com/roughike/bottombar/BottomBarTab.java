@@ -371,6 +371,7 @@ public class BottomBarTab extends LinearLayout {
             setAlphas(activeAlpha);
         }
 
+        setSelected(true);
         if (badge != null && badgeHidesWhenActive) {
             badge.hide();
         }
@@ -396,6 +397,7 @@ public class BottomBarTab extends LinearLayout {
             setAlphas(inActiveAlpha);
         }
 
+        setSelected(false);
         if (!isShifting && badge != null && !badge.isVisible()) {
             badge.show();
         }
