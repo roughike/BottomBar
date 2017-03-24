@@ -1,4 +1,7 @@
 # BottomBar
+
+[![Build Status](https://travis-ci.org/roughike/BottomBar.svg?branch=master)](https://travis-ci.org/roughike/BottomBar) [![Coverage Status](https://coveralls.io/repos/github/roughike/BottomBar/badge.svg?branch=development)](https://coveralls.io/github/roughike/BottomBar?branch=master) [![Download](https://api.bintray.com/packages/roughike/maven/bottom-bar/images/download.svg)](https://bintray.com/roughike/maven/bottom-bar/_latestVersion)
+
 <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/shy-demo.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/shifting-demo.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/screenshot_tablet.png" width="33%" />
 
 ## Version 2.0 released!
@@ -28,7 +31,7 @@ Your uncle Bob's Galaxy S Mini will probably be supported in the future though.
 ## Gimme that Gradle sweetness, pls?
 
 ```groovy
-compile 'com.roughike:bottom-bar:2.0.2'
+compile 'com.roughike:bottom-bar:2.1.2'
 ```
 
 **Maven:**
@@ -36,7 +39,7 @@ compile 'com.roughike:bottom-bar:2.0.2'
 <dependency>
   <groupId>com.roughike</groupId>
   <artifactId>bottom-bar</artifactId>
-  <version>2.0.2</version>
+  <version>2.1.2</version>
   <type>pom</type>
 </dependency>
 ```
@@ -288,7 +291,7 @@ nearby.removeBadge/();
 
 ## All customization options
 
-**For the BottomBar:**
+### For the BottomBar
 
 ```xml
 <com.roughike.bottombar.BottomBar
@@ -303,6 +306,7 @@ nearby.removeBadge/();
     app:bb_activeTabAlpha="1"
     app:bb_inActiveTabColor="#222222"
     app:bb_activeTabColor="@color/colorPrimary"
+    app:bb_badgesHideWhenActive="true"
     app:bb_titleTextAppearance="@style/MyTextAppearance"
     app:bb_titleTypeFace="fonts/MySuperDuperFont.ttf"
     app:bb_showShadow="true" />
@@ -325,6 +329,8 @@ nearby.removeBadge/();
     <dd>the color for active tabs, that's used in the tab icons and titles.</dd>
     <dt>bb_badgeBackgroundColor</dt>
     <dd>the background color for any Badges in this BottomBar.</dd>
+    <dt>bb_badgesHideWhenActive</dt>
+    <dd>whether badges should be hidden for active tabs, defaults to true.</dd>
     <dt>bb_titleTextAppearance</dt>
     <dd>custom textAppearance for the titles</dd>
     <dt>bb_titleTypeFace</dt>
@@ -333,7 +339,7 @@ nearby.removeBadge/();
     <dd>controls whether the shadow is shown or hidden, defaults to true.</dd>
 </dl>
 
-**For the tabs:**
+### For the tabs
 
 ```xml
 <tab
@@ -343,7 +349,8 @@ nearby.removeBadge/();
     inActiveColor="#00FF00"
     activeColor="#FF0000"
     barColorWhenSelected="#FF0000"
-    badgeBackgroundColor="#FF0000" />
+    badgeBackgroundColor="#FF0000"
+    badgeHidesWhenActive="true" />
 ```
 
 <dl>
@@ -355,18 +362,23 @@ nearby.removeBadge/();
     <dd>the color that the whole BottomBar should be when selected this tab.</dd>
     <dt>badgeBackgroundColor</dt>
     <dd>the background color for any Badges in this tab.</dd>
-    <dt></dt>
-    <dd></dd>
+    <dt>badgeHidesWhenActive</dt>
+    <dd>whether or not the badge should be hidden when this tab is selected, defaults to true.</dd>
     <dt></dt>
     <dd></dd>
 </dl>
 
 ## Apps using BottomBar
 
+
+  * [Nearby](https://play.google.com/store/apps/details?id=com.synergetechsolutions.nearbylive) : A location-based social networking app with over 5 million users.
   * [FragNav](https://github.com/ncapdevi/FragNav) : An Android Library for managing multiple stacks of Fragments. BottomBar is used in the sample app.
   * [BottomNavigationBar](https://github.com/pocheshire/BottomNavigationBar) : BottomBar ported to C# for Xamarin developers
   * [KyudoScoreBookTeam](https://play.google.com/store/apps/details?id=com.bowyer.app.android.kyudoscoreteam&hl=en) : BottomBar is used in the KyudoScoreBookTeam app.
   * [memeham](https://play.google.com/store/apps/details?id=com.memeham.beyourself.memeham) : BottomBar is used in the memeham app.
+  * [NewsCatchr](https://play.google.com/store/apps/details?id=jlelse.readit) : A newsreader app, which uses this BottomBar library.
+  * [GitSkarios](https://play.google.com/store/apps/details?id=com.alorma.github) : A Github android App, to visit your repositories, gists and  more!
+    * [Code](https://github.com/gitskarios/Gitskarios)
   
 Send me a pull request with modified README.md to get a shoutout!
 

@@ -13,6 +13,7 @@
         <attr name="bb_inActiveTabColor" format="color" />
         <attr name="bb_activeTabColor" format="color" />
         <attr name="bb_badgeBackgroundColor" format="color" />
+        <attr name="bb_badgesHideWhenActive" format="boolean" />
         <attr name="bb_titleTextAppearance" format="reference" />
         <attr name="bb_titleTypeFace" format="string" />
         <attr name="bb_showShadow" format="boolean" />

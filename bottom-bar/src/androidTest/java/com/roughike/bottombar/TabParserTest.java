@@ -15,8 +15,10 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -31,7 +33,7 @@ public class TabParserTest {
                 context,
                 new BottomBarTab.Config.Builder().build(),
                 com.roughike.bottombar.test.R.xml.dummy_tabs_five
-        ).getTabs();
+        ).parseTabs();
     }
 
     @Test
@@ -116,6 +118,15 @@ public class TabParserTest {
         assertEquals(Color.parseColor("#F00000"), tabs.get(2).getBadgeBackgroundColor());
         assertEquals(Color.parseColor("#00F000"), tabs.get(3).getBadgeBackgroundColor());
         assertEquals(Color.parseColor("#00F0F0"), tabs.get(4).getBadgeBackgroundColor());
+    }
+
+    @Test
+    public void correctBadgeHidingPolicies() {
+        assertFalse(tabs.get(0).getBadgeHidesWhenActive());
+        assertTrue(tabs.get(1).getBadgeHidesWhenActive());
+        assertFalse(tabs.get(2).getBadgeHidesWhenActive());
+        assertTrue(tabs.get(3).getBadgeHidesWhenActive());
+        assertTrue(tabs.get(4).getBadgeHidesWhenActive());
     }
 
     private Drawable getDrawableByResource(int iconResId) {
