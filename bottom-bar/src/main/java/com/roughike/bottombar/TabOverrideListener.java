@@ -18,7 +18,7 @@ import android.support.annotation.IdRes;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public interface OnTabShouldSelectListener {
+public interface TabOverrideListener {
     /**
      * The method being called when currently visible {@link BottomBarTab} is about to change.
      *
@@ -27,6 +27,8 @@ public interface OnTabShouldSelectListener {
      *
      * @param oldTabId the currently visible {@link BottomBarTab}
      * @param newTabId the {@link BottomBarTab} that will be switched to
+     *
+     * @return true if you want to override/stop the tab change, false to continue as normal
      */
-    boolean onTabShouldSelect(@IdRes int oldTabId, @IdRes int newTabId);
+    boolean shouldOverrideTabSelection(@IdRes int oldTabId, @IdRes int newTabId);
 }
