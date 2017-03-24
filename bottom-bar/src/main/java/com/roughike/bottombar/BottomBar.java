@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.XmlRes;
@@ -51,15 +52,12 @@ import java.util.List;
 public class BottomBar extends LinearLayout implements View.OnClickListener, View.OnLongClickListener {
     private static final String STATE_CURRENT_SELECTED_TAB = "STATE_CURRENT_SELECTED_TAB";
     private static final float DEFAULT_INACTIVE_SHIFTING_TAB_ALPHA = 0.6f;
-
-    private BatchTabPropertyApplier batchPropertyApplier;
-
     // Behaviors
     private static final int BEHAVIOR_NONE = 0;
     private static final int BEHAVIOR_SHIFTING = 1;
     private static final int BEHAVIOR_SHY = 2;
     private static final int BEHAVIOR_DRAW_UNDER_NAV = 4;
-
+    private BatchTabPropertyApplier batchPropertyApplier;
     private int primaryColor;
     private int screenWidth;
     private int tenDp;
@@ -91,8 +89,13 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private int inActiveShiftingItemWidth;
     private int activeShiftingItemWidth;
 
-    private TabOverrideListener tabOverrideListener;
+    @Nullable
+    private OverrideTabSelectionListener overrideTabSelectionListener;
+
+    @Nullable
     private OnTabSelectListener onTabSelectListener;
+
+    @Nullable
     private OnTabReselectListener onTabReselectListener;
 
     private boolean isComingFromRestoredState;
@@ -354,50 +357,71 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     }
 
     /**
-     * Set a listener that gets fired when the selected tab is about to change.
+     * Set a listener that gets fired when the selected {@link BottomBarTab} is about to change.
      *
      * @param listener a listener for potentially interrupting changes in tab selection.
      */
-    public void setTabOverrideListener(@Nullable TabOverrideListener listener) {
-        tabOverrideListener = listener;
+    public void setOverrideTabSelectionListener(@NonNull OverrideTabSelectionListener listener) {
+        overrideTabSelectionListener = listener;
     }
 
     /**
-     * Set a listener that gets fired when the selected tab changes.
-     *
+     * Removes the current {@link OverrideTabSelectionListener} listener
+     */
+    public void removeOverrideTabSelectionListener() {
+        overrideTabSelectionListener = null;
+    }
+
+    /**
+     * Set a listener that gets fired when the selected {@link BottomBarTab} changes.
+     * <p>
      * Note: Will be immediately called for the currently selected tab
      * once when set.
      *
      * @param listener a listener for monitoring changes in tab selection.
      */
-    public void setOnTabSelectListener(@Nullable OnTabSelectListener listener) {
+    public void setOnTabSelectListener(@NonNull OnTabSelectListener listener) {
         setOnTabSelectListener(listener, true);
     }
 
     /**
-     * Set a listener that gets fired when the selected tab changes.
-     *
-     * If shouldFireInitially is set to false, this listener isn't fired straight away
+     * Set a listener that gets fired when the selected {@link BottomBarTab} changes.
+     * <p>
+     * If {@code shouldFireInitially} is set to false, this listener isn't fired straight away
      * it's set, but you'll get all events normally for consecutive tab selection changes.
      *
-     * @param listener a listener for monitoring changes in tab selection.
+     * @param listener            a listener for monitoring changes in tab selection.
      * @param shouldFireInitially whether the listener should be fired the first time it's set.
      */
-    public void setOnTabSelectListener(@Nullable OnTabSelectListener listener, boolean shouldFireInitially) {
+    public void setOnTabSelectListener(@NonNull OnTabSelectListener listener, boolean shouldFireInitially) {
         onTabSelectListener = listener;
 
-        if (shouldFireInitially && listener != null && getTabCount() > 0) {
+        if (shouldFireInitially && getTabCount() > 0) {
             listener.onTabSelected(getCurrentTabId());
         }
     }
 
     /**
-     * Set a listener that gets fired when a currently selected tab is clicked.
+     * Removes the current {@link OnTabSelectListener} listener
+     */
+    public void removeOnTabSelectListener() {
+        onTabSelectListener = null;
+    }
+
+    /**
+     * Set a listener that gets fired when a currently selected {@link BottomBarTab} is clicked.
      *
      * @param listener a listener for handling tab reselections.
      */
-    public void setOnTabReselectListener(@Nullable OnTabReselectListener listener) {
+    public void setOnTabReselectListener(@NonNull OnTabReselectListener listener) {
         onTabReselectListener = listener;
+    }
+
+    /**
+     * Removes the current {@link OnTabReselectListener} listener
+     */
+    public void removeOnTabReselectListener() {
+        onTabReselectListener = null;
     }
 
     /**
@@ -442,7 +466,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      * Select a tab at the specified position.
      *
      * @param position the position to select.
-     * @param animate should the tab change be animated or not.
+     * @param animate  should the tab change be animated or not.
      */
     public void selectTabAtPosition(int position, boolean animate) {
         if (position > getTabCount() - 1 || position < 0) {
@@ -767,13 +791,14 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     }
 
     @Override
-    public void onClick(View v) {
-        handleClick(v);
+    public void onClick(View target) {
+        if (!(target instanceof BottomBarTab)) return;
+        handleClick((BottomBarTab) target);
     }
 
     @Override
-    public boolean onLongClick(View v) {
-        return handleLongClick(v);
+    public boolean onLongClick(View target) {
+        return !(target instanceof BottomBarTab) || handleLongClick((BottomBarTab) target);
     }
 
     private BottomBarTab findTabInLayout(ViewGroup child) {
@@ -788,14 +813,12 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         return null;
     }
 
-    private void handleClick(View v) {
+    private void handleClick(BottomBarTab newTab) {
         BottomBarTab oldTab = getCurrentTab();
-        BottomBarTab newTab = (BottomBarTab) v;
 
-        if (tabOverrideListener != null) {
-            if (tabOverrideListener.shouldOverrideTabSelection(oldTab.getId(), newTab.getId())) {
-                return;
-            }
+        if (overrideTabSelectionListener != null
+                && overrideTabSelectionListener.shouldOverrideTabSelection(oldTab.getId(), newTab.getId())) {
+            return;
         }
 
         oldTab.deselect(true);
@@ -806,13 +829,9 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         updateSelectedTab(newTab.getIndexInTabContainer());
     }
 
-    private boolean handleLongClick(View v) {
-        if (v instanceof BottomBarTab) {
-            BottomBarTab longClickedTab = (BottomBarTab) v;
-
-            if ((isShiftingMode() || isTabletMode) && !longClickedTab.isActive()) {
-                Toast.makeText(getContext(), longClickedTab.getTitle(), Toast.LENGTH_SHORT).show();
-            }
+    private boolean handleLongClick(BottomBarTab longClickedTab) {
+        if ((isShiftingMode() || isTabletMode) && !longClickedTab.isActive()) {
+            Toast.makeText(getContext(), longClickedTab.getTitle(), Toast.LENGTH_SHORT).show();
         }
 
         return true;

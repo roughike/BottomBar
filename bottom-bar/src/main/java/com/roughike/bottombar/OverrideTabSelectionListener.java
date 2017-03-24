@@ -18,12 +18,12 @@ import android.support.annotation.IdRes;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public interface TabOverrideListener {
+public interface OverrideTabSelectionListener {
     /**
      * The method being called when currently visible {@link BottomBarTab} is about to change.
      *
-     * This listener is fired when the current tab is about to change. This gives
-     * an opportunity to interrupt the tab change.
+     * This listener is fired when the current {@link BottomBar} is about to change. This gives
+     * an opportunity to interrupt the {@link BottomBarTab} change.
      *
      * @param oldTabId the currently visible {@link BottomBarTab}
      * @param newTabId the {@link BottomBarTab} that will be switched to
