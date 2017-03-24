@@ -42,7 +42,7 @@ class TabParser {
                 if(eventType == XmlResourceParser.START_TAG) {
                     parseNewTab(parser);
                 } else if(eventType == XmlResourceParser.END_TAG) {
-                    if (parser.getName().equals("tab")) {
+                    if (parser.getName().equals("tab")||parser.getName().equals("menu")) {
                         if (workingTab != null) {
                             tabs.add(workingTab);
                             workingTab = null;
