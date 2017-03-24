@@ -95,10 +95,8 @@ public class BottomBarTab extends LinearLayout {
 
         // set a selectable item background
         final TypedValue typedValue = new TypedValue();
-        int mBackground;
         getContext().getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
-        mBackground = typedValue.resourceId;
-        setBackgroundResource(mBackground);
+        setBackgroundResource(typedValue.resourceId);
 
         iconView = (AppCompatImageView) findViewById(R.id.bb_bottom_bar_icon);
         iconView.setImageResource(iconResId);
