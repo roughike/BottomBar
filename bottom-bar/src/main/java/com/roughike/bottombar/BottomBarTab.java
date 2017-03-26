@@ -294,16 +294,12 @@ public class BottomBarTab extends LinearLayout {
 
     public void setBadgeCount(int count) {
         if (count <= 0) {
-            if (badge != null) {
-                badge.removeFromTab(this);
-                badge = null;
-            }
-
+            removeBadge();
             return;
         }
 
         if (badge == null) {
-            badge = new BottomBarBadge(getContext());
+            badge = new BottomBarBadge(getContext(), count);
             badge.attachToTab(this, badgeBackgroundColor);
         }
 
@@ -314,8 +310,19 @@ public class BottomBarTab extends LinearLayout {
         }
     }
 
+    public void setBadgeDot() {
+        removeBadge();
+        if (badge == null) {
+            badge = new BottomBarBadge(getContext());
+            badge.attachToTab(this, badgeBackgroundColor);
+        }
+    }
+
     public void removeBadge() {
-        setBadgeCount(0);
+        if (badge != null) {
+            badge.removeFromTab(this);
+            badge = null;
+        }
     }
 
     boolean isActive() {

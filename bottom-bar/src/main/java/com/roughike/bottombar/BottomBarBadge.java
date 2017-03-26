@@ -4,8 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
+import android.support.annotation.Dimension;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.Gravity;
@@ -30,11 +29,16 @@ import android.widget.TextView;
  * limitations under the License.
  */
 class BottomBarBadge extends TextView {
-    private int count;
+    private int count = -1; // if count == -1 , Badge show as a dot
     private boolean isVisible = false;
 
     BottomBarBadge(Context context) {
         super(context);
+    }
+
+    BottomBarBadge(Context context, int count) {
+        super(context);
+        this.count = count;
     }
 
     /**
@@ -45,6 +49,7 @@ class BottomBarBadge extends TextView {
     void setCount(int count) {
         this.count = count;
         setText(String.valueOf(count));
+        setTextSize(Dimension.SP, 10);
     }
 
     /**
@@ -147,10 +152,14 @@ class BottomBarBadge extends TextView {
         ViewGroup.LayoutParams params = getLayoutParams();
 
         int size = Math.max(getWidth(), getHeight());
-        float xOffset = (float) (iconView.getWidth() / 1.25);
-
-        setX(iconView.getX() + xOffset);
-        setTranslationY(10);
+        final boolean isDot = count == -1;
+        if (isDot) {
+            size = MiscUtils.dpToPixel(getContext(), 8);
+        }
+        float xOffset = isDot ? iconView.getWidth() : iconView.getWidth() / 1.25f;
+        float yOffset = isDot ? 9 : 6;
+        setTranslationX(iconView.getX() + xOffset);
+        setTranslationY(MiscUtils.dpToPixel(getContext(), yOffset));
 
         if (params.width != size || params.height != size) {
             params.width = size;
