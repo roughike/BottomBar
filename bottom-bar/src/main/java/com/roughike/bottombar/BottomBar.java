@@ -247,7 +247,9 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         if (defaultTabConfig == null) {
             defaultTabConfig = getTabConfig();
         }
-
+        if (tabContainer != null) {
+            tabContainer.removeAllViews();
+        }
         TabParser parser = new TabParser(getContext(), defaultTabConfig, xmlRes);
         updateItems(parser.parseTabs());
     }
