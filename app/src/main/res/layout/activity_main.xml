@@ -20,6 +20,12 @@
         android:text="Simple example with three tabs" />
 
     <Button
+        android:id="@+id/icons_only"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tabs with icons only" />
+
+    <Button
         android:id="@+id/five_tabs_custom_colors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
