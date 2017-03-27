@@ -35,9 +35,9 @@ import static android.support.annotation.Dimension.DP;
  */
 class MiscUtils {
 
-    @NonNull protected static TypedValue getTypedValue(@NonNull Context context, @AttrRes int color) {
+    @NonNull protected static TypedValue getTypedValue(@NonNull Context context, @AttrRes int resId) {
         TypedValue tv = new TypedValue();
-        context.getTheme().resolveAttribute(color, tv, true);
+        context.getTheme().resolveAttribute(resId, tv, true);
         return tv;
     }
 
