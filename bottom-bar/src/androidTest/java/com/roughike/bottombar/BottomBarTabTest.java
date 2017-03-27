@@ -25,25 +25,33 @@ public class BottomBarTabTest {
     }
 
     @Test
-    public void correctLayoutReturned_ForFixedTab() {
+    public void correctLayoutReturnedForFixedTab() {
         tab.setType(BottomBarTab.Type.FIXED);
         assertEquals(R.layout.bb_bottom_bar_item_fixed, tab.getLayoutResource());
     }
 
-    @Test
-    public void correctLayoutReturned_ForTitlelessTab() {
+    @Test(expected = IllegalStateException.class)
+    public void setType_ToTitleless_WhenIconDoesNotExist_ThrowsException() {
         tab.setType(BottomBarTab.Type.TITLELESS);
         assertEquals(R.layout.bb_bottom_bar_item_titleless, tab.getLayoutResource());
     }
 
     @Test
-    public void correctLayoutReturned_ForShiftingTab() {
+    public void correctLayoutForTitlelessTab() {
+        tab.setIconResId(com.roughike.bottombar.test.R.drawable.empty_icon);
+        tab.setType(BottomBarTab.Type.TITLELESS);
+
+        assertEquals(R.layout.bb_bottom_bar_item_titleless, tab.getLayoutResource());
+    }
+
+    @Test
+    public void correctLayoutForShiftingTab() {
         tab.setType(BottomBarTab.Type.SHIFTING);
         assertEquals(R.layout.bb_bottom_bar_item_shifting, tab.getLayoutResource());
     }
 
     @Test
-    public void correctLayoutReturned_ForTabletTab() {
+    public void correctLayoutForTabletTab() {
         tab.setType(BottomBarTab.Type.TABLET);
         assertEquals(R.layout.bb_bottom_bar_item_fixed_tablet, tab.getLayoutResource());
     }

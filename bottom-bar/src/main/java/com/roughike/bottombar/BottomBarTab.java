@@ -160,6 +160,12 @@ public class BottomBarTab extends LinearLayout {
     }
 
     void setType(Type type) {
+        if (type == Type.TITLELESS && getIconResId() == 0) {
+            throw new IllegalStateException("This tab is supposed to be " +
+                    "icon only, yet it has no icon specified. Index in " +
+                    "container: " + getIndexInTabContainer());
+        }
+
         this.type = type;
     }
 
