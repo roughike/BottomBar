@@ -31,16 +31,8 @@ public class BottomBarTabTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void setType_ToTitleless_WhenIconDoesNotExist_ThrowsException() {
-        tab.setType(BottomBarTab.Type.TITLELESS);
-        assertEquals(R.layout.bb_bottom_bar_item_titleless, tab.getLayoutResource());
-    }
-
-    @Test
-    public void correctLayoutForTitlelessTab() {
-        tab.setIconResId(com.roughike.bottombar.test.R.drawable.empty_icon);
-        tab.setType(BottomBarTab.Type.TITLELESS);
-
+    public void setIsTitleless_WhenTrueAndIconDoesNotExist_ThrowsException() {
+        tab.setIsTitleless(true);
         assertEquals(R.layout.bb_bottom_bar_item_titleless, tab.getLayoutResource());
     }
 

@@ -47,9 +47,12 @@ public class BottomBarTab extends LinearLayout {
     private final int sixDps;
     private final int eightDps;
     private final int sixteenDps;
+
     @VisibleForTesting
     BottomBarBadge badge;
+
     private Type type = Type.FIXED;
+    private boolean isTitleless;
     private int iconResId;
     private String title;
     private float inActiveAlpha;
@@ -89,14 +92,20 @@ public class BottomBarTab extends LinearLayout {
     void prepareLayout() {
         inflate(getContext(), getLayoutResource(), this);
         setOrientation(VERTICAL);
-        setGravity(type == Type.TITLELESS? Gravity.CENTER : Gravity.CENTER_HORIZONTAL);
+        setGravity(isTitleless? Gravity.CENTER : Gravity.CENTER_HORIZONTAL);
         setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
         iconView = (AppCompatImageView) findViewById(R.id.bb_bottom_bar_icon);
         iconView.setImageResource(iconResId);
 
-        if (type != Type.TABLET && type != Type.TITLELESS) {
+        if (type != Type.TABLET && !isTitleless) {
             titleView = (TextView) findViewById(R.id.bb_bottom_bar_title);
+            titleView.setVisibility(VISIBLE);
+
+            if (type == Type.SHIFTING) {
+                findViewById(R.id.spacer).setVisibility(VISIBLE);
+            }
+
             updateTitle();
         }
 
@@ -110,9 +119,6 @@ public class BottomBarTab extends LinearLayout {
         switch (type) {
             case FIXED:
                 layoutResource = R.layout.bb_bottom_bar_item_fixed;
-                break;
-            case TITLELESS:
-                layoutResource = R.layout.bb_bottom_bar_item_titleless;
                 break;
             case SHIFTING:
                 layoutResource = R.layout.bb_bottom_bar_item_shifting;
@@ -159,13 +165,17 @@ public class BottomBarTab extends LinearLayout {
     }
 
     void setType(Type type) {
-        if (type == Type.TITLELESS && getIconResId() == 0) {
+        this.type = type;
+    }
+
+    void setIsTitleless(boolean isTitleless) {
+        if (isTitleless && getIconResId() == 0) {
             throw new IllegalStateException("This tab is supposed to be " +
                     "icon only, yet it has no icon specified. Index in " +
                     "container: " + getIndexInTabContainer());
         }
 
-        this.type = type;
+        this.isTitleless = isTitleless;
     }
 
     public ViewGroup getOuterView() {
@@ -370,7 +380,7 @@ public class BottomBarTab extends LinearLayout {
         isActive = true;
 
         if (animate) {
-            if (type != Type.TITLELESS) {
+            if (!isTitleless) {
                 setTopPaddingAnimated(iconView.getPaddingTop(), sixDps);
             }
 
@@ -380,7 +390,7 @@ public class BottomBarTab extends LinearLayout {
         } else {
             setTitleScale(ACTIVE_TITLE_SCALE);
 
-            if (type != Type.TITLELESS) {
+            if (!isTitleless) {
                 setTopPadding(sixDps);
             }
 
@@ -403,7 +413,7 @@ public class BottomBarTab extends LinearLayout {
         int iconPaddingTop = isShifting ? sixteenDps : eightDps;
 
         if (animate) {
-            if (type != Type.TITLELESS) {
+            if (!isTitleless) {
                 setTopPaddingAnimated(iconView.getPaddingTop(), iconPaddingTop);
             }
 
@@ -413,7 +423,7 @@ public class BottomBarTab extends LinearLayout {
         } else {
             setTitleScale(scale);
 
-            if (type != Type.TITLELESS) {
+            if (!isTitleless) {
                 setTopPadding(iconPaddingTop);
             }
 
@@ -507,7 +517,7 @@ public class BottomBarTab extends LinearLayout {
     }
 
     private void setTopPaddingAnimated(int start, int end) {
-        if (type == Type.TABLET) {
+        if (type == Type.TABLET || isTitleless) {
             return;
         }
 
@@ -529,7 +539,7 @@ public class BottomBarTab extends LinearLayout {
     }
 
     private void animateTitle(float finalScale, float finalAlpha) {
-        if (type == Type.TABLET) {
+        if (type == Type.TABLET && isTitleless) {
             return;
         }
 
@@ -549,7 +559,7 @@ public class BottomBarTab extends LinearLayout {
     }
 
     private void setTopPadding(int topPadding) {
-        if (type == Type.TABLET) {
+        if (type == Type.TABLET || isTitleless) {
             return;
         }
 
@@ -562,7 +572,7 @@ public class BottomBarTab extends LinearLayout {
     }
 
     private void setTitleScale(float scale) {
-        if (type == Type.TABLET || type == Type.TITLELESS) {
+        if (type == Type.TABLET || isTitleless) {
             return;
         }
 
@@ -609,7 +619,7 @@ public class BottomBarTab extends LinearLayout {
     }
 
     enum Type {
-        FIXED, SHIFTING, TITLELESS, TABLET
+        FIXED, SHIFTING, TABLET
     }
 
     public static class Config {

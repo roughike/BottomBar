@@ -143,11 +143,6 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             tabXmlResource = ta.getResourceId(R.styleable.BottomBar_bb_tabXmlResource, 0);
             isTabletMode = ta.getBoolean(R.styleable.BottomBar_bb_tabletMode, false);
             behaviors = ta.getInteger(R.styleable.BottomBar_bb_behavior, BEHAVIOR_NONE);
-
-            if (isIconsOnlyMode() && isShiftingMode()) {
-                throw new UnsupportedOperationException("Can't be shifting and icons only at the same time.");
-            }
-
             inActiveTabAlpha = ta.getFloat(R.styleable.BottomBar_bb_inActiveTabAlpha,
                     isShiftingMode() ? DEFAULT_INACTIVE_SHIFTING_TAB_ALPHA : 1);
             activeTabAlpha = ta.getFloat(R.styleable.BottomBar_bb_activeTabAlpha, 1);
@@ -290,10 +285,12 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                 type = BottomBarTab.Type.SHIFTING;
             } else if (isTabletMode) {
                 type = BottomBarTab.Type.TABLET;
-            } else if (isIconsOnlyMode()) {
-                type = BottomBarTab.Type.TITLELESS;
             } else {
                 type = BottomBarTab.Type.FIXED;
+            }
+
+            if (isIconsOnlyMode()) {
+                bottomBarTab.setIsTitleless(true);
             }
 
             bottomBarTab.setType(type);
