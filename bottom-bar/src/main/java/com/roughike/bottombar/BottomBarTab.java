@@ -382,6 +382,8 @@ public class BottomBarTab extends LinearLayout {
         if (animate) {
             if (!isTitleless) {
                 setTopPaddingAnimated(iconView.getPaddingTop(), sixDps);
+            } else if (type == Type.SHIFTING) {
+                animateIconScale(1.24f);
             }
 
             animateIcon(activeAlpha);
@@ -392,6 +394,8 @@ public class BottomBarTab extends LinearLayout {
 
             if (!isTitleless) {
                 setTopPadding(sixDps);
+            } else if (type == Type.SHIFTING) {
+                setIconScale(1.24f);
             }
 
             setColors(activeColor);
@@ -415,6 +419,8 @@ public class BottomBarTab extends LinearLayout {
         if (animate) {
             if (!isTitleless) {
                 setTopPaddingAnimated(iconView.getPaddingTop(), iconPaddingTop);
+            } else if (isShifting) {
+                animateIconScale(1f);
             }
 
             animateTitle(scale, inActiveAlpha);
@@ -425,6 +431,8 @@ public class BottomBarTab extends LinearLayout {
 
             if (!isTitleless) {
                 setTopPadding(iconPaddingTop);
+            } else if (isShifting) {
+                setIconScale(1f);
             }
 
             setColors(inActiveColor);
@@ -551,6 +559,14 @@ public class BottomBarTab extends LinearLayout {
         titleAnimator.start();
     }
 
+    private void animateIconScale(float scale) {
+        ViewCompat.animate(iconView)
+                .setDuration(ANIMATION_DURATION)
+                .scaleX(scale)
+                .scaleY(scale)
+                .start();
+    }
+
     private void animateIcon(float finalAlpha) {
         ViewCompat.animate(iconView)
                 .setDuration(ANIMATION_DURATION)
@@ -578,6 +594,11 @@ public class BottomBarTab extends LinearLayout {
 
         ViewCompat.setScaleX(titleView, scale);
         ViewCompat.setScaleY(titleView, scale);
+    }
+
+    private void setIconScale(float scale) {
+        ViewCompat.setScaleX(iconView, scale);
+        ViewCompat.setScaleY(iconView, scale);
     }
 
     @Override
