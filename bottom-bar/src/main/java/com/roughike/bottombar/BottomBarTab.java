@@ -43,6 +43,8 @@ public class BottomBarTab extends LinearLayout {
     private static final long ANIMATION_DURATION = 150;
     private static final float ACTIVE_TITLE_SCALE = 1;
     private static final float INACTIVE_FIXED_TITLE_SCALE = 0.86f;
+    private static final float ACTIVE_SHIFTING_TITLELESS_ICON_SCALE = 1.24f;
+    private static final float INACTIVE_SHIFTING_TITLELESS_ICON_SCALE = 1f;
 
     private final int sixDps;
     private final int eightDps;
@@ -380,29 +382,19 @@ public class BottomBarTab extends LinearLayout {
         isActive = true;
 
         if (animate) {
-            if (!isTitleless) {
-                setTopPaddingAnimated(iconView.getPaddingTop(), sixDps);
-            } else if (type == Type.SHIFTING) {
-                animateIconScale(1.24f);
-            }
-
-            animateIcon(activeAlpha);
-            animateTitle(ACTIVE_TITLE_SCALE, activeAlpha);
+            animateIcon(activeAlpha, ACTIVE_SHIFTING_TITLELESS_ICON_SCALE);
+            animateTitle(sixDps, ACTIVE_TITLE_SCALE, activeAlpha);
             animateColors(inActiveColor, activeColor);
         } else {
             setTitleScale(ACTIVE_TITLE_SCALE);
-
-            if (!isTitleless) {
-                setTopPadding(sixDps);
-            } else if (type == Type.SHIFTING) {
-                setIconScale(1.24f);
-            }
-
+            setTopPadding(sixDps);
+            setIconScale(ACTIVE_SHIFTING_TITLELESS_ICON_SCALE);
             setColors(activeColor);
             setAlphas(activeAlpha);
         }
 
         setSelected(true);
+
         if (badge != null && badgeHidesWhenActive) {
             badge.hide();
         }
@@ -413,33 +405,23 @@ public class BottomBarTab extends LinearLayout {
 
         boolean isShifting = type == Type.SHIFTING;
 
-        float scale = isShifting ? 0 : INACTIVE_FIXED_TITLE_SCALE;
+        float titleScale = isShifting ? 0 : INACTIVE_FIXED_TITLE_SCALE;
         int iconPaddingTop = isShifting ? sixteenDps : eightDps;
 
         if (animate) {
-            if (!isTitleless) {
-                setTopPaddingAnimated(iconView.getPaddingTop(), iconPaddingTop);
-            } else if (isShifting) {
-                animateIconScale(1f);
-            }
-
-            animateTitle(scale, inActiveAlpha);
-            animateIcon(inActiveAlpha);
+            animateTitle(iconPaddingTop, titleScale, inActiveAlpha);
+            animateIcon(inActiveAlpha, INACTIVE_SHIFTING_TITLELESS_ICON_SCALE);
             animateColors(activeColor, inActiveColor);
         } else {
-            setTitleScale(scale);
-
-            if (!isTitleless) {
-                setTopPadding(iconPaddingTop);
-            } else if (isShifting) {
-                setIconScale(1f);
-            }
-
+            setTitleScale(titleScale);
+            setTopPadding(iconPaddingTop);
+            setIconScale(INACTIVE_SHIFTING_TITLELESS_ICON_SCALE);
             setColors(inActiveColor);
             setAlphas(inActiveAlpha);
         }
 
         setSelected(false);
+
         if (!isShifting && badge != null && !badge.isVisible()) {
             badge.show();
         }
@@ -546,16 +528,18 @@ public class BottomBarTab extends LinearLayout {
         paddingAnimator.start();
     }
 
-    private void animateTitle(float finalScale, float finalAlpha) {
+    private void animateTitle(int padding, float scale, float alpha) {
         if (type == Type.TABLET && isTitleless) {
             return;
         }
 
+        setTopPaddingAnimated(iconView.getPaddingTop(), padding);
+
         ViewPropertyAnimatorCompat titleAnimator = ViewCompat.animate(titleView)
                 .setDuration(ANIMATION_DURATION)
-                .scaleX(finalScale)
-                .scaleY(finalScale);
-        titleAnimator.alpha(finalAlpha);
+                .scaleX(scale)
+                .scaleY(scale);
+        titleAnimator.alpha(alpha);
         titleAnimator.start();
     }
 
@@ -567,11 +551,15 @@ public class BottomBarTab extends LinearLayout {
                 .start();
     }
 
-    private void animateIcon(float finalAlpha) {
+    private void animateIcon(float alpha, float scale) {
         ViewCompat.animate(iconView)
                 .setDuration(ANIMATION_DURATION)
-                .alpha(finalAlpha)
+                .alpha(alpha)
                 .start();
+
+        if (isTitleless && type == Type.SHIFTING) {
+            animateIconScale(scale);
+        }
     }
 
     private void setTopPadding(int topPadding) {
@@ -597,8 +585,10 @@ public class BottomBarTab extends LinearLayout {
     }
 
     private void setIconScale(float scale) {
-        ViewCompat.setScaleX(iconView, scale);
-        ViewCompat.setScaleY(iconView, scale);
+        if (isTitleless && type == Type.SHIFTING) {
+            ViewCompat.setScaleX(iconView, scale);
+            ViewCompat.setScaleY(iconView, scale);
+        }
     }
 
     @Override
