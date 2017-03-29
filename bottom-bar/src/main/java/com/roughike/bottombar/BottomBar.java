@@ -59,6 +59,8 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private static final int BEHAVIOR_SHIFTING = 1;
     private static final int BEHAVIOR_SHY = 2;
     private static final int BEHAVIOR_DRAW_UNDER_NAV = 4;
+    private static final int BEHAVIOR_ICONS_ONLY = 8;
+
     private BatchTabPropertyApplier batchPropertyApplier;
     private int primaryColor;
     private int screenWidth;
@@ -225,6 +227,8 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         return shyHeightAlreadyCalculated;
     }
 
+    private boolean isIconsOnlyMode() { return !isTabletMode && hasBehavior(BEHAVIOR_ICONS_ONLY); }
+
     private boolean hasBehavior(int behavior) {
         return (behaviors | behavior) == behaviors;
     }
@@ -326,6 +330,10 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                 type = BottomBarTab.Type.TABLET;
             } else {
                 type = BottomBarTab.Type.FIXED;
+            }
+
+            if (isIconsOnlyMode()) {
+                bottomBarTab.setIsTitleless(true);
             }
 
             bottomBarTab.setType(type);
@@ -743,6 +751,10 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     }
 
     private void updateTitleBottomPadding() {
+        if (isIconsOnlyMode()) {
+            return;
+        }
+
         int tabCount = getTabCount();
 
         if (tabContainer == null || tabCount == 0 || !isShiftingMode()) {

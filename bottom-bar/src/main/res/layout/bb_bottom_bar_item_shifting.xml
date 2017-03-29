@@ -9,15 +9,18 @@
 
     <!-- We use this empty space to push the text to the bottom -->
     <android.support.v4.widget.Space
+        android:id="@+id/spacer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/bb_bottom_bar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/BB_BottomBarItem_Shifting.TitleAppearance"
+        android:visibility="gone"
         style="@style/BB_BottomBarItem_TitleStyle"/>
 
 </merge>

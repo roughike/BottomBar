@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ThreeTabsActivity" />
+        <activity android:name=".IconsOnlyActivity" />
         <activity android:name=".FiveColorChangingTabsActivity" android:theme="@style/AppTheme.TransNav" />
         <activity android:name=".ThreeTabsQRActivity" android:theme="@style/AppTheme.TransNav" />
         <activity android:name=".BadgeActivity" />
