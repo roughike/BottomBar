@@ -24,6 +24,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -414,8 +415,8 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      */
     public ShySettings getShySettings() {
         if (!isShy()) {
-            throw new UnsupportedOperationException("Tried to get shy settings for a " +
-                    "BottomBar that is not shy.");
+            Log.e("BottomBar", "Tried to get shy settings for a BottomBar " +
+                    "that is not shy.");
         }
 
         if (shySettings == null) {
