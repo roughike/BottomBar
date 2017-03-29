@@ -427,11 +427,11 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         }
 
         if (shyHeightAlreadyCalculated) {
-            BottomNavigationBehavior<BottomBar> from = BottomNavigationBehavior.from(this);
+            BottomNavigationBehavior<BottomBar> behavior = BottomNavigationBehavior.from(this);
 
-            if (from != null) {
+            if (behavior != null) {
                 boolean isHidden = !visible;
-                from.setHidden(this, isHidden);
+                behavior.setHidden(this, isHidden);
             }
         } else {
             pendingIsVisibleInShyMode = true;
