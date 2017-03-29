@@ -103,7 +103,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private boolean isComingFromRestoredState;
     private boolean ignoreTabReselectionListener;
 
-    private Boolean pendingIsVisibleInShyMode;
+    private ShySettings shySettings;
     private boolean shyHeightAlreadyCalculated;
     private boolean navBarAccountedHeightCalculated;
 
@@ -217,8 +217,12 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                 && NavbarUtils.shouldDrawBehindNavbar(getContext());
     }
 
-    private boolean isShy() {
+    boolean isShy() {
         return !isTabletMode && hasBehavior(BEHAVIOR_SHY);
+    }
+
+    boolean isShyHeightAlreadyCalculated() {
+        return shyHeightAlreadyCalculated;
     }
 
     private boolean hasBehavior(int behavior) {
@@ -396,46 +400,21 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     }
 
     /**
-     * Shows the BottomBar in shy mode, if it was hidden.
+     * Returns the settings specific for a shy BottomBar.
      *
-     * If this BottomBar is a shy one (with bb_behavior set to "shy"), this
-     * will show it with a translate animation.
-     *
-     * If this BottomBar is NOT shy, or if it's already visible, this will be
-     * a no-op.
+     * @throws UnsupportedOperationException, if this BottomBar is not shy.
      */
-    public void showInShyMode() {
-        toggleIsVisibleInShyMode(true);
-    }
-
-    /**
-     * Hides the BottomBar in shy mode, if it was visible.
-     *
-     * If this BottomBar is a shy one (with bb_behavior set to "shy"), this
-     * will hide it with a translate animation.
-     *
-     * If this BottomBar is NOT shy, or if it's already hidden, this will be
-     * a no-op.
-     */
-    public void hideInShyMode() {
-        toggleIsVisibleInShyMode(false);
-    }
-
-    private void toggleIsVisibleInShyMode(boolean visible) {
+    public ShySettings getShySettings() {
         if (!isShy()) {
-            return;
+            throw new UnsupportedOperationException("Tried to get shy settings for a " +
+                    "BottomBar that is not shy.");
         }
 
-        if (shyHeightAlreadyCalculated) {
-            BottomNavigationBehavior<BottomBar> behavior = BottomNavigationBehavior.from(this);
-
-            if (behavior != null) {
-                boolean isHidden = !visible;
-                behavior.setHidden(this, isHidden);
-            }
-        } else {
-            pendingIsVisibleInShyMode = true;
+        if (shySettings == null) {
+            shySettings = new ShySettings(this);
         }
+
+        return shySettings;
     }
 
     /**
@@ -806,16 +785,9 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
             if (height != 0) {
                 updateShyHeight(height);
-                updatePendingShyVisibility();
+                getShySettings().shyHeightCalculated();
                 shyHeightAlreadyCalculated = true;
             }
-        }
-    }
-
-    private void updatePendingShyVisibility() {
-        if (pendingIsVisibleInShyMode != null) {
-            toggleIsVisibleInShyMode(pendingIsVisibleInShyMode);
-            pendingIsVisibleInShyMode = null;
         }
     }
 
