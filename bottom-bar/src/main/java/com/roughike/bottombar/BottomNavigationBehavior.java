@@ -113,16 +113,20 @@ class BottomNavigationBehavior<V extends View> extends VerticalScrollingBehavior
 
     static <V extends View> BottomNavigationBehavior<V> from(@NonNull V view) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
+
         if (!(params instanceof CoordinatorLayout.LayoutParams)) {
             throw new IllegalArgumentException("The view is not a child of CoordinatorLayout");
         }
+
         CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) params)
                 .getBehavior();
-        if (!(behavior instanceof BottomNavigationBehavior)) {
-            throw new IllegalArgumentException(
-                    "The view is not associated with BottomNavigationBehavior");
+
+        if (behavior instanceof BottomNavigationBehavior) {
+            // noinspection unchecked
+            return (BottomNavigationBehavior<V>) behavior;
         }
-        return (BottomNavigationBehavior<V>) behavior;
+
+        throw new IllegalArgumentException("The view is not associated with BottomNavigationBehavior");
     }
 
     private interface BottomNavigationWithSnackbar {

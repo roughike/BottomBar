@@ -103,6 +103,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private boolean isComingFromRestoredState;
     private boolean ignoreTabReselectionListener;
 
+    private Boolean pendingIsVisibleInShyMode;
     private boolean shyHeightAlreadyCalculated;
     private boolean navBarAccountedHeightCalculated;
 
@@ -391,6 +392,49 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             }
 
             tabView.setLayoutParams(params);
+        }
+    }
+
+    /**
+     * Shows the BottomBar in shy mode, if it was hidden.
+     *
+     * If this BottomBar is a shy one (with bb_behavior set to "shy"), this
+     * will show it with a translate animation.
+     *
+     * If this BottomBar is NOT shy, or if it's already visible, this will be
+     * a no-op.
+     */
+    public void showInShyMode() {
+        toggleIsVisibleInShyMode(true);
+    }
+
+    /**
+     * Hides the BottomBar in shy mode, if it was visible.
+     *
+     * If this BottomBar is a shy one (with bb_behavior set to "shy"), this
+     * will hide it with a translate animation.
+     *
+     * If this BottomBar is NOT shy, or if it's already hidden, this will be
+     * a no-op.
+     */
+    public void hideInShyMode() {
+        toggleIsVisibleInShyMode(false);
+    }
+
+    private void toggleIsVisibleInShyMode(boolean visible) {
+        if (!isShy()) {
+            return;
+        }
+
+        if (shyHeightAlreadyCalculated) {
+            BottomNavigationBehavior<BottomBar> from = BottomNavigationBehavior.from(this);
+
+            if (from != null) {
+                boolean isHidden = !visible;
+                from.setHidden(this, isHidden);
+            }
+        } else {
+            pendingIsVisibleInShyMode = true;
         }
     }
 
@@ -762,8 +806,16 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
             if (height != 0) {
                 updateShyHeight(height);
+                updatePendingShyVisibility();
                 shyHeightAlreadyCalculated = true;
             }
+        }
+    }
+
+    private void updatePendingShyVisibility() {
+        if (pendingIsVisibleInShyMode != null) {
+            toggleIsVisibleInShyMode(pendingIsVisibleInShyMode);
+            pendingIsVisibleInShyMode = null;
         }
     }
 
@@ -1006,17 +1058,5 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                         ViewCompat.setAlpha(backgroundOverlay, 1);
                     }
                 }).start();
-    }
-
-    /**
-     * Toggle translation of BottomBar to hidden and visible in a CoordinatorLayout.
-     *
-     * @param visible true resets translation to 0, false translates view to hidden
-     */
-    private void toggleShyVisibility(boolean visible) {
-        BottomNavigationBehavior<BottomBar> from = BottomNavigationBehavior.from(this);
-        if (from != null) {
-            from.setHidden(this, visible);
-        }
     }
 }
