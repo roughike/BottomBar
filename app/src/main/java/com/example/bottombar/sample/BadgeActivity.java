@@ -1,16 +1,16 @@
 package com.example.bottombar.sample;
 
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarTab;
+import com.roughike.bottombar.OnTabReselectListener;
+import com.roughike.bottombar.OnTabSelectListener;
+
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.BottomBarTab;
-import com.roughike.bottombar.OnTabReselectListener;
-import com.roughike.bottombar.OnTabSelectListener;
 
 /**
  * Created by iiro on 7.6.2016.
@@ -42,5 +42,8 @@ public class BadgeActivity extends AppCompatActivity {
 
         BottomBarTab nearby = bottomBar.getTabWithId(R.id.tab_nearby);
         nearby.setBadgeCount(5);
+
+        BottomBarTab friends = bottomBar.getTabWithId(R.id.tab_friends);
+        friends.setBadgeSymbol("N");
     }
 }

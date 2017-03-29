@@ -15,6 +15,7 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -39,6 +40,9 @@ import android.widget.TextView;
 public class BottomBarTab extends LinearLayout {
     @VisibleForTesting
     static final String STATE_BADGE_COUNT = "STATE_BADGE_COUNT_FOR_TAB_";
+
+    @VisibleForTesting
+    static final String STATE_BADGE_SYMBOL = "STATE_BADGE_SYMBOL_FOR_TAB_";
 
     private static final long ANIMATION_DURATION = 150;
     private static final float ACTIVE_TITLE_SCALE = 1;
@@ -314,6 +318,28 @@ public class BottomBarTab extends LinearLayout {
         }
     }
 
+    public void setBadgeSymbol(String symbol){
+        if(TextUtils.isEmpty(symbol)){
+            if (badge != null) {
+                badge.removeFromTab(this);
+                badge = null;
+            }
+
+            return;
+        }
+
+        if (badge == null) {
+            badge = new BottomBarBadge(getContext());
+            badge.attachToTab(this, badgeBackgroundColor);
+        }
+
+        badge.setSymbol(symbol);
+
+        if (isActive && badgeHidesWhenActive) {
+            badge.hide();
+        }
+    }
+
     public void removeBadge() {
         setBadgeCount(0);
     }
@@ -582,7 +608,13 @@ public class BottomBarTab extends LinearLayout {
     @VisibleForTesting
     void restoreState(Bundle savedInstanceState) {
         int previousBadgeCount = savedInstanceState.getInt(STATE_BADGE_COUNT + getIndexInTabContainer());
-        setBadgeCount(previousBadgeCount);
+        if (previousBadgeCount != 0) {
+            setBadgeCount(previousBadgeCount);
+            return;
+        }
+
+        String previousBadgeSymbol = savedInstanceState.getString(STATE_BADGE_SYMBOL + getIndexInTabContainer());
+        setBadgeSymbol(previousBadgeSymbol);
     }
 
     enum Type {
