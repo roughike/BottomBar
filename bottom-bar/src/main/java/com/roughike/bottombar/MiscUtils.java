@@ -4,9 +4,10 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
+import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 import android.support.annotation.Dimension;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Px;
 import android.support.annotation.StyleRes;
@@ -34,11 +35,20 @@ import static android.support.annotation.Dimension.DP;
  */
 class MiscUtils {
 
-    @ColorInt
-    protected static int getColor(@NonNull Context context, @ColorRes int color) {
+    @NonNull protected static TypedValue getTypedValue(@NonNull Context context, @AttrRes int resId) {
         TypedValue tv = new TypedValue();
-        context.getTheme().resolveAttribute(color, tv, true);
-        return tv.data;
+        context.getTheme().resolveAttribute(resId, tv, true);
+        return tv;
+    }
+
+    @ColorInt
+    protected static int getColor(@NonNull Context context, @AttrRes int color) {
+        return getTypedValue(context, color).data;
+    }
+
+    @DrawableRes
+    protected static int getDrawableRes(@NonNull Context context, @AttrRes int drawable) {
+        return getTypedValue(context, drawable).resourceId;
     }
 
     /**
