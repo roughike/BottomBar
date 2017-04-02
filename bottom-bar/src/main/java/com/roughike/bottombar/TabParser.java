@@ -27,6 +27,7 @@ import static com.roughike.bottombar.TabParser.TabAttribute.BAR_COLOR_WHEN_SELEC
 import static com.roughike.bottombar.TabParser.TabAttribute.ICON;
 import static com.roughike.bottombar.TabParser.TabAttribute.ID;
 import static com.roughike.bottombar.TabParser.TabAttribute.INACTIVE_COLOR;
+import static com.roughike.bottombar.TabParser.TabAttribute.IS_TITLELESS;
 import static com.roughike.bottombar.TabParser.TabAttribute.TITLE;
 
 /**
@@ -137,6 +138,10 @@ class TabParser {
                     boolean badgeHidesWhenActive = parser.getAttributeBooleanValue(i, true);
                     workingTab.setBadgeHidesWhenActive(badgeHidesWhenActive);
                     break;
+                case IS_TITLELESS:
+                    boolean isTitleless = parser.getAttributeBooleanValue(i, false);
+                    workingTab.setIsTitleless(isTitleless);
+                    break;
             }
         }
 
@@ -175,7 +180,17 @@ class TabParser {
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({ID, ICON, TITLE, INACTIVE_COLOR, ACTIVE_COLOR, BAR_COLOR_WHEN_SELECTED, BADGE_BACKGROUND_COLOR, BADGE_HIDES_WHEN_ACTIVE})
+    @StringDef({
+            ID,
+            ICON,
+            TITLE,
+            INACTIVE_COLOR,
+            ACTIVE_COLOR,
+            BAR_COLOR_WHEN_SELECTED,
+            BADGE_BACKGROUND_COLOR,
+            BADGE_HIDES_WHEN_ACTIVE,
+            IS_TITLELESS
+    })
     @interface TabAttribute {
         String ID = "id";
         String ICON = "icon";
@@ -185,6 +200,7 @@ class TabParser {
         String BAR_COLOR_WHEN_SELECTED = "barColorWhenSelected";
         String BADGE_BACKGROUND_COLOR = "badgeBackgroundColor";
         String BADGE_HIDES_WHEN_ACTIVE = "badgeHidesWhenActive";
+        String IS_TITLELESS = "iconOnly";
     }
 
     @SuppressWarnings("WeakerAccess")

@@ -171,6 +171,10 @@ public class BottomBarTab extends LinearLayout {
         this.type = type;
     }
 
+    boolean isTitleless() {
+        return isTitleless;
+    }
+
     void setIsTitleless(boolean isTitleless) {
         if (isTitleless && getIconResId() == 0) {
             throw new IllegalStateException("This tab is supposed to be " +

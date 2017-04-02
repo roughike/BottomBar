@@ -129,6 +129,15 @@ public class TabParserTest {
         assertTrue(tabs.get(4).getBadgeHidesWhenActive());
     }
 
+    @Test
+    public void titlelessTabsAsExpected() {
+        assertFalse(tabs.get(0).isTitleless());
+        assertFalse(tabs.get(1).isTitleless());
+        assertTrue(tabs.get(2).isTitleless());
+        assertFalse(tabs.get(3).isTitleless());
+        assertTrue(tabs.get(4).isTitleless());
+    }
+
     private Drawable getDrawableByResource(int iconResId) {
         return ContextCompat.getDrawable(context, iconResId);
     }
