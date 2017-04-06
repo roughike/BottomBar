@@ -1,6 +1,16 @@
 ## Changelog
 
-(or: y u no add shiny new things?!)
+### 2.3.0
+
+* [#713](https://github.com/roughike/BottomBar/pull/713): Ripple touch feedback for tabs!
+* [#716](https://github.com/roughike/BottomBar/pull/716): Bugfix for misbehaving shadow. No more weird white spaces above the bar!
+* [#717](https://github.com/roughike/BottomBar/pull/717): Support for tabs with icons only, without titles!
+* [#722](https://github.com/roughike/BottomBar/pull/722): Showing / hiding the BottomBar when on shy mode.
+* [#714](https://github.com/roughike/BottomBar/pull/714): Controlling whether Toasts of tab titles are shown when long pressing tabs.
+* [#719](https://github.com/roughike/BottomBar/pull/719): Fix for wrong size in tabs
+* [#712](https://github.com/roughike/BottomBar/pull/712): Data binding fixes.
+
+Thanks for @yombunker, @MarcRubio and @tushar-acharya for their contributions!
 
 ### 2.2.0
 
