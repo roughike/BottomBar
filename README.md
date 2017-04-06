@@ -29,7 +29,7 @@ Nope. The minSDK version is **API level 11 (Honeycomb).**
 ## Gimme that Gradle sweetness, pls?
 
 ```groovy
-compile 'com.roughike:bottom-bar:2.2.0'
+compile 'com.roughike:bottom-bar:2.3.0'
 ```
 
 **Maven:**
@@ -37,7 +37,7 @@ compile 'com.roughike:bottom-bar:2.2.0'
 <dependency>
   <groupId>com.roughike</groupId>
   <artifactId>bottom-bar</artifactId>
-  <version>2.2.0</version>
+  <version>2.3.0</version>
   <type>pom</type>
 </dependency>
 ```
