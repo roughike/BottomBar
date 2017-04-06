@@ -18,6 +18,12 @@ Thanks for @yombunker, @MarcRubio and @tushar-acharya for their contributions!
 * Overriding tab selections is now supported, by using [TabSelectionInterceptor](https://github.com/roughike/BottomBar/blob/master/bottom-bar/src/main/java/com/roughike/bottombar/TabSelectionInterceptor.java)
 * Internal code quality improvements and small changes
 
+### 2.2.0
+
+* Ability to change icons when the tabs are selected, using drawable selectors
+* Overriding tab selections is now supported, by using [TabSelectionInterceptor](https://github.com/roughike/BottomBar/blob/master/bottom-bar/src/main/java/com/roughike/bottombar/TabSelectionInterceptor.java)
+* Internal code quality improvements and small changes
+
 ### 2.1.2
 
 * Merged [#703](https://github.com/roughike/BottomBar/pull/703) that allows controlling badge visibility for tabs that are active.
