@@ -419,9 +419,9 @@ nearby.removeBadge/();
   * [memeham](https://play.google.com/store/apps/details?id=com.memeham.beyourself.memeham) : BottomBar is used in the memeham app.
   * [NewsCatchr](https://play.google.com/store/apps/details?id=jlelse.readit) : A newsreader app, which uses this BottomBar library.
   * [GitSkarios](https://play.google.com/store/apps/details?id=com.alorma.github) : A Github android App, to visit your repositories, gists and  more!
-    * [Code](https://github.com/gitskarios/Gitskarios)
+    * [Github Page](https://github.com/gitskarios/Gitskarios)
   * [Say It! - English Learning](https://play.google.com/store/apps/details?id=com.cesarsk.say_it) : An Android App aimed to improve your English Pronunciation. 
-    * [Code](https://github.com/cesarsk/say_it)
+    * [Github Page](https://github.com/cesarsk/say_it)
 
   
 Send me a pull request with modified README.md to get a shoutout!
