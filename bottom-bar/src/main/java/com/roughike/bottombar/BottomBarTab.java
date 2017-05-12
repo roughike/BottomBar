@@ -1,7 +1,5 @@
 package com.roughike.bottombar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -493,15 +491,19 @@ public class BottomBarTab extends LinearLayout {
                 setLayoutParams(params);
             }
         });
-        animator.addListener(new AnimatorListenerAdapter() {
+
+        // Workaround to avoid using faulty onAnimationEnd() listener
+        postDelayed(new Runnable() {
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void run() {
                 if (!isActive && badge != null) {
+                    clearAnimation();
                     badge.adjustPositionAndSize(BottomBarTab.this);
                     badge.show();
                 }
             }
-        });
+        }, animator.getDuration());
+
         animator.start();
     }
 
