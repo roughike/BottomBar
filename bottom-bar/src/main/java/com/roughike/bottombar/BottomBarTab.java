@@ -72,7 +72,7 @@ public class BottomBarTab extends LinearLayout {
     BottomBarTab(Context context) {
         super(context);
 
-        sixDps = MiscUtils.dpToPixel(context, 6);
+        sixDps = MiscUtils.dpToPixel(context, 8);
         eightDps = MiscUtils.dpToPixel(context, 8);
         sixteenDps = MiscUtils.dpToPixel(context, 16);
     }
