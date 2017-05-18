@@ -65,6 +65,13 @@ class BottomNavigationBehavior<V extends View> extends VerticalScrollingBehavior
 
     @Override
     public void onDirectionNestedPreScroll(CoordinatorLayout coordinatorLayout, V child, View target, int dx, int dy, int[] consumed, @ScrollDirection int scrollDirection) {
+        if (scrollDirection == ScrollDirection.SCROLL_NONE) {
+            if (dy > 0) {
+                scrollDirection = ScrollDirection.SCROLL_DIRECTION_UP;
+            } else if (dy < 0) {
+                scrollDirection = ScrollDirection.SCROLL_DIRECTION_DOWN;
+            }
+        }
         handleDirection(child, scrollDirection);
     }
 
