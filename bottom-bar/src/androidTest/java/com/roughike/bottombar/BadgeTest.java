@@ -1,15 +1,14 @@
 package com.roughike.bottombar;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.annotation.UiThreadTest;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -26,20 +25,23 @@ import static org.junit.Assert.assertTrue;
 public class BadgeTest {
     private BottomBar bottomBar;
     private BottomBarTab nearby;
+    private BottomBarTab friends;
 
     @Before
     public void setUp() {
         bottomBar = new BottomBar(InstrumentationRegistry.getContext());
         bottomBar.setItems(com.roughike.bottombar.test.R.xml.dummy_tabs_three);
         nearby = bottomBar.getTabWithId(com.roughike.bottombar.test.R.id.tab_nearby);
+        friends = bottomBar.getTabWithId(com.roughike.bottombar.test.R.id.tab_friends);
         nearby.setBadgeCount(5);
+        friends.setBadgeSymbol("N");
     }
 
     @Test
-    public void hasNoBadges_ExceptNearby() {
+    public void hasNoBadges_OnlyFavorites() {
         assertNull(bottomBar.getTabWithId(com.roughike.bottombar.test.R.id.tab_favorites).badge);
-        assertNull(bottomBar.getTabWithId(com.roughike.bottombar.test.R.id.tab_friends).badge);
 
+        assertNotNull(friends.badge);
         assertNotNull(nearby.badge);
     }
 
@@ -51,6 +53,9 @@ public class BadgeTest {
             public void run() {
                 bottomBar.selectTabWithId(com.roughike.bottombar.test.R.id.tab_nearby);
                 assertFalse(nearby.badge.isVisible());
+
+                bottomBar.selectTabWithId(com.roughike.bottombar.test.R.id.tab_friends);
+                assertFalse(friends.badge.isVisible());
             }
         });
     }
@@ -71,17 +76,34 @@ public class BadgeTest {
 
     @Test
     @UiThreadTest
+    public void whenBadgeSymbolIsEmpty_BadgeIsRemoved() {
+        friends.setBadgeSymbol("");
+        assertNull(friends.badge);
+    }
+
+    @Test
+    @UiThreadTest
     public void whenBadgeStateRestored_CountPersists() {
         nearby.setBadgeCount(1);
         assertEquals(1, nearby.badge.getCount());
 
-
-        int tabIndex = nearby.getIndexInTabContainer();
+        int tabNearbyIndex = nearby.getIndexInTabContainer();
         Bundle savedInstanceState = new Bundle();
-        savedInstanceState.putInt(BottomBarTab.STATE_BADGE_COUNT + tabIndex, 2);
+        savedInstanceState.putInt(BottomBarTab.STATE_BADGE_COUNT + tabNearbyIndex, 2);
         nearby.restoreState(savedInstanceState);
 
         assertEquals(2, nearby.badge.getCount());
+
+
+        friends.setBadgeSymbol("N");
+        assertEquals("N", friends.badge.getSymbol());
+
+        int tabFriendsIndex = friends.getIndexInTabContainer();
+        savedInstanceState = new Bundle();
+        savedInstanceState.putString(BottomBarTab.STATE_BADGE_SYMBOL + tabFriendsIndex, "U");
+        friends.restoreState(savedInstanceState);
+
+        assertEquals("U", friends.badge.getSymbol());
     }
 
     @Test
@@ -94,5 +116,13 @@ public class BadgeTest {
         nearby.removeBadge();
         assertNull(nearby.badge);
         assertEquals(bottomBar.findViewById(R.id.bb_bottom_bar_item_container), nearby.getOuterView());
+
+        assertNotEquals(bottomBar.findViewById(R.id.bb_bottom_bar_item_container), friends.getOuterView());
+        assertEquals(2, friends.getOuterView().getChildCount());
+        assertTrue(friends.getOuterView().getChildAt(1) instanceof BottomBarBadge);
+
+        friends.removeBadge();
+        assertNull(friends.badge);
+        assertEquals(bottomBar.findViewById(R.id.bb_bottom_bar_item_container), friends.getOuterView());
     }
 }

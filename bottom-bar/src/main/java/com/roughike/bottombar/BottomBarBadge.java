@@ -31,6 +31,7 @@ import android.widget.TextView;
  */
 class BottomBarBadge extends TextView {
     private int count;
+    private String symbol;
     private boolean isVisible = false;
 
     BottomBarBadge(Context context) {
@@ -54,6 +55,25 @@ class BottomBarBadge extends TextView {
      */
     int getCount() {
         return count;
+    }
+
+    /**
+     * Set the unread / new item / whatever symbol for this Badge.
+     *
+     * @param symbol the value this Badge should show.
+     */
+    void setSymbol(String symbol){
+        this.symbol = symbol;
+        setText(symbol);
+    }
+
+    /**
+     * Get the currently showing symbol for this Badge.
+     *
+     * @return current symbol for the Badge.
+     */
+    String getSymbol(){
+        return this.symbol;
     }
 
     /**
