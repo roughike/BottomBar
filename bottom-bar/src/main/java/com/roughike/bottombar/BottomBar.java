@@ -733,6 +733,24 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      *                 but you only need to provide fonts/MySuperDuperFont.ttf, as the asset folder
      *                 will be auto-filled for you.
      */
+
+
+    /**
+     * set dark theme background color
+     * @param colorRes color resources
+     */
+    public void setDarThemeColorRes(@IdRes int colorRes) {
+        mDarkBackgroundColor = ContextCompat.getColor(getContext(), colorRes);
+    }
+
+    /**
+     * set dark theme background color
+     * @param color background color
+     */
+    public void setDarThemeColor(int color) {
+        mDarkBackgroundColor = color;
+    }
+
     public void setTabTitleTypeface(String fontPath) {
         Typeface actualTypeface = getTypeFaceFromAsset(fontPath);
         setTabTitleTypeface(actualTypeface);
