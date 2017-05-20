@@ -27,6 +27,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewParent;
@@ -828,7 +829,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
     private void updateShyHeight(int height) {
         ((CoordinatorLayout.LayoutParams) getLayoutParams())
-                .setBehavior(new BottomNavigationBehavior(height, 0, false));
+                .setBehavior(new BottomNavigationBehavior(height, 0, ViewConfiguration.get(getContext()).getScaledTouchSlop()*2,false));
     }
 
     private void resizeForDrawingUnderNavbar() {

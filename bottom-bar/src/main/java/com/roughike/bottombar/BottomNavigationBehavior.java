@@ -13,7 +13,7 @@ import android.view.animation.Interpolator;
 
 /**
  * Created by Nikola D. on 3/15/2016.
- *
+ * <p>
  * Credit goes to Nikola Despotoski:
  * https://github.com/NikolaDespotoski
  */
@@ -29,16 +29,46 @@ class BottomNavigationBehavior<V extends View> extends VerticalScrollingBehavior
     private final BottomNavigationWithSnackbar mWithSnackBarImpl = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? new LollipopBottomNavWithSnackBarImpl() : new PreLollipopBottomNavWithSnackBarImpl();
     private boolean mScrollingEnabled = true;
 
+    /**
+     * Minimum touch distance
+     */
+    private final int scaledTouchSlop;
+
+    /**
+     * current Y offset
+     */
+    private int offset;
+
+
     BottomNavigationBehavior(int bottomNavHeight, int defaultOffset, boolean tablet) {
+        this(bottomNavHeight, defaultOffset, 0, tablet);
+    }
+
+    BottomNavigationBehavior(int bottomNavHeight, int defaultOffset, int scaledTouchSlop, boolean tablet) {
         this.bottomNavHeight = bottomNavHeight;
         this.defaultOffset = defaultOffset;
         isTablet = tablet;
+        this.scaledTouchSlop = Math.max(0,scaledTouchSlop);
+        this.offset = 0;
     }
+
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, V child, View dependency) {
         mWithSnackBarImpl.updateSnackbar(parent, dependency, child);
         return dependency instanceof Snackbar.SnackbarLayout;
+    }
+
+    @Override
+    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, V child, View directTargetChild, View target, int nestedScrollAxes) {
+        offset = 0;
+        return super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, nestedScrollAxes);
+    }
+
+    @Override
+    public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, V child, View target) {
+        super.onStopNestedScroll(coordinatorLayout, child, target);
+        offset = 0;
     }
 
     @Override
@@ -65,7 +95,14 @@ class BottomNavigationBehavior<V extends View> extends VerticalScrollingBehavior
 
     @Override
     public void onDirectionNestedPreScroll(CoordinatorLayout coordinatorLayout, V child, View target, int dx, int dy, int[] consumed, @ScrollDirection int scrollDirection) {
-        handleDirection(child, scrollDirection);
+        offset += dy;
+        if (offset > scaledTouchSlop) {
+            handleDirection(child, ScrollDirection.SCROLL_DIRECTION_UP);
+            offset = 0;
+        } else if (offset < -scaledTouchSlop) {
+            handleDirection(child, ScrollDirection.SCROLL_DIRECTION_DOWN);
+            offset = 0;
+        }
     }
 
     private void handleDirection(V child, int scrollDirection) {
@@ -101,11 +138,11 @@ class BottomNavigationBehavior<V extends View> extends VerticalScrollingBehavior
     }
 
 
-    void setHidden(@NonNull  V view, boolean bottomLayoutHidden) {
+    void setHidden(@NonNull V view, boolean bottomLayoutHidden) {
         if (!bottomLayoutHidden && hidden) {
             animateOffset(view, defaultOffset);
         } else if (bottomLayoutHidden && !hidden) {
-            animateOffset(view,  bottomNavHeight + defaultOffset);
+            animateOffset(view, bottomNavHeight + defaultOffset);
         }
         hidden = bottomLayoutHidden;
     }
