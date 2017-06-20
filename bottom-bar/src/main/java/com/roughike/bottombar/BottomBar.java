@@ -22,6 +22,7 @@ import android.support.annotation.XmlRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -88,6 +89,10 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private View backgroundOverlay;
     private ViewGroup outerContainer;
     private ViewGroup tabContainer;
+
+    // Attached ViewPager
+    private ViewPager viewPager;
+
 
     private int defaultBackgroundColor = Color.WHITE;
     private int currentBackgroundColor;
@@ -189,7 +194,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         maxFixedItemWidth = MiscUtils.dpToPixel(getContext(), 168);
 
         TypedArray ta = context.getTheme()
-                               .obtainStyledAttributes(attrs, R.styleable.BottomBar, defStyleAttr, defStyleRes);
+                .obtainStyledAttributes(attrs, R.styleable.BottomBar, defStyleAttr, defStyleRes);
 
         try {
             tabXmlResource = ta.getResourceId(R.styleable.BottomBar_bb_tabXmlResource, 0);
@@ -395,7 +400,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         inActiveShiftingItemWidth = (int) (proposedItemWidth * 0.9);
         activeShiftingItemWidth = (int) (proposedItemWidth + (proposedItemWidth * ((tabsToAdd.length - 1) * 0.1)));
         int height = Math.round(getContext().getResources()
-                                            .getDimension(R.dimen.bb_height));
+                .getDimension(R.dimen.bb_height));
 
         for (BottomBarTab tabView : tabsToAdd) {
             ViewGroup.LayoutParams params = tabView.getLayoutParams();
@@ -739,6 +744,39 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     }
 
     /**
+     * Set tab behaviour with respect to viewpager.
+     * If tab is changed, viewpager will also be updated.
+     * If viewpager is changed, tab will be updated.
+     *
+     *
+     * @param viewPager ViewPager object that is to be coupled with navigation bar.
+     */
+    public void setUpWithViewPager(ViewPager viewPager) {
+
+
+        this.viewPager = viewPager;
+
+        if (viewPager != null) {
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    selectTabAtPosition(position, true);
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+        }
+    }
+
+    /**
      * Set a custom typeface for all tab's titles.
      */
     public void setTabTitleTypeface(Typeface typeface) {
@@ -935,7 +973,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
         if (shouldShowHint) {
             Toast.makeText(getContext(), longClickedTab.getTitle(), Toast.LENGTH_SHORT)
-                 .show();
+                    .show();
         }
 
         return true;
@@ -943,6 +981,14 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
     private void updateSelectedTab(int newPosition) {
         int newTabId = getTabAtPosition(newPosition).getId();
+
+
+        // check if viewpager is not null
+        if (viewPager != null && newPosition != currentTabPosition)  // check if same tab is clicked
+        {
+
+            viewPager.setCurrentItem(newPosition);  // set viewpager position to tab position
+        }
 
         if (newPosition != currentTabPosition) {
             if (onTabSelectListener != null) {
@@ -1054,24 +1100,26 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private void backgroundCrossfadeAnimation(final int newColor) {
         ViewCompat.setAlpha(backgroundOverlay, 0);
         ViewCompat.animate(backgroundOverlay)
-                  .alpha(1)
-                  .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                      @Override
-                      public void onAnimationEnd(View view) {
-                          onEnd();
-                      }
+                .alpha(1)
+                .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(View view) {
+                        onEnd();
+                    }
 
-                      @Override
-                      public void onAnimationCancel(View view) {
-                          onEnd();
-                      }
+                    @Override
+                    public void onAnimationCancel(View view) {
+                        onEnd();
+                    }
 
-                      private void onEnd() {
-                          outerContainer.setBackgroundColor(newColor);
-                          backgroundOverlay.setVisibility(View.INVISIBLE);
-                          ViewCompat.setAlpha(backgroundOverlay, 1);
-                      }
-                  })
-                  .start();
+                    private void onEnd() {
+                        outerContainer.setBackgroundColor(newColor);
+                        backgroundOverlay.setVisibility(View.INVISIBLE);
+                        ViewCompat.setAlpha(backgroundOverlay, 1);
+                    }
+                })
+                .start();
     }
+
+
 }
