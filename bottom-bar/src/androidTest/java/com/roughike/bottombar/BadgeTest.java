@@ -95,4 +95,15 @@ public class BadgeTest {
         assertNull(nearby.badge);
         assertEquals(bottomBar.findViewById(R.id.bb_bottom_bar_item_container), nearby.getOuterView());
     }
+
+    @Test
+    @UiThreadTest
+    public void badgeFormatTest() {
+        nearby.setBadgeCount(1200, true);
+        assertNotNull(nearby.badge);
+        assertEquals(nearby.badge.getText(), "1K");
+
+        nearby.setBadgeCount(0, true);
+        assertNull(nearby.badge);
+    }
 }
