@@ -21,7 +21,9 @@ import android.support.annotation.VisibleForTesting;
 import android.support.annotation.XmlRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -308,6 +310,33 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
         TabParser parser = new TabParser(getContext(), defaultTabConfig, xmlRes);
         updateItems(parser.parseTabs());
+    }
+
+    public void setupWithViewPager(@NonNull ViewPager viewPager) {
+        final PagerAdapter adapter = viewPager.getAdapter();
+        if (adapter == null) {
+            throw new IllegalArgumentException("ViewPager does not have a PagerAdapter set");
+        }
+
+        // First we'll make sure that the number of adapter fragments equals tab count
+        if (adapter.getCount() != getTabCount()) {
+            throw new IllegalArgumentException("PagerAdapter fragments count doesn't match tab xml resource");
+        }
+
+        // Now we'll add our page change listener to the ViewPager
+        viewPager.addOnPageChangeListener(new BottomBarOnPageChangeListener(this));
+
+        // Now we'll add a tab select listener to set ViewPager's current item
+        setOnTabSelectListener(new ViewPagerOnTabSelectListener(viewPager));
+
+
+        // Make sure we reflect the currently set ViewPager item
+        if (adapter.getCount() > 0) {
+            final int curItem = viewPager.getCurrentItem();
+            if (getCurrentTabPosition() != curItem) {
+                selectTabAtPosition(curItem);
+            }
+        }
     }
 
     private BottomBarTab.Config getTabConfig() {
@@ -1074,4 +1103,41 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                   })
                   .start();
     }
+
+    private class ViewPagerOnTabSelectListener implements OnTabSelectListener {
+        private final ViewPager mViewPager;
+
+        public ViewPagerOnTabSelectListener(ViewPager viewPager) {
+            mViewPager = viewPager;
+        }
+
+        @Override
+        public void onTabSelected(@IdRes int tabId) {
+            mViewPager.setCurrentItem(findPositionForTabWithId(tabId));
+        }
+    }
+
+    private class BottomBarOnPageChangeListener implements ViewPager.OnPageChangeListener {
+        private final BottomBar mBottomBar;
+
+        public BottomBarOnPageChangeListener(BottomBar bottomBar) {
+            mBottomBar = bottomBar;
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            // No-op
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            mBottomBar.selectTabAtPosition(position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            // No-op
+        }
+    }
+
 }
