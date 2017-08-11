@@ -335,6 +335,8 @@ public class BottomBarTab extends LinearLayout {
 
         if (isActive && badgeHidesWhenActive) {
             badge.hide();
+        } else {
+            badge.show();
         }
     }
 
