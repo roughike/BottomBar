@@ -4,7 +4,12 @@ package com.example.bottombar.sample;
  * Created by iiro on 7.6.2016.
  */
 public class TabMessage {
+
     public static String get(int menuItemId, boolean isReselection) {
+        return get(menuItemId, isReselection, false);
+    }
+
+    public static String get(int menuItemId, boolean isReselection, boolean isLongPress) {
         String message = "Content for ";
 
         switch (menuItemId) {
@@ -27,6 +32,10 @@ public class TabMessage {
 
         if (isReselection) {
             message += " WAS RESELECTED! YAY!";
+        }
+
+        if (isLongPress) {
+            message += " WAS LONG PRESSED! YAY!";
         }
 
         return message;

@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
+import com.roughike.bottombar.OnTabLongSelectListener;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -30,6 +31,14 @@ public class BadgeActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 messageView.setText(TabMessage.get(tabId, false));
+            }
+        });
+
+        bottomBar.setOnTabLongSelectListener(new OnTabLongSelectListener() {
+            @Override
+            public boolean onTabLongSelected(@IdRes int tabId) {
+                Toast.makeText(BadgeActivity.this, bottomBar.getTabWithId(tabId).getTitle(), Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 

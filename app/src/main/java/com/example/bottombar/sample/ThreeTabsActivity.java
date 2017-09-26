@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabLongSelectListener;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
@@ -38,5 +39,14 @@ public class ThreeTabsActivity extends Activity {
                 Toast.makeText(getApplicationContext(), TabMessage.get(tabId, true), Toast.LENGTH_LONG).show();
             }
         });
+
+        bottomBar.setOnTabLongSelectListener(new OnTabLongSelectListener() {
+            @Override
+            public boolean onTabLongSelected(int tabId) {
+                Toast.makeText(getApplicationContext(), TabMessage.get(tabId, false, true), Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+
     }
 }

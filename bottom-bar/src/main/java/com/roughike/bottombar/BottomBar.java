@@ -23,6 +23,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
+import android.support.v7.widget.TooltipCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -101,6 +102,9 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
     @Nullable
     private OnTabSelectListener onTabSelectListener;
+
+    @Nullable
+    private OnTabLongSelectListener onTabLongSelectListener;
 
     @Nullable
     private OnTabReselectListener onTabReselectListener;
@@ -204,7 +208,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                     Color.WHITE : ContextCompat.getColor(context, R.color.bb_inActiveBottomBarItemColor);
             int defaultActiveColor = isShiftingMode() ? Color.WHITE : primaryColor;
 
-            longPressHintsEnabled = ta.getBoolean(R.styleable.BottomBar_bb_longPressHintsEnabled, true);
+            longPressHintsEnabled = ta.getBoolean(R.styleable.BottomBar_bb_longPressHintsEnabled, false);
             inActiveTabColor = ta.getColor(R.styleable.BottomBar_bb_inActiveTabColor, defaultInActiveColor);
             activeTabColor = ta.getColor(R.styleable.BottomBar_bb_activeTabColor, defaultActiveColor);
             badgeBackgroundColor = ta.getColor(R.styleable.BottomBar_bb_badgeBackgroundColor, Color.RED);
@@ -368,8 +372,14 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                 tabContainer.addView(bottomBarTab);
             }
 
+            if (longPressHintsEnabled) {
+                TooltipCompat.setTooltipText(bottomBarTab, bottomBarTab.getTitle());
+            } else {
+                bottomBarTab.setOnLongClickListener(this);
+            }
+
             bottomBarTab.setOnClickListener(this);
-            bottomBarTab.setOnLongClickListener(this);
+
             index++;
         }
 
@@ -463,6 +473,10 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
      */
     public void setOnTabSelectListener(@NonNull OnTabSelectListener listener) {
         setOnTabSelectListener(listener, true);
+    }
+
+    public void setOnTabLongSelectListener(@NonNull OnTabLongSelectListener listener) {
+        onTabLongSelectListener = listener;
     }
 
     /**
@@ -895,7 +909,12 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
     @Override
     public boolean onLongClick(View target) {
-        return !(target instanceof BottomBarTab) || handleLongClick((BottomBarTab) target);
+        if (target instanceof BottomBarTab) {
+            if (onTabLongSelectListener != null) {
+                return onTabLongSelectListener.onTabLongSelected(target.getId());
+            }
+        }
+        return false;
     }
 
     private BottomBarTab findTabInLayout(ViewGroup child) {
@@ -927,18 +946,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     }
 
     private boolean handleLongClick(BottomBarTab longClickedTab) {
-        boolean areInactiveTitlesHidden = isShiftingMode() || isTabletMode;
-        boolean isClickedTitleHidden = !longClickedTab.isActive();
-        boolean shouldShowHint = areInactiveTitlesHidden
-                && isClickedTitleHidden
-                && longPressHintsEnabled;
-
-        if (shouldShowHint) {
-            Toast.makeText(getContext(), longClickedTab.getTitle(), Toast.LENGTH_SHORT)
-                 .show();
-        }
-
-        return true;
+        return onTabLongSelectListener != null && onTabLongSelectListener.onTabLongSelected(longClickedTab.getId());
     }
 
     private void updateSelectedTab(int newPosition) {
