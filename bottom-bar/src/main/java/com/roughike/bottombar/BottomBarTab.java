@@ -68,6 +68,7 @@ public class BottomBarTab extends LinearLayout {
     private int indexInContainer;
     private int titleTextAppearanceResId;
     private Typeface titleTypeFace;
+    private int badgeThreshold;
 
     BottomBarTab(Context context) {
         super(context);
@@ -87,6 +88,7 @@ public class BottomBarTab extends LinearLayout {
         setBadgeHidesWhenActive(config.badgeHidesWhenSelected);
         setTitleTextAppearance(config.titleTextAppearance);
         setTitleTypeface(config.titleTypeFace);
+        setBadgeThreshold(config.badgeThreshold);
     }
 
     void prepareLayout() {
@@ -329,6 +331,7 @@ public class BottomBarTab extends LinearLayout {
         if (badge == null) {
             badge = new BottomBarBadge(getContext());
             badge.attachToTab(this, badgeBackgroundColor);
+            badge.setCountThreshold(badgeThreshold);
         }
 
         badge.setCount(count);
@@ -379,6 +382,18 @@ public class BottomBarTab extends LinearLayout {
 
     public Typeface getTitleTypeFace() {
         return titleTypeFace;
+    }
+
+    public int getBadgeThreshold() {
+        return badgeThreshold;
+    }
+
+    public void setBadgeThreshold(int badgeThreshold) {
+        this.badgeThreshold = badgeThreshold;
+
+        if(badge != null){
+            badge.setCountThreshold(badgeThreshold);
+        }
     }
 
     void select(boolean animate) {
@@ -650,6 +665,7 @@ public class BottomBarTab extends LinearLayout {
         private final int titleTextAppearance;
         private final Typeface titleTypeFace;
         private boolean badgeHidesWhenSelected = true;
+        private final int badgeThreshold;
 
         private Config(Builder builder) {
             this.inActiveTabAlpha = builder.inActiveTabAlpha;
@@ -661,6 +677,7 @@ public class BottomBarTab extends LinearLayout {
             this.badgeHidesWhenSelected = builder.hidesBadgeWhenSelected;
             this.titleTextAppearance = builder.titleTextAppearance;
             this.titleTypeFace = builder.titleTypeFace;
+            this.badgeThreshold = builder.badgeThreshold;
         }
 
         public static class Builder {
@@ -673,6 +690,7 @@ public class BottomBarTab extends LinearLayout {
             private boolean hidesBadgeWhenSelected = true;
             private int titleTextAppearance;
             private Typeface titleTypeFace;
+            private int badgeThreshold;
 
             public Builder inActiveTabAlpha(float alpha) {
                 this.inActiveTabAlpha = alpha;
@@ -716,6 +734,11 @@ public class BottomBarTab extends LinearLayout {
 
             public Builder titleTypeFace(Typeface titleTypeFace) {
                 this.titleTypeFace = titleTypeFace;
+                return this;
+            }
+
+            public Builder setBadgeThreshold(int badgeThreshold) {
+                this.badgeThreshold = badgeThreshold;
                 return this;
             }
 

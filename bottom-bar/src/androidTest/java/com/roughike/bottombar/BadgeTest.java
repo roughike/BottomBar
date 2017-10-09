@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.annotation.UiThreadTest;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
+import android.text.TextUtils;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,6 +34,7 @@ public class BadgeTest {
         bottomBar.setItems(com.roughike.bottombar.test.R.xml.dummy_tabs_three);
         nearby = bottomBar.getTabWithId(com.roughike.bottombar.test.R.id.tab_nearby);
         nearby.setBadgeCount(5);
+        nearby.setBadgeThreshold(20);
     }
 
     @Test
@@ -95,4 +97,19 @@ public class BadgeTest {
         assertNull(nearby.badge);
         assertEquals(bottomBar.findViewById(R.id.bb_bottom_bar_item_container), nearby.getOuterView());
     }
+
+    @Test
+    @UiThreadTest
+    public void badgeWithCounterBiggerThanThreshold(){
+        nearby.setBadgeCount(25);
+        assertTrue(TextUtils.equals(nearby.badge.getText(), "20+"));
+    }
+
+    @Test
+    @UiThreadTest
+    public void badgeWithCounterSmallerThanThreshold(){
+        nearby.setBadgeCount(2);
+        assertTrue(TextUtils.equals(nearby.badge.getText(), "2"));
+    }
+
 }

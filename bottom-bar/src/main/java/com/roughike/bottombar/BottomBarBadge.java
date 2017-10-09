@@ -5,9 +5,12 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -29,12 +32,20 @@ import android.widget.TextView;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-class BottomBarBadge extends TextView {
+class BottomBarBadge extends AppCompatTextView {
+
     private int count;
     private boolean isVisible = false;
+    private int countThreshold;
+    String countThresholdString;
 
     BottomBarBadge(Context context) {
         super(context);
+        countThresholdString = context.getString(R.string.badge_threshold);
+    }
+
+    public void setCountThreshold(int countThreshold) {
+        this.countThreshold = countThreshold;
     }
 
     /**
@@ -44,7 +55,12 @@ class BottomBarBadge extends TextView {
      */
     void setCount(int count) {
         this.count = count;
-        setText(String.valueOf(count));
+
+        if(count > countThreshold){
+            setText(String.format(countThresholdString, countThreshold));
+        }else{
+            setText(String.valueOf(count));
+        }
     }
 
     /**

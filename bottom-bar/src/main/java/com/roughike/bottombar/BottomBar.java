@@ -84,6 +84,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private boolean showShadow;
     private float shadowElevation;
     private View shadowView;
+    private int badgeThreshold;
 
     private View backgroundOverlay;
     private ViewGroup outerContainer;
@@ -212,6 +213,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             titleTextAppearance = ta.getResourceId(R.styleable.BottomBar_bb_titleTextAppearance, 0);
             titleTypeFace = getTypeFaceFromAsset(ta.getString(R.styleable.BottomBar_bb_titleTypeFace));
             showShadow = ta.getBoolean(R.styleable.BottomBar_bb_showShadow, true);
+            badgeThreshold = ta.getInt(R.styleable.BottomBar_bb_badgeThreshold, 99);
         } finally {
             ta.recycle();
         }
@@ -321,6 +323,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                 .hideBadgeWhenSelected(hideBadgeWhenActive)
                 .titleTextAppearance(titleTextAppearance)
                 .titleTypeFace(titleTypeFace)
+                .setBadgeThreshold(badgeThreshold)
                 .build();
     }
 
