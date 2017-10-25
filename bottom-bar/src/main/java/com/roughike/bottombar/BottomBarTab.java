@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -69,6 +72,11 @@ public class BottomBarTab extends LinearLayout {
     private int titleTextAppearanceResId;
     private Typeface titleTypeFace;
 
+    private View stripeView;
+    private int stripeViewColor;
+    private boolean stripeViewEnabled;
+    private ToggleVisibilityCallback toggleVisibilityCallback;
+
     BottomBarTab(Context context) {
         super(context);
 
@@ -92,7 +100,7 @@ public class BottomBarTab extends LinearLayout {
     void prepareLayout() {
         inflate(getContext(), getLayoutResource(), this);
         setOrientation(VERTICAL);
-        setGravity(isTitleless? Gravity.CENTER : Gravity.CENTER_HORIZONTAL);
+        setGravity(isTitleless ? Gravity.CENTER : Gravity.CENTER_HORIZONTAL);
         setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         setBackgroundResource(MiscUtils.getDrawableRes(getContext(), R.attr.selectableItemBackgroundBorderless));
 
@@ -112,6 +120,17 @@ public class BottomBarTab extends LinearLayout {
 
         updateCustomTextAppearance();
         updateCustomTypeface();
+        prepareStripe();
+    }
+
+    private void prepareStripe() {
+        stripeView = new View(getContext());
+        stripeView.setBackgroundColor(stripeViewColor);
+        int stripeHeight = 20;
+        addView(stripeView, 0, new LinearLayout.LayoutParams(-1, stripeHeight));
+        if (!stripeViewEnabled) {
+            hideStripeView();
+        }
     }
 
     @VisibleForTesting
@@ -226,6 +245,17 @@ public class BottomBarTab extends LinearLayout {
 
     public float getActiveAlpha() {
         return activeAlpha;
+    }
+
+    public void setStripeViewEnabled(boolean stripeViewEnabled) {
+        this.stripeViewEnabled = stripeViewEnabled;
+    }
+
+    public void setStripeViewColor(int stripeViewColor) {
+        this.stripeViewColor = stripeViewColor;
+        if (stripeView != null) {
+            stripeView.setBackgroundColor(stripeViewColor);
+        }
     }
 
     public void setActiveAlpha(float activeAlpha) {
@@ -381,7 +411,10 @@ public class BottomBarTab extends LinearLayout {
         return titleTypeFace;
     }
 
+    static String TAG = "TAG";
+
     void select(boolean animate) {
+        Log.i(TAG, "select: " + animate);
         isActive = true;
 
         if (animate) {
@@ -400,6 +433,9 @@ public class BottomBarTab extends LinearLayout {
 
         if (badge != null && badgeHidesWhenActive) {
             badge.hide();
+        }
+        if (stripeViewEnabled) {
+            showStripeView();
         }
     }
 
@@ -427,6 +463,9 @@ public class BottomBarTab extends LinearLayout {
 
         if (!isShifting && badge != null && !badge.isVisible()) {
             badge.show();
+        }
+        if (stripeViewEnabled) {
+            hideStripeView();
         }
     }
 
@@ -543,26 +582,26 @@ public class BottomBarTab extends LinearLayout {
         setTopPaddingAnimated(iconView.getPaddingTop(), padding);
 
         ViewPropertyAnimatorCompat titleAnimator = ViewCompat.animate(titleView)
-                .setDuration(ANIMATION_DURATION)
-                .scaleX(scale)
-                .scaleY(scale);
+                                                             .setDuration(ANIMATION_DURATION)
+                                                             .scaleX(scale)
+                                                             .scaleY(scale);
         titleAnimator.alpha(alpha);
         titleAnimator.start();
     }
 
     private void animateIconScale(float scale) {
         ViewCompat.animate(iconView)
-                .setDuration(ANIMATION_DURATION)
-                .scaleX(scale)
-                .scaleY(scale)
-                .start();
+                  .setDuration(ANIMATION_DURATION)
+                  .scaleX(scale)
+                  .scaleY(scale)
+                  .start();
     }
 
     private void animateIcon(float alpha, float scale) {
         ViewCompat.animate(iconView)
-                .setDuration(ANIMATION_DURATION)
-                .alpha(alpha)
-                .start();
+                  .setDuration(ANIMATION_DURATION)
+                  .alpha(alpha)
+                  .start();
 
         if (isTitleless && type == Type.SHIFTING) {
             animateIconScale(scale);
@@ -596,6 +635,24 @@ public class BottomBarTab extends LinearLayout {
             ViewCompat.setScaleX(iconView, scale);
             ViewCompat.setScaleY(iconView, scale);
         }
+    }
+
+    public void hideStripeView() {
+        stripeView.setVisibility(INVISIBLE);
+        if (toggleVisibilityCallback != null) {
+            toggleVisibilityCallback.onVisibleEnd(stripeView);
+        }
+    }
+
+    public void showStripeView() {
+        stripeView.setVisibility(VISIBLE);
+        if (toggleVisibilityCallback != null) {
+            toggleVisibilityCallback.onVisibleStart(stripeView);
+        }
+    }
+
+    public void setCustomStripeAnimation(@Nullable ToggleVisibilityCallback toggleVisibilityCallback) {
+        this.toggleVisibilityCallback = toggleVisibilityCallback;
     }
 
     @Override

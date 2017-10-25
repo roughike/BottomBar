@@ -1,52 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:ignore="HardcodedText">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp"
+              tools:ignore="HardcodedText">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Check out these samples and their sources for the most basic use cases."
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:text="Check out these samples and their sources for the most basic use cases."/>
 
     <Button
         android:id="@+id/simple_three_tabs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Simple example with three tabs" />
+        android:text="Simple example with three tabs"/>
 
     <Button
         android:id="@+id/icons_only"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tabs with icons only" />
+        android:text="Tabs with icons only"/>
 
     <Button
         android:id="@+id/five_tabs_custom_colors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Using custom colors and fonts" />
+        android:text="Using custom colors and fonts"/>
 
     <Button
         android:id="@+id/five_tabs_changing_colors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Five tabs with changing colors" />
+        android:text="Five tabs with changing colors"/>
 
     <Button
         android:id="@+id/three_tabs_quick_return"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Three tabs with Quick Return" />
+        android:text="Three tabs with Quick Return"/>
 
     <Button
         android:id="@+id/badges"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Using Badges" />
+        android:text="Using Badges"/>
+
+    <Button
+        android:id="@+id/stripes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tabs with stripes"/>
 
 </LinearLayout>

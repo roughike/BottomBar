@@ -23,6 +23,7 @@
         <activity android:name=".ThreeTabsQRActivity" android:theme="@style/AppTheme.TransNav" />
         <activity android:name=".BadgeActivity" />
         <activity android:name=".CustomColorAndFontActivity" />
+        <activity android:name=".StripedTabsActivity" />
     </application>
 
 </manifest>

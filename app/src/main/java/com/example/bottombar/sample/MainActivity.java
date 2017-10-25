@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.three_tabs_quick_return).setOnClickListener(this);
         findViewById(R.id.five_tabs_custom_colors).setOnClickListener(this);
         findViewById(R.id.badges).setOnClickListener(this);
+        findViewById(R.id.stripes).setOnClickListener(this);
     }
 
     @Override
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.badges:
                 clazz = BadgeActivity.class;
+                break;
+            case R.id.stripes:
+                clazz = StripedTabsActivity.class;
                 break;
         }
 
