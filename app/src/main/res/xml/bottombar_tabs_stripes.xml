@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        stripeColor="#7c4dff"
+        icon="@drawable/ic_recents"
+        id="@+id/tab_recents"
+        title="Recents"/>
+    <tab
+        stripeColor="#e53935"
+        icon="@drawable/ic_favorites"
+        id="@+id/tab_favorites"
+        title="Favorites"/>
+    <tab
+        stripeColor="#e040fb"
+        icon="@drawable/ic_nearby"
+        id="@+id/tab_nearby"
+        title="Nearby"/>
+    <tab
+        stripeColor="#fdd835"
+        icon="@drawable/ic_friends"
+        id="@+id/tab_friends"
+        title="Friends"/>
+    <tab
+        stripeColor="#1de9b6"
+        icon="@drawable/ic_restaurants"
+        id="@+id/tab_food"
+        title="Food"/>
+</tabs>

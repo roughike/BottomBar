@@ -19,6 +19,7 @@
         id="@+id/tab_friends"
         icon="@drawable/ic_friends"
         title="Friends"
+
         barColorWhenSelected="#FF5252" />
     <tab
         id="@+id/tab_food"

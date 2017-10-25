@@ -42,14 +42,14 @@ public class StripedTabsActivity extends Activity {
         final ToggleVisibilityCallback callback = new StripeAnimation();
         final int tabCount = bottomBar.getTabCount();
         for (int i = 0; i < tabCount; i++) {
+
             BottomBarTab tab = bottomBar.getTabAtPosition(i);
-            if (i % 2 == 0) {
-                tab.setStripeViewEnabled(true);
-                if (i == tabCount - 1) {
-                    tab.setStripeViewColor(Color.GREEN);
-                }
-                tab.setCustomStripeAnimation(callback);
-            }
+            tab.setStripeViewEnabled(true);
+            tab.setCustomStripeAnimation(callback);
+            //all colors can be defined by xml 'stripeColor' attribute
+            //you can also setup custom color per tab programmatically:
+//            int color = ContextCompat.getColor(this,R.color.colorAccent);
+//            tab.setStripeViewColor(color);
         }
 
         bottomBar.setOnTabReselectListener(new OnTabReselectListener() {

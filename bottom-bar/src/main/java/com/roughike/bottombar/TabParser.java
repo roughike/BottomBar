@@ -28,6 +28,7 @@ import static com.roughike.bottombar.TabParser.TabAttribute.ICON;
 import static com.roughike.bottombar.TabParser.TabAttribute.ID;
 import static com.roughike.bottombar.TabParser.TabAttribute.INACTIVE_COLOR;
 import static com.roughike.bottombar.TabParser.TabAttribute.IS_TITLELESS;
+import static com.roughike.bottombar.TabParser.TabAttribute.STRIPE_COLOR;
 import static com.roughike.bottombar.TabParser.TabAttribute.TITLE;
 
 /**
@@ -124,6 +125,11 @@ class TabParser {
                     if (activeColor == COLOR_NOT_SET) continue;
                     workingTab.setActiveColor(activeColor);
                     break;
+                case STRIPE_COLOR:
+                    int stripeColor = getColorValue(parser, i);
+                    if (stripeColor == COLOR_NOT_SET) continue;
+                    workingTab.setStripeViewColor(stripeColor);
+                    break;
                 case BAR_COLOR_WHEN_SELECTED:
                     int barColorWhenSelected = getColorValue(parser, i);
                     if (barColorWhenSelected == COLOR_NOT_SET) continue;
@@ -201,6 +207,7 @@ class TabParser {
         String BADGE_BACKGROUND_COLOR = "badgeBackgroundColor";
         String BADGE_HIDES_WHEN_ACTIVE = "badgeHidesWhenActive";
         String IS_TITLELESS = "iconOnly";
+        String STRIPE_COLOR = "stripeColor";
     }
 
     @SuppressWarnings("WeakerAccess")

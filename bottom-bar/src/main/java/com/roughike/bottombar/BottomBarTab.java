@@ -75,7 +75,7 @@ public class BottomBarTab extends LinearLayout {
     private Typeface titleTypeFace;
 
     private View stripeView;
-    private int stripeViewColor;
+    private int stripeViewColor = Color.TRANSPARENT;
     private boolean stripeViewEnabled;
     private ToggleVisibilityCallback toggleVisibilityCallback;
 
@@ -92,7 +92,6 @@ public class BottomBarTab extends LinearLayout {
         setActiveAlpha(config.activeTabAlpha);
         setInActiveColor(config.inActiveTabColor);
         setActiveColor(config.activeTabColor);
-        setStripeViewColor(config.stripeBackgroundColor);
         setBarColorWhenSelected(config.barColorWhenSelected);
         setBadgeBackgroundColor(config.badgeBackgroundColor);
         setBadgeHidesWhenActive(config.badgeHidesWhenSelected);
@@ -251,6 +250,9 @@ public class BottomBarTab extends LinearLayout {
     }
 
     public void setStripeViewEnabled(boolean stripeViewEnabled) {
+        if (this.stripeViewEnabled && !stripeViewEnabled) {
+            setStripeViewColor(Color.TRANSPARENT);
+        }
         this.stripeViewEnabled = stripeViewEnabled;
     }
 
@@ -708,7 +710,6 @@ public class BottomBarTab extends LinearLayout {
         private final int barColorWhenSelected;
         private final int badgeBackgroundColor;
         private final int titleTextAppearance;
-        private int stripeBackgroundColor = Color.TRANSPARENT;
         private final Typeface titleTypeFace;
         private boolean badgeHidesWhenSelected = true;
 
@@ -719,7 +720,6 @@ public class BottomBarTab extends LinearLayout {
             this.activeTabColor = builder.activeTabColor;
             this.barColorWhenSelected = builder.barColorWhenSelected;
             this.badgeBackgroundColor = builder.badgeBackgroundColor;
-            this.stripeBackgroundColor = builder.stripeBackgroundColor;
             this.badgeHidesWhenSelected = builder.hidesBadgeWhenSelected;
             this.titleTextAppearance = builder.titleTextAppearance;
             this.titleTypeFace = builder.titleTypeFace;
@@ -732,7 +732,6 @@ public class BottomBarTab extends LinearLayout {
             private int activeTabColor;
             private int barColorWhenSelected;
             private int badgeBackgroundColor;
-            private int stripeBackgroundColor;
             private boolean hidesBadgeWhenSelected = true;
             private int titleTextAppearance;
             private Typeface titleTypeFace;
@@ -786,10 +785,6 @@ public class BottomBarTab extends LinearLayout {
                 return new Config(this);
             }
 
-            public Builder stripeBackgroundColor(int stripeBackgroundColor) {
-                this.stripeBackgroundColor = stripeBackgroundColor;
-                return this;
-            }
         }
     }
 }
