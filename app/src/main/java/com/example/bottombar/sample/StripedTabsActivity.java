@@ -1,6 +1,7 @@
 package com.example.bottombar.sample;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -38,15 +39,17 @@ public class StripedTabsActivity extends Activity {
             }
         });
 
-        int color = ContextCompat.getColor(this, R.color.colorPrimary);
-
         final ToggleVisibilityCallback callback = new StripeAnimation();
-
-        for (int i = 0; i < bottomBar.getTabCount(); i++) {
+        final int tabCount = bottomBar.getTabCount();
+        for (int i = 0; i < tabCount; i++) {
             BottomBarTab tab = bottomBar.getTabAtPosition(i);
-            tab.setStripeViewColor(color);
-            tab.setStripeViewEnabled(true);
-            tab.setCustomStripeAnimation(callback);
+            if (i % 2 == 0) {
+                tab.setStripeViewEnabled(true);
+                if (i == tabCount - 1) {
+                    tab.setStripeViewColor(Color.GREEN);
+                }
+                tab.setCustomStripeAnimation(callback);
+            }
         }
 
         bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
