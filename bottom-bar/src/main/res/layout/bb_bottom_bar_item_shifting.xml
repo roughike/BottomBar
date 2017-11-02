@@ -19,6 +19,7 @@
         android:id="@+id/bb_bottom_bar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         android:textAppearance="@style/BB_BottomBarItem_Shifting.TitleAppearance"
         android:visibility="gone"
         style="@style/BB_BottomBarItem_TitleStyle"/>
