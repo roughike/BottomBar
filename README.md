@@ -420,6 +420,7 @@ nearby.removeBadge/();
   * [NewsCatchr](https://play.google.com/store/apps/details?id=jlelse.readit) : A newsreader app, which uses this BottomBar library.
   * [GitSkarios](https://play.google.com/store/apps/details?id=com.alorma.github) : A Github android App, to visit your repositories, gists and  more!
     * [Code](https://github.com/gitskarios/Gitskarios)
+* [BeerTasting.Club](https://play.google.com/store/apps/details?id=at.co.babos.beertasting) : The Android app for the biggest german-speaking craft beer community!
   
 Send me a pull request with modified README.md to get a shoutout!
 
