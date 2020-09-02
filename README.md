@@ -1,9 +1,5 @@
 # BottomBar (Deprecated)
 
-BottomBar is being sponsored by the following tool; please help to support us by taking a look and signing up to a free trial
-
-<a href="https://tracking.gitads.io/?repo=BottomBar"> <img src="https://images.gitads.io/BottomBar" alt="GitAds"/> </a>
-
 I don't have time to maintain this anymore. I basically wrote the whole library in a rush, without tests, while being a serious expert beginner at the time. As a result, there's a lot of unpredictable moving parts and the tests probably aren't that great either. Don't really know, since I haven't touched this in ages.
 
 I'd recommend you to use the official BottomNavigationView from Google and urge them to implement the features you need. Or use another 3rd party library.
