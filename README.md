@@ -165,6 +165,32 @@ bottomBar.setTabSelectionInterceptor(new TabSelectionInterceptor() {
 });
 ```
 
+### Setting up with ViewPager
+
+If you want to set up the tabs with ViewPager (v4), which usually is the case of tabs with FragmentPagerAdapter,
+you dont have to do any extra work, just pass your ViewPager in ```setUpWithViewPager()``` method. And it will behave
+accordingly. Any change in tab will update fragment (ViewPager) and any change in ViewPager (slide/setCurrentItem)
+will update tabs.
+
+```java
+
+        // get viewpager instance
+        viewPager = (ViewPager) findViewById(R.id.viewpager_button);
+        
+        // initiate viewpager adapter
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+
+        // set adapter to viewpager
+        viewPager.setAdapter(viewPagerAdapter);
+
+        // just add viewpager to bottombar
+        bottomBar.setUpWithViewPager(viewPager);
+
+        // Now viewpager and bottom bar will work together
+```
+
+
 ### Changing icons based on selection state
 
 If you want to have different icon when a specific tab is selected, just use state list drawables.
