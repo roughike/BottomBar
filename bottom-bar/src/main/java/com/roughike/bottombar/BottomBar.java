@@ -61,6 +61,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private static final int BEHAVIOR_SHY = 2;
     private static final int BEHAVIOR_DRAW_UNDER_NAV = 4;
     private static final int BEHAVIOR_ICONS_ONLY = 8;
+    private static final int BEHAVIOR_MOTIONLESS = 16;
 
     private BatchTabPropertyApplier batchPropertyApplier;
     private int primaryColor;
@@ -239,6 +240,10 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
         return !isTabletMode && hasBehavior(BEHAVIOR_ICONS_ONLY);
     }
 
+    private boolean isMotionlessMode() {
+        return !isTabletMode && hasBehavior(BEHAVIOR_MOTIONLESS);
+    }
+
     private boolean hasBehavior(int behavior) {
         return (behaviors | behavior) == behaviors;
     }
@@ -337,6 +342,8 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
 
             if (isShiftingMode()) {
                 type = BottomBarTab.Type.SHIFTING;
+            } else if (isMotionlessMode()) {
+                type = BottomBarTab.Type.MOTIONLESS;
             } else if (isTabletMode) {
                 type = BottomBarTab.Type.TABLET;
             } else {
@@ -918,8 +925,8 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             return;
         }
 
-        oldTab.deselect(true);
-        newTab.select(true);
+        oldTab.deselect(!isMotionlessMode());
+        newTab.select(!isMotionlessMode());
 
         shiftingMagic(oldTab, newTab, true);
         handleBackgroundColorChange(newTab, true);

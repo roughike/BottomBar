@@ -118,6 +118,7 @@ public class BottomBarTab extends LinearLayout {
     int getLayoutResource() {
         int layoutResource;
         switch (type) {
+            case MOTIONLESS:
             case FIXED:
                 layoutResource = R.layout.bb_bottom_bar_item_fixed;
                 break;
@@ -384,13 +385,16 @@ public class BottomBarTab extends LinearLayout {
     void select(boolean animate) {
         isActive = true;
 
+        boolean isMotionless = type == Type.MOTIONLESS;
+        int iconPaddingTop = isMotionless  ? eightDps : sixDps;
+
         if (animate) {
             animateIcon(activeAlpha, ACTIVE_SHIFTING_TITLELESS_ICON_SCALE);
             animateTitle(sixDps, ACTIVE_TITLE_SCALE, activeAlpha);
             animateColors(inActiveColor, activeColor);
         } else {
             setTitleScale(ACTIVE_TITLE_SCALE);
-            setTopPadding(sixDps);
+            setTopPadding(iconPaddingTop);
             setIconScale(ACTIVE_SHIFTING_TITLELESS_ICON_SCALE);
             setColors(activeColor);
             setAlphas(activeAlpha);
@@ -407,9 +411,10 @@ public class BottomBarTab extends LinearLayout {
         isActive = false;
 
         boolean isShifting = type == Type.SHIFTING;
+        boolean isMotionless = type == Type.MOTIONLESS;
 
-        float titleScale = isShifting ? 0 : INACTIVE_FIXED_TITLE_SCALE;
-        int iconPaddingTop = isShifting ? sixteenDps : eightDps;
+        float titleScale = isMotionless ? ACTIVE_TITLE_SCALE: isShifting ? 0 : INACTIVE_FIXED_TITLE_SCALE;
+        int iconPaddingTop = isMotionless ? eightDps : isShifting ? sixteenDps : eightDps;
 
         if (animate) {
             animateTitle(iconPaddingTop, titleScale, inActiveAlpha);
@@ -637,7 +642,7 @@ public class BottomBarTab extends LinearLayout {
     }
 
     enum Type {
-        FIXED, SHIFTING, TABLET
+        MOTIONLESS, FIXED, SHIFTING, TABLET
     }
 
     public static class Config {

@@ -8,6 +8,7 @@
             <flag name="shy" value="2" />
             <flag name="underNavbar" value="4" />
             <flag name="iconsOnly" value="8" />
+            <flag name="motionless" value="16" />
         </attr>
         <attr name="bb_longPressHintsEnabled" format="boolean" />
         <attr name="bb_inActiveTabAlpha" format="float" />
