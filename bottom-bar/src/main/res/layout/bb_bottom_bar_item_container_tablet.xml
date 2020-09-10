@@ -12,7 +12,7 @@
             android:layout_height="match_parent"
             android:visibility="invisible" />
 
-        <LinearLayout
+        <com.roughike.bottombar.BottomBarTabContainer
             android:id="@+id/bb_bottom_bar_item_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
