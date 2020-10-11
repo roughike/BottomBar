@@ -1,8 +1,9 @@
 package com.roughike.bottombar;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by iiro on 29.8.2016.

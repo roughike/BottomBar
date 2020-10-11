@@ -3,11 +3,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp"
     android:paddingTop="16dp"
+    android:paddingRight="20dp"
     android:paddingBottom="16dp">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/bb_bottom_bar_icon"
         style="@style/BB_BottomBarItem_Tablet" />
 

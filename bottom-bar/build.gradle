@@ -56,18 +56,19 @@ tasks.coveralls {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:' + rootProject.ext.supportLibraryVersion
-    compile 'com.android.support:design:' + rootProject.ext.supportLibraryVersion
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "androidx.appcompat:appcompat-resources:${rootProject.ext.supportLibraryVersion}"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:${rootProject.ext.supportLibraryVersion}"
+    implementation "com.google.android.material:material:${rootProject.ext.supportLibraryVersion}"
 
-    testCompile 'junit:junit:' + rootProject.ext.junitVersion
+    testImplementation 'junit:junit:' + rootProject.ext.junitVersion
 
-    androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile 'org.mockito:mockito-core:1.+'
-    androidTestCompile "com.google.dexmaker:dexmaker:1.2"
-    androidTestCompile "com.google.dexmaker:dexmaker-mockito:1.2"
+    androidTestImplementation 'junit:junit:4.13'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'org.mockito:mockito-core:2.19.0'
+    androidTestImplementation "com.google.dexmaker:dexmaker:1.2"
+    androidTestImplementation "com.google.dexmaker:dexmaker-mockito:1.2"
 }
 
 apply plugin: 'com.github.dcendents.android-maven'

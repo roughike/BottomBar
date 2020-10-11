@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Bottom-Bar.iml" filepath="$PROJECT_DIR$/.idea/modules/Bottom-Bar.iml" group="Bottom-Bar" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Bottom-Bar-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Bottom-Bar-app.iml" group="Bottom-Bar/app" />
       <module fileurl="file://$PROJECT_DIR$/BottomBar.iml" filepath="$PROJECT_DIR$/BottomBar.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bottom-bar/bottom-bar.iml" filepath="$PROJECT_DIR$/bottom-bar/bottom-bar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bottom-bar/com.roughike-bottom-bar.iml" filepath="$PROJECT_DIR$/.idea/modules/bottom-bar/com.roughike-bottom-bar.iml" group="Bottom-Bar/bottom-bar" />
     </modules>
   </component>
 </project>

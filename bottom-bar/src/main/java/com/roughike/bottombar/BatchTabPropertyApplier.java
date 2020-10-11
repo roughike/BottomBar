@@ -1,6 +1,6 @@
 package com.roughike.bottombar;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 class BatchTabPropertyApplier {
     private final BottomBar bottomBar;
