@@ -1,5 +1,9 @@
 ## Changelog
 
+### 3.0.0
+
+* [#1](https://github.com/bsobe/BottomBar/pull/1): Migrate to androidX, minSdk 21
+
 ### 2.3.1
 
 * [#749](https://github.com/roughike/BottomBar/pull/749): Quick fix for the issue where *bb_showShadow* set to false didn't have any effect. Thanks @yombunker!

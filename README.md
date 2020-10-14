@@ -1,49 +1,36 @@
-# BottomBar (Deprecated)
-
-I don't have time to maintain this anymore. I basically wrote the whole library in a rush, without tests, while being a serious expert beginner at the time. As a result, there's a lot of unpredictable moving parts and the tests probably aren't that great either. Don't really know, since I haven't touched this in ages.
-
-I'd recommend you to use the official BottomNavigationView from Google and urge them to implement the features you need. Or use another 3rd party library.
-
-[![Build Status](https://travis-ci.org/roughike/BottomBar.svg?branch=master)](https://travis-ci.org/roughike/BottomBar) [![Coverage Status](https://coveralls.io/repos/github/roughike/BottomBar/badge.svg?branch=development)](https://coveralls.io/github/roughike/BottomBar?branch=master) [![Download](https://api.bintray.com/packages/roughike/maven/bottom-bar/images/download.svg)](https://bintray.com/roughike/maven/bottom-bar/_latestVersion)
+# BottomBar [![](https://jitpack.io/v/bsobe/BottomBar.svg)](https://jitpack.io/#bsobe/BottomBar) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/shy-demo.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/shifting-demo.gif" width="30%" /> <img src="https://raw.githubusercontent.com/roughike/BottomBar/master/graphics/screenshot_tablet.png" width="33%" />
 
-## Version 2.0 released!
 
-[The latest version before that can be found in the v1 branch](https://github.com/roughike/BottomBar/tree/v1)
+## Version 3.0 released!
 
-* Cleaner code and better APIs
-* No more unnecessary stuff or spaghetti mess
-* Now the look, feel and behavior is defined in XML, as it should be
-* No more nasty regressions, thanks to the automated tests
-* **Everything is a little different compared to earlier, but it's for the greater good!**
+* AndroidX Support
+* MinSdk 21
 
 [How to contribute](https://github.com/roughike/BottomBar/blob/master/README.md#contributions)
 
-[Changelog](https://github.com/roughike/BottomBar/blob/master/CHANGELOG.md)
+[Changelog](https://github.com/bsobe/BottomBar/blob/master/CHANGELOG.md)
 
 ## What?
 
 A custom view component that mimics the new [Material Design Bottom Navigation pattern](https://www.google.com/design/spec/components/bottom-navigation.html).
 
-## Does it work on my Grandpa Gary's HTC Dream?
-
-Nope. The minSDK version is **API level 11 (Honeycomb).**
-
-## Gimme that Gradle sweetness, pls?
-
-```groovy
-compile 'com.roughike:bottom-bar:2.3.1'
+# Installation
+ - To implement **Bottom Bar** to your Android project via Gradle, you need to add JitPack repository to your root build.gradle.
+```gradle
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
 ```
-
-**Maven:**
-```xml
-<dependency>
-  <groupId>com.roughike</groupId>
-  <artifactId>bottom-bar</artifactId>
-  <version>2.3.1</version>
-  <type>pom</type>
-</dependency>
+ - After adding JitPack repository, you can add **Bottom Bar** dependency to your app level build.gradle.
+```gradle
+dependencies {
+    implementation "com.github.bsobe:BottomBar:$last-version"
+}
 ```
 
 ## How?
