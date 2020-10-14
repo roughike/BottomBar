@@ -4,14 +4,15 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.AppCompatImageView;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.TextViewCompat;
 
 /*
  * BottomBar library for Android
@@ -29,7 +30,7 @@ import android.widget.TextView;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-class BottomBarBadge extends TextView {
+class BottomBarBadge extends AppCompatTextView {
     private int count;
     private boolean isVisible = false;
 
@@ -97,7 +98,7 @@ class BottomBarBadge extends TextView {
 
         setLayoutParams(params);
         setGravity(Gravity.CENTER);
-        MiscUtils.setTextAppearance(this, R.style.BB_BottomBarBadge_Text);
+        TextViewCompat.setTextAppearance(this, R.style.BB_BottomBarBadge_Text);
 
         setColoredCircleBackground(backgroundColor);
         wrapTabAndBadgeInSameContainer(tab);

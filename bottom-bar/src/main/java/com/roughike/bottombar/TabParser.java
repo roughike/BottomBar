@@ -3,14 +3,15 @@ package com.roughike.bottombar;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.graphics.Color;
-import android.support.annotation.CheckResult;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
-import android.support.annotation.XmlRes;
-import android.support.v4.content.ContextCompat;
+
+import androidx.annotation.CheckResult;
+import androidx.annotation.ColorInt;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringDef;
+import androidx.annotation.XmlRes;
+import androidx.core.content.ContextCompat;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -32,16 +33,16 @@ import static com.roughike.bottombar.TabParser.TabAttribute.TITLE;
 
 /**
  * Created by iiro on 21.7.2016.
- *
+ * <p>
  * BottomBar library for Android
  * Copyright (c) 2016 Iiro Krankka (http://github.com/roughike).
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -160,7 +161,7 @@ class TabParser {
     private String getTitleValue(@NonNull XmlResourceParser parser, @IntRange(from = 0) int attrIndex) {
         int titleResource = parser.getAttributeResourceValue(attrIndex, 0);
         return titleResource == RESOURCE_NOT_FOUND
-                ? parser.getAttributeValue(attrIndex) : context.getString(titleResource);
+            ? parser.getAttributeValue(attrIndex) : context.getString(titleResource);
     }
 
     @ColorInt
@@ -181,15 +182,15 @@ class TabParser {
 
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({
-            ID,
-            ICON,
-            TITLE,
-            INACTIVE_COLOR,
-            ACTIVE_COLOR,
-            BAR_COLOR_WHEN_SELECTED,
-            BADGE_BACKGROUND_COLOR,
-            BADGE_HIDES_WHEN_ACTIVE,
-            IS_TITLELESS
+        ID,
+        ICON,
+        TITLE,
+        INACTIVE_COLOR,
+        ACTIVE_COLOR,
+        BAR_COLOR_WHEN_SELECTED,
+        BADGE_BACKGROUND_COLOR,
+        BADGE_HIDES_WHEN_ACTIVE,
+        IS_TITLELESS
     })
     @interface TabAttribute {
         String ID = "id";

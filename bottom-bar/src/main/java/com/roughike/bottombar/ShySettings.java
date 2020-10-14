@@ -37,10 +37,8 @@ public class ShySettings {
         if (bottomBar.isShyHeightAlreadyCalculated()) {
             BottomNavigationBehavior<BottomBar> behavior = BottomNavigationBehavior.from(bottomBar);
 
-            if (behavior != null) {
-                boolean isHidden = !visible;
-                behavior.setHidden(bottomBar, isHidden);
-            }
+            boolean isHidden = !visible;
+            behavior.setHidden(bottomBar, isHidden);
         } else {
             pendingIsVisibleInShyMode = true;
         }

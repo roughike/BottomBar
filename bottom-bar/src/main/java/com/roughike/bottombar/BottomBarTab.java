@@ -7,16 +7,17 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorCompat;
-import android.support.v7.widget.AppCompatImageView;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.ViewPropertyAnimatorCompat;
 
 /*
  * BottomBar library for Android
@@ -92,7 +93,7 @@ public class BottomBarTab extends LinearLayout {
     void prepareLayout() {
         inflate(getContext(), getLayoutResource(), this);
         setOrientation(VERTICAL);
-        setGravity(isTitleless? Gravity.CENTER : Gravity.CENTER_HORIZONTAL);
+        setGravity(isTitleless ? Gravity.CENTER : Gravity.CENTER_HORIZONTAL);
         setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         setBackgroundResource(MiscUtils.getDrawableRes(getContext(), R.attr.selectableItemBackgroundBorderless));
 
@@ -140,7 +141,6 @@ public class BottomBarTab extends LinearLayout {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void updateCustomTextAppearance() {
         if (titleView == null || titleTextAppearanceResId == 0) {
             return;
@@ -176,8 +176,8 @@ public class BottomBarTab extends LinearLayout {
     void setIsTitleless(boolean isTitleless) {
         if (isTitleless && getIconResId() == 0) {
             throw new IllegalStateException("This tab is supposed to be " +
-                    "icon only, yet it has no icon specified. Index in " +
-                    "container: " + getIndexInTabContainer());
+                "icon only, yet it has no icon specified. Index in " +
+                "container: " + getIndexInTabContainer());
         }
 
         this.isTitleless = isTitleless;
@@ -366,7 +366,6 @@ public class BottomBarTab extends LinearLayout {
         return titleTextAppearanceResId;
     }
 
-    @SuppressWarnings("deprecation")
     void setTitleTextAppearance(int resId) {
         this.titleTextAppearanceResId = resId;
         updateCustomTextAppearance();
@@ -458,11 +457,11 @@ public class BottomBarTab extends LinearLayout {
 
     private void setAlphas(float alpha) {
         if (iconView != null) {
-            ViewCompat.setAlpha(iconView, alpha);
+            iconView.setAlpha(alpha);
         }
 
         if (titleView != null) {
-            ViewCompat.setAlpha(titleView, alpha);
+            titleView.setAlpha(alpha);
         }
     }
 
@@ -523,10 +522,10 @@ public class BottomBarTab extends LinearLayout {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 iconView.setPadding(
-                        iconView.getPaddingLeft(),
-                        (Integer) animation.getAnimatedValue(),
-                        iconView.getPaddingRight(),
-                        iconView.getPaddingBottom()
+                    iconView.getPaddingLeft(),
+                    (Integer) animation.getAnimatedValue(),
+                    iconView.getPaddingRight(),
+                    iconView.getPaddingBottom()
                 );
             }
         });
@@ -543,26 +542,26 @@ public class BottomBarTab extends LinearLayout {
         setTopPaddingAnimated(iconView.getPaddingTop(), padding);
 
         ViewPropertyAnimatorCompat titleAnimator = ViewCompat.animate(titleView)
-                .setDuration(ANIMATION_DURATION)
-                .scaleX(scale)
-                .scaleY(scale);
+            .setDuration(ANIMATION_DURATION)
+            .scaleX(scale)
+            .scaleY(scale);
         titleAnimator.alpha(alpha);
         titleAnimator.start();
     }
 
     private void animateIconScale(float scale) {
         ViewCompat.animate(iconView)
-                .setDuration(ANIMATION_DURATION)
-                .scaleX(scale)
-                .scaleY(scale)
-                .start();
+            .setDuration(ANIMATION_DURATION)
+            .scaleX(scale)
+            .scaleY(scale)
+            .start();
     }
 
     private void animateIcon(float alpha, float scale) {
         ViewCompat.animate(iconView)
-                .setDuration(ANIMATION_DURATION)
-                .alpha(alpha)
-                .start();
+            .setDuration(ANIMATION_DURATION)
+            .alpha(alpha)
+            .start();
 
         if (isTitleless && type == Type.SHIFTING) {
             animateIconScale(scale);
@@ -575,10 +574,10 @@ public class BottomBarTab extends LinearLayout {
         }
 
         iconView.setPadding(
-                iconView.getPaddingLeft(),
-                topPadding,
-                iconView.getPaddingRight(),
-                iconView.getPaddingBottom()
+            iconView.getPaddingLeft(),
+            topPadding,
+            iconView.getPaddingRight(),
+            iconView.getPaddingBottom()
         );
     }
 
@@ -587,14 +586,14 @@ public class BottomBarTab extends LinearLayout {
             return;
         }
 
-        ViewCompat.setScaleX(titleView, scale);
-        ViewCompat.setScaleY(titleView, scale);
+        titleView.setScaleX(scale);
+        titleView.setScaleY(scale);
     }
 
     private void setIconScale(float scale) {
         if (isTitleless && type == Type.SHIFTING) {
-            ViewCompat.setScaleX(iconView, scale);
-            ViewCompat.setScaleY(iconView, scale);
+            iconView.setScaleX(scale);
+            iconView.setScaleY(scale);
         }
     }
 

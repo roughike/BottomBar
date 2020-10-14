@@ -4,18 +4,19 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Dimension;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Px;
-import android.support.annotation.StyleRes;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.widget.TextView;
 
-import static android.support.annotation.Dimension.DP;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.Dimension;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Px;
+import androidx.annotation.StyleRes;
+
+import static androidx.annotation.Dimension.DP;
 
 /*
  * BottomBar library for Android
@@ -35,7 +36,8 @@ import static android.support.annotation.Dimension.DP;
  */
 class MiscUtils {
 
-    @NonNull protected static TypedValue getTypedValue(@NonNull Context context, @AttrRes int resId) {
+    @NonNull
+    protected static TypedValue getTypedValue(@NonNull Context context, @AttrRes int resId) {
         TypedValue tv = new TypedValue();
         context.getTheme().resolveAttribute(resId, tv, true);
         return tv;
@@ -90,21 +92,6 @@ class MiscUtils {
     protected static int getScreenWidth(@NonNull Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         return (int) (displayMetrics.widthPixels / displayMetrics.density);
-    }
-
-    /**
-     * A convenience method for setting text appearance.
-     *
-     * @param textView a TextView which textAppearance to modify.
-     * @param resId    a style resource for the text appearance.
-     */
-    @SuppressWarnings("deprecation")
-    protected static void setTextAppearance(@NonNull TextView textView, @StyleRes int resId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            textView.setTextAppearance(resId);
-        } else {
-            textView.setTextAppearance(textView.getContext(), resId);
-        }
     }
 
     /**

@@ -1,19 +1,21 @@
 package com.roughike.bottombar;
 
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorCompat;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 
+import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.ViewPropertyAnimatorCompat;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
+
+import com.google.android.material.snackbar.Snackbar;
+
 /**
  * Created by Nikola D. on 3/15/2016.
- *
+ * <p>
  * Credit goes to Nikola Despotoski:
  * https://github.com/NikolaDespotoski
  */
@@ -101,11 +103,11 @@ class BottomNavigationBehavior<V extends View> extends VerticalScrollingBehavior
     }
 
 
-    void setHidden(@NonNull  V view, boolean bottomLayoutHidden) {
+    void setHidden(@NonNull V view, boolean bottomLayoutHidden) {
         if (!bottomLayoutHidden && hidden) {
             animateOffset(view, defaultOffset);
         } else if (bottomLayoutHidden && !hidden) {
-            animateOffset(view,  bottomNavHeight + defaultOffset);
+            animateOffset(view, bottomNavHeight + defaultOffset);
         }
         hidden = bottomLayoutHidden;
     }
@@ -119,7 +121,7 @@ class BottomNavigationBehavior<V extends View> extends VerticalScrollingBehavior
         }
 
         CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) params)
-                .getBehavior();
+            .getBehavior();
 
         if (behavior instanceof BottomNavigationBehavior) {
             // noinspection unchecked
@@ -167,7 +169,7 @@ class BottomNavigationBehavior<V extends View> extends VerticalScrollingBehavior
                 if (ViewCompat.getTranslationY(child) != 0) return;
                 int targetPadding = (mSnackbarHeight + bottomNavHeight - defaultOffset);
                 dependency.setPadding(dependency.getPaddingLeft(),
-                        dependency.getPaddingTop(), dependency.getPaddingRight(), targetPadding
+                    dependency.getPaddingTop(), dependency.getPaddingRight(), targetPadding
                 );
             }
         }
