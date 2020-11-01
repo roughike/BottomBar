@@ -1,33 +1,41 @@
 package com.example.bottombar.sample;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
-import android.widget.TextView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
-import com.roughike.bottombar.OnTabSelectListener;
 
-public class IconsOnlyActivity extends Activity {
-    private TextView messageView;
+public class IconsOnlyActivity extends AppCompatActivity {
+    private static final int TABS_COUNT = 5;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_icons_only);
 
-        messageView = (TextView) findViewById(R.id.messageView);
-
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
-            public void onTabSelected(@IdRes int tabId) {
-                messageView.setText(TabMessage.get(tabId, false));
+            public Fragment getItem(int position) {
+                return SampleFragment.newInstance(Integer.toString(position));
+            }
+
+            @Override
+            public int getCount() {
+                return TABS_COUNT;
             }
         });
+
+        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        bottomBar.setupWithViewPager(viewPager);
 
         bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
             @Override
