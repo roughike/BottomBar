@@ -77,6 +77,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
     private int inActiveTabColor;
     private int activeTabColor;
     private int badgeBackgroundColor;
+    private int badgeTextColor;
     private boolean hideBadgeWhenActive;
     private boolean longPressHintsEnabled;
     private int titleTextAppearance;
@@ -208,6 +209,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             inActiveTabColor = ta.getColor(R.styleable.BottomBar_bb_inActiveTabColor, defaultInActiveColor);
             activeTabColor = ta.getColor(R.styleable.BottomBar_bb_activeTabColor, defaultActiveColor);
             badgeBackgroundColor = ta.getColor(R.styleable.BottomBar_bb_badgeBackgroundColor, Color.RED);
+            badgeTextColor = ta.getColor(R.styleable.BottomBar_bb_badgeTextColor, Color.WHITE);
             hideBadgeWhenActive = ta.getBoolean(R.styleable.BottomBar_bb_badgesHideWhenActive, true);
             titleTextAppearance = ta.getResourceId(R.styleable.BottomBar_bb_titleTextAppearance, 0);
             titleTypeFace = getTypeFaceFromAsset(ta.getString(R.styleable.BottomBar_bb_titleTypeFace));
@@ -318,6 +320,7 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
                 .activeTabColor(activeTabColor)
                 .barColorWhenSelected(defaultBackgroundColor)
                 .badgeBackgroundColor(badgeBackgroundColor)
+                .badgeTextColor(badgeTextColor)
                 .hideBadgeWhenSelected(hideBadgeWhenActive)
                 .titleTextAppearance(titleTextAppearance)
                 .titleTypeFace(titleTypeFace)
@@ -693,6 +696,17 @@ public class BottomBar extends LinearLayout implements View.OnClickListener, Vie
             @Override
             public void update(BottomBarTab tab) {
                 tab.setBadgeBackgroundColor(badgeBackgroundColor);
+            }
+        });
+    }
+
+    public void setBadgeTextColor(@ColorInt int color) {
+        badgeTextColor = color;
+
+        batchPropertyApplier.applyToAllTabs(new BatchTabPropertyApplier.TabPropertyUpdater() {
+            @Override
+            public void update(BottomBarTab tab) {
+                tab.setBadgeTextColor(badgeTextColor);
             }
         });
     }

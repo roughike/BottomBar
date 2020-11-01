@@ -45,6 +45,7 @@ public class BottomBarTest {
     private static final int ACTIVE_TAB_COLOR = Color.parseColor("#222222");
     private static final int BACKGROUND_COLOR = Color.parseColor("#333333");
     private static final int BADGE_BACKGROUND_COLOR = Color.parseColor("#444444");
+    private static final int BADGE_TEXT_COLOR = Color.parseColor("#555555");
     private static final boolean DEFAULT_BADGE_HIDES_WHEN_SELECTED_VALUE = true;
     private static final int TITLE_TEXT_APPEARANCE = com.roughike.bottombar.test.R.style.dummy_text_appearance;
     private static final Typeface TYPEFACE = Typeface.DEFAULT_BOLD;
@@ -56,6 +57,7 @@ public class BottomBarTest {
             .activeTabColor(ACTIVE_TAB_COLOR)
             .barColorWhenSelected(BACKGROUND_COLOR)
             .badgeBackgroundColor(BADGE_BACKGROUND_COLOR)
+            .badgeTextColor(BADGE_TEXT_COLOR)
             .hideBadgeWhenSelected(DEFAULT_BADGE_HIDES_WHEN_SELECTED_VALUE)
             .titleTextAppearance(TITLE_TEXT_APPEARANCE)
             .titleTypeFace(TYPEFACE)
@@ -115,6 +117,7 @@ public class BottomBarTest {
         assertEquals(ACTIVE_TAB_COLOR, first.getActiveColor());
         assertEquals(BACKGROUND_COLOR, first.getBarColorWhenSelected());
         assertEquals(BADGE_BACKGROUND_COLOR, first.getBadgeBackgroundColor());
+        assertEquals(BADGE_TEXT_COLOR, first.getBadgeTextColor());
         assertEquals(DEFAULT_BADGE_HIDES_WHEN_SELECTED_VALUE, first.getBadgeHidesWhenActive());
         assertEquals(TITLE_TEXT_APPEARANCE, first.getTitleTextAppearance());
         assertEquals(TYPEFACE, first.getTitleTypeFace());
@@ -384,6 +387,7 @@ public class BottomBarTest {
         assertEquals(ACTIVE_TAB_COLOR, inActiveTab.getActiveColor());
         assertEquals(BACKGROUND_COLOR, inActiveTab.getBarColorWhenSelected());
         assertEquals(BADGE_BACKGROUND_COLOR, inActiveTab.getBadgeBackgroundColor());
+        assertEquals(BADGE_TEXT_COLOR, inActiveTab.getBadgeTextColor());
         assertEquals(TITLE_TEXT_APPEARANCE, inActiveTab.getTitleTextAppearance());
         assertEquals(TYPEFACE, inActiveTab.getTitleTypeFace());
     }
@@ -417,6 +421,7 @@ public class BottomBarTest {
         assertEquals(ACTIVE_TAB_COLOR, activeTab.getActiveColor());
         assertEquals(BACKGROUND_COLOR, activeTab.getBarColorWhenSelected());
         assertEquals(BADGE_BACKGROUND_COLOR, activeTab.getBadgeBackgroundColor());
+        assertEquals(BADGE_TEXT_COLOR, activeTab.getBadgeTextColor());
         assertEquals(TITLE_TEXT_APPEARANCE, activeTab.getTitleTextAppearance());
         assertEquals(TYPEFACE, activeTab.getTitleTypeFace());
     }
@@ -455,6 +460,7 @@ public class BottomBarTest {
         assertEquals(ACTIVE_TAB_COLOR, inActiveTab.getActiveColor());
         assertEquals(BACKGROUND_COLOR, inActiveTab.getBarColorWhenSelected());
         assertEquals(BADGE_BACKGROUND_COLOR, inActiveTab.getBadgeBackgroundColor());
+        assertEquals(BADGE_TEXT_COLOR, inActiveTab.getBadgeTextColor());
         assertEquals(TITLE_TEXT_APPEARANCE, inActiveTab.getTitleTextAppearance());
         assertEquals(TYPEFACE, inActiveTab.getTitleTypeFace());
     }
@@ -491,6 +497,7 @@ public class BottomBarTest {
         assertEquals(Color.BLUE, inActiveTab.getActiveColor());
         assertEquals(BACKGROUND_COLOR, inActiveTab.getBarColorWhenSelected());
         assertEquals(BADGE_BACKGROUND_COLOR, inActiveTab.getBadgeBackgroundColor());
+        assertEquals(BADGE_TEXT_COLOR, inActiveTab.getBadgeTextColor());
         assertEquals(TITLE_TEXT_APPEARANCE, inActiveTab.getTitleTextAppearance());
         assertEquals(TYPEFACE, inActiveTab.getTitleTypeFace());
     }
@@ -528,6 +535,37 @@ public class BottomBarTest {
 
     @Test
     @UiThreadTest
+    public void setBadgeTextColor_UpdatesColor() {
+        BottomBarTab inActiveTab = bottomBar.getTabAtPosition(1);
+        inActiveTab.setBadgeCount(3);
+
+        int previousBadgeTextColor = inActiveTab.getBadgeTextColor();
+        int testColor = Color.GREEN;
+        assertNotEquals(testColor, previousBadgeTextColor);
+
+        bottomBar.setBadgeTextColor(testColor);
+        assertEquals(testColor, inActiveTab.getBadgeTextColor());
+    }
+
+    @Test
+    public void setBadgeTextColor_LeavesOtherValuesIntact() {
+        bottomBar.setBadgeTextColor(Color.BLUE);
+
+        BottomBarTab inActiveTab = bottomBar.getTabAtPosition(1);
+        assertNotEquals(inActiveTab, bottomBar.getCurrentTab());
+
+        assertEquals(INACTIVE_TAB_ALPHA, inActiveTab.getInActiveAlpha(), 0);
+        assertEquals(ACTIVE_TAB_ALPHA, inActiveTab.getActiveAlpha(), 0);
+        assertEquals(INACTIVE_TAB_COLOR, inActiveTab.getInActiveColor());
+        assertEquals(ACTIVE_TAB_COLOR, inActiveTab.getActiveColor());
+        assertEquals(BACKGROUND_COLOR, inActiveTab.getBarColorWhenSelected());
+        assertEquals(Color.BLUE, inActiveTab.getBadgeTextColor());
+        assertEquals(TITLE_TEXT_APPEARANCE, inActiveTab.getTitleTextAppearance());
+        assertEquals(TYPEFACE, inActiveTab.getTitleTypeFace());
+    }
+
+    @Test
+    @UiThreadTest
     public void setBadgeHidesWhenSelected_UpdatesBadgeHidesWhenSelected() {
         BottomBarTab tab = bottomBar.getCurrentTab();
 
@@ -550,6 +588,7 @@ public class BottomBarTest {
         assertEquals(ACTIVE_TAB_COLOR, tab.getActiveColor());
         assertEquals(BACKGROUND_COLOR, tab.getBarColorWhenSelected());
         assertEquals(BADGE_BACKGROUND_COLOR, tab.getBadgeBackgroundColor());
+        assertEquals(BADGE_TEXT_COLOR, tab.getBadgeTextColor());
         assertTrue(tab.getBadgeHidesWhenActive());
         assertEquals(TITLE_TEXT_APPEARANCE, tab.getTitleTextAppearance());
         assertEquals(TYPEFACE, tab.getTitleTypeFace());
@@ -582,6 +621,7 @@ public class BottomBarTest {
         assertEquals(ACTIVE_TAB_COLOR, inActiveTab.getActiveColor());
         assertEquals(BACKGROUND_COLOR, inActiveTab.getBarColorWhenSelected());
         assertEquals(BADGE_BACKGROUND_COLOR, inActiveTab.getBadgeBackgroundColor());
+        assertEquals(BADGE_TEXT_COLOR, inActiveTab.getBadgeTextColor());
         assertEquals(-666, inActiveTab.getTitleTextAppearance());
         assertEquals(TYPEFACE, inActiveTab.getTitleTypeFace());
     }
@@ -614,6 +654,7 @@ public class BottomBarTest {
         assertEquals(ACTIVE_TAB_COLOR, inActiveTab.getActiveColor());
         assertEquals(BACKGROUND_COLOR, inActiveTab.getBarColorWhenSelected());
         assertEquals(BADGE_BACKGROUND_COLOR, inActiveTab.getBadgeBackgroundColor());
+        assertEquals(BADGE_TEXT_COLOR, inActiveTab.getBadgeTextColor());
         assertEquals(TITLE_TEXT_APPEARANCE, inActiveTab.getTitleTextAppearance());
         assertEquals(Typeface.DEFAULT, inActiveTab.getTitleTypeFace());
     }

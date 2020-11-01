@@ -121,6 +121,15 @@ public class TabParserTest {
     }
 
     @Test
+    public void badgeTextColorAsExpected() {
+        assertEquals(Color.parseColor("#FF0000"), tabs.get(0).getBadgeTextColor());
+        assertEquals(Color.parseColor("#00FF00"), tabs.get(1).getBadgeTextColor());
+        assertEquals(Color.parseColor("#F00000"), tabs.get(2).getBadgeTextColor());
+        assertEquals(Color.parseColor("#00F000"), tabs.get(3).getBadgeTextColor());
+        assertEquals(Color.parseColor("#00F0F0"), tabs.get(4).getBadgeTextColor());
+    }
+
+    @Test
     public void correctBadgeHidingPolicies() {
         assertFalse(tabs.get(0).getBadgeHidesWhenActive());
         assertTrue(tabs.get(1).getBadgeHidesWhenActive());

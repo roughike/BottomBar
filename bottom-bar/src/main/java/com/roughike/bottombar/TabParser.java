@@ -22,6 +22,7 @@ import java.util.List;
 
 import static com.roughike.bottombar.TabParser.TabAttribute.ACTIVE_COLOR;
 import static com.roughike.bottombar.TabParser.TabAttribute.BADGE_BACKGROUND_COLOR;
+import static com.roughike.bottombar.TabParser.TabAttribute.BADGE_TEXT_COLOR;
 import static com.roughike.bottombar.TabParser.TabAttribute.BADGE_HIDES_WHEN_ACTIVE;
 import static com.roughike.bottombar.TabParser.TabAttribute.BAR_COLOR_WHEN_SELECTED;
 import static com.roughike.bottombar.TabParser.TabAttribute.ICON;
@@ -134,6 +135,11 @@ class TabParser {
                     if (badgeBackgroundColor == COLOR_NOT_SET) continue;
                     workingTab.setBadgeBackgroundColor(badgeBackgroundColor);
                     break;
+                case BADGE_TEXT_COLOR:
+                    int badgeTextColor = getColorValue(parser, i);
+                    if (badgeTextColor == COLOR_NOT_SET) continue;
+                    workingTab.setBadgeTextColor(badgeTextColor);
+                    break;
                 case BADGE_HIDES_WHEN_ACTIVE:
                     boolean badgeHidesWhenActive = parser.getAttributeBooleanValue(i, true);
                     workingTab.setBadgeHidesWhenActive(badgeHidesWhenActive);
@@ -188,6 +194,7 @@ class TabParser {
             ACTIVE_COLOR,
             BAR_COLOR_WHEN_SELECTED,
             BADGE_BACKGROUND_COLOR,
+            BADGE_TEXT_COLOR,
             BADGE_HIDES_WHEN_ACTIVE,
             IS_TITLELESS
     })
@@ -199,6 +206,7 @@ class TabParser {
         String ACTIVE_COLOR = "activeColor";
         String BAR_COLOR_WHEN_SELECTED = "barColorWhenSelected";
         String BADGE_BACKGROUND_COLOR = "badgeBackgroundColor";
+        String BADGE_TEXT_COLOR = "badgeTextColor";
         String BADGE_HIDES_WHEN_ACTIVE = "badgeHidesWhenActive";
         String IS_TITLELESS = "iconOnly";
     }
