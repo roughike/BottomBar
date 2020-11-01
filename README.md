@@ -46,6 +46,14 @@ compile 'com.roughike:bottom-bar:2.3.1'
 </dependency>
 ```
 
+## ProGuard?
+
+Do add rules below if using ProGuard:
+
+```
+-dontwarn com.roughike.bottombar.**
+```
+
 ## How?
 
 You can add items by **writing a XML resource file**.
