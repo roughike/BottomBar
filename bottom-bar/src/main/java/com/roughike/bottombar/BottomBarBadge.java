@@ -42,9 +42,13 @@ class BottomBarBadge extends TextView {
      *
      * @param count the value this Badge should show.
      */
-    void setCount(int count) {
+    void setCount(int count, boolean formatBadge) {
         this.count = count;
-        setText(String.valueOf(count));
+        if (formatBadge && count > 1000) {
+            setText(String.format(getResources().getString(R.string.badge_format), count / 1000));
+        } else {
+            setText(String.valueOf(count));
+        }
     }
 
     /**
