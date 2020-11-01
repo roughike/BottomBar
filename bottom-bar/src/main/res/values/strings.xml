@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BottomBar</string>
+    <string name="badge_threshold">%1$d+</string>
 </resources>
