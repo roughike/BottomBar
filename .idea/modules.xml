@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Bottom-Bar.iml" filepath="$PROJECT_DIR$/.idea/modules/Bottom-Bar.iml" group="Bottom-Bar" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Bottom-Bar-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Bottom-Bar-app.iml" group="Bottom-Bar/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bottom-bar/com.github.bsobe-bottom-bar.iml" filepath="$PROJECT_DIR$/.idea/modules/bottom-bar/com.github.bsobe-bottom-bar.iml" group="Bottom-Bar/bottom-bar" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BottomBar_v2.iml" filepath="$PROJECT_DIR$/.idea/modules/BottomBar_v2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BottomBar_v2.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BottomBar_v2.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bottom-bar/BottomBar_v2.bottom-bar.iml" filepath="$PROJECT_DIR$/.idea/modules/bottom-bar/BottomBar_v2.bottom-bar.iml" />
     </modules>
   </component>
 </project>
