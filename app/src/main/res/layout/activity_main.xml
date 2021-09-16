@@ -44,6 +44,12 @@
         android:text="Three tabs with Quick Return" />
 
     <Button
+        android:id="@+id/viewpager_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="With ViewPager" />
+
+    <Button
         android:id="@+id/badges"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
